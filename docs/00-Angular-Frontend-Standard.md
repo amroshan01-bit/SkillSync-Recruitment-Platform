@@ -230,8 +230,8 @@ Unauthorized personal information காட்டக்கூடாது.
 
 Roshan   → feature/roshan-auth-admin
 Piraveena  → feature/piraveena-jobseeker-profile
-Thalaivi → feature/thalaivi-employer-vacancy
-Piru     → feature/piru-matching-application
+Thirushanthi → feature/thirushanthi-employer-vacancy
+Piruthusan   → feature/piruthusan-matching-application
 
 Members நேரடியாக main அல்லது develop branch-க்கு push செய்யக்கூடாது.
 
