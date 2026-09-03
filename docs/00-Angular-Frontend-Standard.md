@@ -229,7 +229,7 @@ Unauthorized personal information காட்டக்கூடாது.
 ஒவ்வொரு member-மும் எந்த branch-ல் வேலை செய்ய வேண்டும் என்பதைச் சொல்கிறது.
 
 Roshan   → feature/roshan-auth-admin
-Pravina  → feature/pravina-jobseeker-profile
+Piraveena  → feature/piraveena-jobseeker-profile
 Thalaivi → feature/thalaivi-employer-vacancy
 Piru     → feature/piru-matching-application
 
