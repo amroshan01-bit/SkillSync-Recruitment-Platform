@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SkillSync.Api.Data;
+using SkillSync.Api.Repositories.Implementations;
+using SkillSync.Api.Repositories.Interfaces;
+using SkillSync.Api.Services.Implementations;
+using SkillSync.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +14,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddScoped<
+    IJobSeekerProfileRepository,
+    JobSeekerProfileRepository>();
+
+builder.Services.AddScoped<
+    IJobSeekerProfileService,
+    JobSeekerProfileService>();
 
 var app = builder.Build();
 
