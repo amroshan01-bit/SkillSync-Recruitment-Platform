@@ -1,0 +1,268 @@
+<div
+  class="profile-page"
+  [class.dark-theme]="darkMode"
+>
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-logo">S</span>
+      <span>SkillSync</span>
+    </div>
+
+    <nav class="navigation">
+      <a href="#">
+        <span class="nav-icon">D</span>
+        Dashboard
+      </a>
+
+      <a href="#">
+        <span class="nav-icon">J</span>
+        Find Jobs
+      </a>
+
+      <a href="#">
+        <span class="nav-icon">A</span>
+        Applications
+      </a>
+
+      <a href="#" class="active">
+        <span class="nav-icon">P</span>
+        My Profile
+      </a>
+
+      <a href="#">
+        <span class="nav-icon">N</span>
+        Notifications
+      </a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <p class="search-text">
+        Search jobs, skills or companies
+      </p>
+
+      <div class="topbar-actions">
+        <button
+          type="button"
+          class="theme-button"
+          (click)="toggleDarkMode()"
+          [attr.aria-label]="
+            darkMode
+              ? 'Switch to light mode'
+              : 'Switch to dark mode'
+          "
+        >
+          @if (darkMode) {
+            ☀ Light
+          } @else {
+            ☾ Dark
+          }
+        </button>
+
+        <div class="account">
+          <span class="account-avatar">P</span>
+          <span>Piraveena</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="page-heading">
+        <h1>My Profile</h1>
+
+        <p>
+          Keep your details current so employers can
+          understand your experience.
+        </p>
+      </section>
+
+      @if (loading) {
+        <div class="message loading-message">
+          Loading profile...
+        </div>
+      } @else {
+        @if (errorMessage) {
+          <div class="message error-message">
+            {{ errorMessage }}
+          </div>
+        }
+
+        @if (successMessage) {
+          <div class="message success-message">
+            {{ successMessage }}
+          </div>
+        }
+
+        <div class="profile-layout">
+          <form
+            class="form-panel"
+            [formGroup]="profileForm"
+            (ngSubmit)="saveProfile()"
+          >
+            <h2>Professional Information</h2>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="fullName">
+                  Full Name
+                </label>
+
+                <input
+                  id="fullName"
+                  type="text"
+                  formControlName="fullName"
+                />
+
+                @if (
+                  profileForm.controls.fullName.touched &&
+                  profileForm.controls.fullName.invalid
+                ) {
+                  <small class="validation-error">
+                    Full name is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="professionalTitle">
+                  Professional Title
+                </label>
+
+                <input
+                  id="professionalTitle"
+                  type="text"
+                  formControlName="professionalTitle"
+                  placeholder="Example: Frontend Developer"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="location">
+                  Location
+                </label>
+
+                <input
+                  id="location"
+                  type="text"
+                  formControlName="location"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="phoneNumber">
+                  Phone Number
+                </label>
+
+                <input
+                  id="phoneNumber"
+                  type="tel"
+                  formControlName="phoneNumber"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="yearsOfExperience">
+                  Years of Experience
+                </label>
+
+                <input
+                  id="yearsOfExperience"
+                  type="number"
+                  min="0"
+                  max="60"
+                  formControlName="yearsOfExperience"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="highestQualification">
+                  Highest Qualification
+                </label>
+
+                <input
+                  id="highestQualification"
+                  type="text"
+                  formControlName="highestQualification"
+                />
+              </div>
+
+              <div class="form-field full-width">
+                <label for="bio">
+                  Professional Summary
+                </label>
+
+                <textarea
+                  id="bio"
+                  rows="5"
+                  formControlName="bio"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="secondary-button"
+                (click)="loadProfile()"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                class="primary-button"
+                [disabled]="saving"
+              >
+                @if (saving) {
+                  Saving...
+                } @else if (profile) {
+                  Update Profile
+                } @else {
+                  Create Profile
+                }
+              </button>
+            </div>
+          </form>
+
+          <aside class="summary-panel">
+            <div class="profile-avatar">
+              {{
+                profileForm.controls.fullName.value.charAt(0) ||
+                  'P'
+              }}
+            </div>
+
+            <h2>
+              {{
+                profileForm.controls.fullName.value ||
+                  'Job Seeker'
+              }}
+            </h2>
+
+            <p class="profile-title">
+              {{
+                profileForm.controls.professionalTitle.value ||
+                  'Add professional title'
+              }}
+            </p>
+
+            <div class="completion-heading">
+              <span>Profile Completion</span>
+              <strong>80%</strong>
+            </div>
+
+            <div class="completion-track">
+              <div class="completion-value"></div>
+            </div>
+
+            <div class="profile-tip">
+              Add your CV and skills next to improve job
+              matching.
+            </div>
+          </aside>
+        </div>
+      }
+    </main>
+  </div>
+</div>
