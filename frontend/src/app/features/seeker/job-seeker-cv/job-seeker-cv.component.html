@@ -1,0 +1,160 @@
+<section class="cv-card">
+  <!-- Card heading -->
+  <div class="cv-heading">
+    <div class="heading-icon">CV</div>
+
+    <div>
+      <h2>Curriculum Vitae</h2>
+
+      <p>
+        Upload your latest CV to improve your job matches.
+      </p>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  @if (loading) {
+    <div class="state-message">
+      Loading your CV...
+    </div>
+  }
+
+  <!-- Error message -->
+  @if (errorMessage) {
+    <div class="message error-message" role="alert">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <!-- Success message -->
+  @if (successMessage) {
+    <div
+      class="message success-message"
+      aria-live="polite"
+    >
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (!loading) {
+    <!-- File selection area -->
+    <div class="upload-area">
+      <div class="upload-icon">↑</div>
+
+      <h3>
+        @if (cv) {
+          Replace your current CV
+        } @else {
+          Upload your CV
+        }
+      </h3>
+
+      <p>PDF, DOC or DOCX · Maximum 5 MB</p>
+
+      <label class="choose-button" for="cvFile">
+        Choose CV
+      </label>
+
+      <input
+        id="cvFile"
+        class="file-input"
+        type="file"
+        accept=".pdf,.doc,.docx"
+        (change)="onFileSelected($event)"
+      />
+    </div>
+
+    <!-- Selected file preview -->
+    @if (selectedFile) {
+      <div class="selected-file">
+        <div>
+          <span class="file-label">Selected file</span>
+
+          <strong>{{ selectedFile.name }}</strong>
+
+          <small>
+            {{ formatFileSize(selectedFile.size) }}
+          </small>
+        </div>
+
+        <button
+          class="primary-button"
+          type="button"
+          [disabled]="uploading"
+          (click)="uploadCv()"
+        >
+          @if (uploading) {
+            Uploading...
+          } @else if (cv) {
+            Replace CV
+          } @else {
+            Upload CV
+          }
+        </button>
+      </div>
+    }
+
+    <!-- Existing CV information -->
+    @if (cv) {
+      <div class="current-cv">
+        <div class="file-information">
+          <div class="file-icon">PDF</div>
+
+          <div class="file-details">
+            <strong>{{ cv.fileName }}</strong>
+
+            <p>
+              {{ formatFileSize(cv.fileSize) }}
+              ·
+              Uploaded
+              {{ cv.uploadedAtUtc | date: 'mediumDate' }}
+            </p>
+          </div>
+
+          <span class="uploaded-status">
+            Uploaded
+          </span>
+        </div>
+
+        <div class="cv-actions">
+          <button
+            class="secondary-button"
+            type="button"
+            (click)="downloadCv()"
+          >
+            Download
+          </button>
+
+          <label
+            class="secondary-button"
+            for="cvFile"
+          >
+            Replace
+          </label>
+
+          <button
+            class="delete-button"
+            type="button"
+            [disabled]="deleting"
+            (click)="deleteCv()"
+          >
+            @if (deleting) {
+              Deleting...
+            } @else {
+              Delete
+            }
+          </button>
+        </div>
+      </div>
+    } @else if (!selectedFile) {
+      <!-- Empty state -->
+      <div class="empty-state">
+        <strong>No CV uploaded yet</strong>
+
+        <p>
+          Choose a CV file and upload it to your profile.
+        </p>
+      </div>
+    }
+  }
+</section>
