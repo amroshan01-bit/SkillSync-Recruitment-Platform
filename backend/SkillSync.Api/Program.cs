@@ -11,18 +11,33 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// SQL Server Database connection.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Configuration.GetConnectionString(
+            "DefaultConnection")));
 
+// Job Seeker Profile Repository registration.
 builder.Services.AddScoped<
     IJobSeekerProfileRepository,
     JobSeekerProfileRepository>();
 
+// Job Seeker Profile Service registration.
 builder.Services.AddScoped<
     IJobSeekerProfileService,
     JobSeekerProfileService>();
 
+// Job Seeker CV Repository registration.
+builder.Services.AddScoped<
+    IJobSeekerCvRepository,
+    JobSeekerCvRepository>();
+
+// Job Seeker CV Service registration.
+builder.Services.AddScoped<
+    IJobSeekerCvService,
+    JobSeekerCvService>();
+
+// Angular frontend permission.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -36,6 +51,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Swagger is available during development.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

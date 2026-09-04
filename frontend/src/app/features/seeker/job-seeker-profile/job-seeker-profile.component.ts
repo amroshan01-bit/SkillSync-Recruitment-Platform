@@ -12,11 +12,15 @@ import {
   UpdateJobSeekerProfile,
 } from '../../../core/models/job-seeker-profile.model';
 import { JobSeekerProfileService } from '../../../core/services/job-seeker-profile.service';
+import { JobSeekerCvComponent } from '../job-seeker-cv/job-seeker-cv.component';
 
 @Component({
   selector: 'app-job-seeker-profile',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+  ReactiveFormsModule,
+  JobSeekerCvComponent,
+],
   templateUrl: './job-seeker-profile.component.html',
   styleUrl: './job-seeker-profile.component.css',
 })
