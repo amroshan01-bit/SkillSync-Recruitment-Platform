@@ -45,6 +45,15 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IEmployerProfileService,
     EmployerProfileService>();
+// Vacancy Repository registration.
+builder.Services.AddScoped<
+    IVacancyRepository,
+    VacancyRepository>();
+
+// Vacancy Service registration.
+builder.Services.AddScoped<
+    IVacancyService,
+    VacancyService>();
 
 // Angular frontend permission.
 builder.Services.AddCors(options =>
