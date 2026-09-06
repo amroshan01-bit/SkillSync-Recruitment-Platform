@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkillSync.Api.Data;
 
@@ -11,9 +12,11 @@ using SkillSync.Api.Data;
 namespace SkillSync.Api.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260906040756_AddEmployerProfiles")]
+    partial class AddEmployerProfiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,111 +188,6 @@ namespace SkillSync.Api.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("JobSeekerProfiles");
-                });
-
-            modelBuilder.Entity("SkillSync.Api.Models.Vacancy", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ApplicationClosingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("Department")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("EmployerProfileId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EmploymentType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ExperienceLevel")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("JobDescription")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<decimal>("MaximumSalary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("MinimumSalary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("NumberOfOpenings")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("PostedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RequiredSkills")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("Requirements")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime>("UpdatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("WorkplaceType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployerProfileId");
-
-                    b.HasIndex("Status");
-
-                    b.ToTable("Vacancies");
-                });
-
-            modelBuilder.Entity("SkillSync.Api.Models.Vacancy", b =>
-                {
-                    b.HasOne("SkillSync.Api.Models.EmployerProfile", "EmployerProfile")
-                        .WithMany()
-                        .HasForeignKey("EmployerProfileId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("EmployerProfile");
                 });
 #pragma warning restore 612, 618
         }

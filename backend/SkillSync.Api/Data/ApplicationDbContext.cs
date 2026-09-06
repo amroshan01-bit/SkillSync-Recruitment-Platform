@@ -24,6 +24,18 @@ public class ApplicationDbContext : DbContext
         get;
         set;
     }
+    // Employer profile table.
+    public DbSet<EmployerProfile> EmployerProfiles
+    {
+        get;
+        set;
+    }
+    // Vacancy table.
+    public DbSet<Vacancy> Vacancies
+    {
+        get;
+        set;
+    }
 
     // Database rules.
     protected override void OnModelCreating(
@@ -31,14 +43,32 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // ஒரு user-க்கு ஒரு profile மட்டும்.
+        // Each user can have only one job seeker profile.
         modelBuilder.Entity<JobSeekerProfile>()
             .HasIndex(profile => profile.UserId)
             .IsUnique();
 
-        // ஒரு user-க்கு ஒரு current CV மட்டும்.
+        // Each user can have only one current CV.
         modelBuilder.Entity<JobSeekerCv>()
             .HasIndex(cv => cv.UserId)
             .IsUnique();
+        // Each user can have only one employer profile.
+        modelBuilder.Entity<EmployerProfile>()
+            .HasIndex(profile => profile.UserId)
+            .IsUnique();
+        // One employer profile can create many vacancies.
+        modelBuilder.Entity<Vacancy>()
+            .HasOne(vacancy => vacancy.EmployerProfile)
+            .WithMany()
+            .HasForeignKey(vacancy => vacancy.EmployerProfileId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Improve employer vacancy search performance.
+        modelBuilder.Entity<Vacancy>()
+            .HasIndex(vacancy => vacancy.EmployerProfileId);
+
+        // Improve vacancy status filtering performance.
+        modelBuilder.Entity<Vacancy>()
+            .HasIndex(vacancy => vacancy.Status);
     }
 }
