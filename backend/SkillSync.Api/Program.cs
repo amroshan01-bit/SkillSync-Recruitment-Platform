@@ -36,6 +36,15 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IJobSeekerCvService,
     JobSeekerCvService>();
+// Employer Profile Repository registration.
+builder.Services.AddScoped<
+    IEmployerProfileRepository,
+    EmployerProfileRepository>();
+
+// Employer Profile Service registration.
+builder.Services.AddScoped<
+    IEmployerProfileService,
+    EmployerProfileService>();
 
 // Angular frontend permission.
 builder.Services.AddCors(options =>
