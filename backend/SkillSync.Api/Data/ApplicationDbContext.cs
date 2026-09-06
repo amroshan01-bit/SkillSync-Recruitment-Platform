@@ -24,7 +24,12 @@ public class ApplicationDbContext : DbContext
         get;
         set;
     }
-
+    // Employer profile table.
+    public DbSet<EmployerProfile> EmployerProfiles
+    {
+        get;
+        set;
+    }
     // Database rules.
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
@@ -39,6 +44,10 @@ public class ApplicationDbContext : DbContext
         // ஒரு user-க்கு ஒரு current CV மட்டும்.
         modelBuilder.Entity<JobSeekerCv>()
             .HasIndex(cv => cv.UserId)
+            .IsUnique();
+        // Each user can have only one employer profile.
+        modelBuilder.Entity<EmployerProfile>()
+            .HasIndex(profile => profile.UserId)
             .IsUnique();
     }
 }
