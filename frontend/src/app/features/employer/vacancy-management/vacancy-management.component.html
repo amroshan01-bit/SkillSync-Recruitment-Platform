@@ -1,0 +1,501 @@
+<div class="vacancy-page" [class.dark-theme]="darkMode">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-logo">S</span>
+      <span>SkillSync</span>
+    </div>
+
+    <nav class="navigation">
+      <a href="#">
+        <span class="nav-icon">D</span>
+        Dashboard
+      </a>
+
+      <a href="/employer/profile">
+        <span class="nav-icon">P</span>
+        Company Profile
+      </a>
+
+      <a href="/employer/vacancies" class="active">
+        <span class="nav-icon">V</span>
+        Vacancies
+      </a>
+
+      <a href="#">
+        <span class="nav-icon">A</span>
+        Applications
+      </a>
+
+      <a href="#">
+        <span class="nav-icon">N</span>
+        Notifications
+      </a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <p class="search-text">
+        Manage vacancies for {{ companyName || 'your company' }}
+      </p>
+
+      <div class="topbar-actions">
+        <button
+          type="button"
+          class="theme-button"
+          (click)="toggleDarkMode()"
+        >
+          @if (darkMode) {
+            Light Mode
+          } @else {
+            Dark Mode
+          }
+        </button>
+
+        <div class="account">
+          <span class="account-avatar">
+            {{ companyName.charAt(0) || 'E' }}
+          </span>
+          <span>{{ companyName || 'Employer' }}</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="heading-row">
+        <div class="page-heading">
+          <h1>Vacancy Management</h1>
+          <p>
+            Create, publish and manage your job vacancies.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="primary-button create-button"
+          (click)="openCreateForm()"
+          [disabled]="!employerProfileId"
+        >
+          + Create Vacancy
+        </button>
+      </section>
+
+      @if (errorMessage) {
+        <div class="message error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="message success-message">
+          {{ successMessage }}
+        </div>
+      }
+
+      @if (showForm) {
+        <section class="form-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>
+                @if (editingVacancyId) {
+                  Edit Vacancy
+                } @else {
+                  Create Vacancy
+                }
+              </h2>
+              <p>Enter the complete vacancy information.</p>
+            </div>
+
+            <button
+              type="button"
+              class="close-form-button"
+              (click)="cancelForm()"
+            >
+              ×
+            </button>
+          </div>
+
+          <form
+            [formGroup]="vacancyForm"
+            (ngSubmit)="saveVacancy()"
+          >
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="jobTitle">Job Title</label>
+                <input
+                  id="jobTitle"
+                  type="text"
+                  formControlName="jobTitle"
+                  placeholder="Example: Software Engineer"
+                />
+
+                @if (
+                  vacancyForm.controls.jobTitle.touched
+                  && vacancyForm.controls.jobTitle.invalid
+                ) {
+                  <small class="validation-error">
+                    Job title is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="department">Department</label>
+                <input
+                  id="department"
+                  type="text"
+                  formControlName="department"
+                  placeholder="Example: Engineering"
+                />
+
+                @if (
+                  vacancyForm.controls.department.touched
+                  && vacancyForm.controls.department.invalid
+                ) {
+                  <small class="validation-error">
+                    Department is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field full-width">
+                <label for="location">Location</label>
+                <input
+                  id="location"
+                  type="text"
+                  formControlName="location"
+                  placeholder="City, Province, Country"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="workplaceType">
+                  Workplace Type
+                </label>
+                <select
+                  id="workplaceType"
+                  formControlName="workplaceType"
+                >
+                  <option value="">Select workplace type</option>
+                  <option value="On-site">On-site</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Hybrid">Hybrid</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="employmentType">
+                  Employment Type
+                </label>
+                <select
+                  id="employmentType"
+                  formControlName="employmentType"
+                >
+                  <option value="">Select employment type</option>
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Contract">Contract</option>
+                  <option value="Internship">Internship</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="experienceLevel">
+                  Experience Level
+                </label>
+                <select
+                  id="experienceLevel"
+                  formControlName="experienceLevel"
+                >
+                  <option value="">Select experience level</option>
+                  <option value="Entry Level">Entry Level</option>
+                  <option value="Mid Level">Mid Level</option>
+                  <option value="Senior Level">Senior Level</option>
+                  <option value="Manager">Manager</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="numberOfOpenings">
+                  Number of Openings
+                </label>
+                <input
+                  id="numberOfOpenings"
+                  type="number"
+                  min="1"
+                  max="1000"
+                  formControlName="numberOfOpenings"
+                />
+              </div>
+
+              <div class="form-field full-width">
+                <label for="jobDescription">
+                  Job Description
+                </label>
+                <textarea
+                  id="jobDescription"
+                  rows="5"
+                  formControlName="jobDescription"
+                  placeholder="Describe the role and responsibilities..."
+                ></textarea>
+              </div>
+
+              <div class="form-field full-width">
+                <label for="requirements">Requirements</label>
+                <textarea
+                  id="requirements"
+                  rows="4"
+                  formControlName="requirements"
+                  placeholder="Enter education and experience requirements..."
+                ></textarea>
+              </div>
+
+              <div class="form-field full-width">
+                <label for="requiredSkills">
+                  Required Skills
+                </label>
+                <textarea
+                  id="requiredSkills"
+                  rows="3"
+                  formControlName="requiredSkills"
+                  placeholder="Example: C#, .NET, Angular, SQL"
+                ></textarea>
+              </div>
+
+              <div class="form-field">
+                <label for="minimumSalary">
+                  Minimum Salary
+                </label>
+                <input
+                  id="minimumSalary"
+                  type="number"
+                  min="0"
+                  formControlName="minimumSalary"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="maximumSalary">
+                  Maximum Salary
+                </label>
+                <input
+                  id="maximumSalary"
+                  type="number"
+                  min="0"
+                  formControlName="maximumSalary"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="currency">Currency</label>
+                <select
+                  id="currency"
+                  formControlName="currency"
+                >
+                  <option value="LKR">LKR</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="applicationClosingDate">
+                  Application Closing Date
+                </label>
+                <input
+                  id="applicationClosingDate"
+                  type="datetime-local"
+                  formControlName="applicationClosingDate"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="status">Status</label>
+                <select
+                  id="status"
+                  formControlName="status"
+                >
+                  <option value="Draft">Draft</option>
+                  <option value="Open">Open</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="secondary-button"
+                (click)="cancelForm()"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                class="primary-button"
+                [disabled]="saving"
+              >
+                @if (saving) {
+                  Saving...
+                } @else if (editingVacancyId) {
+                  Update Vacancy
+                } @else {
+                  Create Vacancy
+                }
+              </button>
+            </div>
+          </form>
+        </section>
+      }
+
+      <section class="vacancy-section">
+        <div class="list-toolbar">
+          <div>
+            <h2>Your Vacancies</h2>
+            <p>{{ vacancies.length }} vacancy record(s)</p>
+          </div>
+
+          <div class="filter-buttons">
+            <button
+              type="button"
+              [class.active]="selectedStatus === ''"
+              (click)="changeStatusFilter('')"
+            >
+              All
+            </button>
+
+            <button
+              type="button"
+              [class.active]="selectedStatus === 'Draft'"
+              (click)="changeStatusFilter('Draft')"
+            >
+              Draft
+            </button>
+
+            <button
+              type="button"
+              [class.active]="selectedStatus === 'Open'"
+              (click)="changeStatusFilter('Open')"
+            >
+              Open
+            </button>
+
+            <button
+              type="button"
+              [class.active]="selectedStatus === 'Closed'"
+              (click)="changeStatusFilter('Closed')"
+            >
+              Closed
+            </button>
+          </div>
+        </div>
+
+        @if (loading) {
+          <div class="empty-state">
+            Loading vacancies...
+          </div>
+        } @else if (vacancies.length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">V</div>
+            <h3>No vacancies found</h3>
+            <p>
+              Create a vacancy or select another status filter.
+            </p>
+          </div>
+        } @else {
+          <div class="vacancy-grid">
+            @for (vacancy of vacancies; track vacancy.id) {
+              <article class="vacancy-card">
+                <div class="card-heading">
+                  <div>
+                    <span
+                      class="status-badge"
+                      [class.status-open]="
+                        vacancy.status === 'Open'
+                      "
+                      [class.status-draft]="
+                        vacancy.status === 'Draft'
+                      "
+                      [class.status-closed]="
+                        vacancy.status === 'Closed'
+                      "
+                    >
+                      {{ vacancy.status }}
+                    </span>
+
+                    <h3>{{ vacancy.jobTitle }}</h3>
+                    <p>{{ vacancy.department }}</p>
+                  </div>
+
+                  <span class="openings">
+                    {{ vacancy.numberOfOpenings }}
+                    opening(s)
+                  </span>
+                </div>
+
+                <div class="vacancy-details">
+                  <span>{{ vacancy.location }}</span>
+                  <span>{{ vacancy.workplaceType }}</span>
+                  <span>{{ vacancy.employmentType }}</span>
+                  <span>{{ vacancy.experienceLevel }}</span>
+                </div>
+
+                <p class="description">
+                  {{ vacancy.jobDescription }}
+                </p>
+
+                <div class="salary-row">
+                  <span>Salary</span>
+                  <strong>
+                    {{ vacancy.currency }}
+                    {{ vacancy.minimumSalary | number }}
+                    –
+                    {{ vacancy.maximumSalary | number }}
+                  </strong>
+                </div>
+
+                <div class="closing-date">
+                  Closing:
+                  {{
+                    vacancy.applicationClosingDate
+                      | date: 'mediumDate'
+                  }}
+                </div>
+
+                <div class="card-actions">
+                  <button
+                    type="button"
+                    class="edit-button"
+                    (click)="editVacancy(vacancy)"
+                    [disabled]="vacancy.status === 'Closed'"
+                  >
+                    Edit
+                  </button>
+
+                  @if (vacancy.status !== 'Closed') {
+                    <button
+                      type="button"
+                      class="close-button"
+                      (click)="closeVacancy(vacancy)"
+                    >
+                      Close
+                    </button>
+                  }
+
+                  <button
+                    type="button"
+                    class="delete-button"
+                    (click)="deleteVacancy(vacancy)"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </section>
+    </main>
+  </div>
+</div>

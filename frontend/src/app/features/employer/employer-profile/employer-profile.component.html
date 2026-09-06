@@ -1,0 +1,392 @@
+<div class="profile-page" [class.dark-theme]="darkMode">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-logo">S</span>
+      <span>SkillSync</span>
+    </div>
+
+    <nav class="navigation">
+      <a href="#">
+        <span class="nav-icon">D</span>
+        Dashboard
+      </a>
+
+      <a href="#" class="active">
+        <span class="nav-icon">P</span>
+        Company Profile
+      </a>
+
+      <a href="/employer/vacancies">
+  <span class="nav-icon">V</span>
+  Vacancies
+</a>
+
+      <a href="#">
+        <span class="nav-icon">A</span>
+        Applications
+      </a>
+
+      <a href="#">
+        <span class="nav-icon">N</span>
+        Notifications
+      </a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <p class="search-text">
+        Manage your company and recruitment activities
+      </p>
+
+      <div class="topbar-actions">
+        <button
+          type="button"
+          class="theme-button"
+          (click)="toggleDarkMode()"
+          [attr.aria-label]="
+            darkMode
+              ? 'Switch to light mode'
+              : 'Switch to dark mode'
+          "
+        >
+          @if (darkMode) {
+            Light Mode
+          } @else {
+            Dark Mode
+          }
+        </button>
+
+        <div class="account">
+          <span class="account-avatar">
+            {{
+              profileForm.controls.contactPerson.value.charAt(0)
+                || 'E'
+            }}
+          </span>
+          <span>
+            {{
+              profileForm.controls.contactPerson.value
+                || 'Employer'
+            }}
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="page-heading">
+        <h1>Company Profile</h1>
+        <p>
+          Keep your company information current to attract
+          suitable candidates.
+        </p>
+      </section>
+
+      @if (loading) {
+        <div class="message loading-message">
+          Loading employer profile...
+        </div>
+      } @else {
+        @if (errorMessage) {
+          <div class="message error-message">
+            {{ errorMessage }}
+          </div>
+        }
+
+        @if (successMessage) {
+          <div class="message success-message">
+            {{ successMessage }}
+          </div>
+        }
+
+        <div class="profile-layout">
+          <form
+            class="form-panel"
+            [formGroup]="profileForm"
+            (ngSubmit)="saveProfile()"
+          >
+            <h2>Company Information</h2>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="companyName">Company Name</label>
+                <input
+                  id="companyName"
+                  type="text"
+                  formControlName="companyName"
+                  placeholder="Example: TechNova Solutions"
+                />
+
+                @if (
+                  profileForm.controls.companyName.touched
+                  && profileForm.controls.companyName.invalid
+                ) {
+                  <small class="validation-error">
+                    Company name is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="industry">Industry</label>
+                <input
+                  id="industry"
+                  type="text"
+                  formControlName="industry"
+                  placeholder="Example: Software Development"
+                />
+
+                @if (
+                  profileForm.controls.industry.touched
+                  && profileForm.controls.industry.invalid
+                ) {
+                  <small class="validation-error">
+                    Industry is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="companySize">Company Size</label>
+                <select
+                  id="companySize"
+                  formControlName="companySize"
+                >
+                  <option value="">Select company size</option>
+                  <option value="1-10 employees">
+                    1–10 employees
+                  </option>
+                  <option value="11-50 employees">
+                    11–50 employees
+                  </option>
+                  <option value="51-200 employees">
+                    51–200 employees
+                  </option>
+                  <option value="201-500 employees">
+                    201–500 employees
+                  </option>
+                  <option value="501+ employees">
+                    501+ employees
+                  </option>
+                </select>
+
+                @if (
+                  profileForm.controls.companySize.touched
+                  && profileForm.controls.companySize.invalid
+                ) {
+                  <small class="validation-error">
+                    Company size is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="website">Website</label>
+                <input
+                  id="website"
+                  type="url"
+                  formControlName="website"
+                  placeholder="https://company.com"
+                />
+              </div>
+
+              <div class="form-field full-width">
+                <label for="location">Location</label>
+                <input
+                  id="location"
+                  type="text"
+                  formControlName="location"
+                  placeholder="City, Province, Country"
+                />
+
+                @if (
+                  profileForm.controls.location.touched
+                  && profileForm.controls.location.invalid
+                ) {
+                  <small class="validation-error">
+                    Location is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field full-width">
+                <label for="aboutCompany">
+                  About Company
+                </label>
+                <textarea
+                  id="aboutCompany"
+                  rows="5"
+                  formControlName="aboutCompany"
+                  placeholder="Describe your company..."
+                ></textarea>
+
+                @if (
+                  profileForm.controls.aboutCompany.touched
+                  && profileForm.controls.aboutCompany.invalid
+                ) {
+                  <small class="validation-error">
+                    Company description is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field full-width">
+                <label for="logoPath">Company Logo URL</label>
+                <input
+                  id="logoPath"
+                  type="text"
+                  formControlName="logoPath"
+                  placeholder="Optional logo URL"
+                />
+              </div>
+            </div>
+
+            <h2 class="section-heading">
+              Contact Information
+            </h2>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="contactPerson">
+                  Contact Person
+                </label>
+                <input
+                  id="contactPerson"
+                  type="text"
+                  formControlName="contactPerson"
+                />
+
+                @if (
+                  profileForm.controls.contactPerson.touched
+                  && profileForm.controls.contactPerson.invalid
+                ) {
+                  <small class="validation-error">
+                    Contact person is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="emailAddress">
+                  Email Address
+                </label>
+                <input
+                  id="emailAddress"
+                  type="email"
+                  formControlName="emailAddress"
+                />
+
+                @if (
+                  profileForm.controls.emailAddress.touched
+                  && profileForm.controls.emailAddress.invalid
+                ) {
+                  <small class="validation-error">
+                    Enter a valid email address.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="phoneNumber">Phone Number</label>
+                <input
+                  id="phoneNumber"
+                  type="tel"
+                  formControlName="phoneNumber"
+                />
+
+                @if (
+                  profileForm.controls.phoneNumber.touched
+                  && profileForm.controls.phoneNumber.invalid
+                ) {
+                  <small class="validation-error">
+                    Phone number is required.
+                  </small>
+                }
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="secondary-button"
+                (click)="loadProfile()"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                class="primary-button"
+                [disabled]="saving"
+              >
+                @if (saving) {
+                  Saving...
+                } @else if (profile) {
+                  Update Profile
+                } @else {
+                  Create Profile
+                }
+              </button>
+            </div>
+          </form>
+
+          <aside class="summary-panel">
+            <div class="company-logo">
+              @if (profileForm.controls.logoPath.value) {
+                <img
+                  [src]="profileForm.controls.logoPath.value"
+                  alt="Company logo"
+                />
+              } @else {
+                {{
+                  profileForm.controls.companyName.value.charAt(0)
+                    || 'C'
+                }}
+              }
+            </div>
+
+            <h2>
+              {{
+                profileForm.controls.companyName.value
+                  || 'Company Name'
+              }}
+            </h2>
+
+            <p class="company-industry">
+              {{
+                profileForm.controls.industry.value
+                  || 'Add company industry'
+              }}
+            </p>
+
+            <div class="summary-item">
+              <span>Location</span>
+              <strong>
+                {{
+                  profileForm.controls.location.value
+                    || 'Not added'
+                }}
+              </strong>
+            </div>
+
+            <div class="summary-item">
+              <span>Company Size</span>
+              <strong>
+                {{
+                  profileForm.controls.companySize.value
+                    || 'Not added'
+                }}
+              </strong>
+            </div>
+
+            <div class="profile-tip">
+              Complete your company profile before publishing
+              vacancies.
+            </div>
+          </aside>
+        </div>
+      }
+    </main>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+using Microsoft.EntityFrameworkCore;
+using SkillSync.Api.Models;
+
+namespace SkillSync.Api.Data;
+
+public class ApplicationDbContext : DbContext
+{
+    public ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
+
+    // Job seeker profile table.
+    public DbSet<JobSeekerProfile> JobSeekerProfiles
+    {
+        get;
+        set;
+    }
+
+    // Job seeker CV details table.
+    public DbSet<JobSeekerCv> JobSeekerCvs
+    {
+        get;
+        set;
+    }
+    // Employer profile table.
+    public DbSet<EmployerProfile> EmployerProfiles
+    {
+        get;
+        set;
+    }
+    // Vacancy table.
+    public DbSet<Vacancy> Vacancies
+    {
+        get;
+        set;
+    }
+
+    // Database rules.
+    protected override void OnModelCreating(
+        ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Each user can have only one job seeker profile.
+        modelBuilder.Entity<JobSeekerProfile>()
+            .HasIndex(profile => profile.UserId)
+            .IsUnique();
+
+        // Each user can have only one current CV.
+        modelBuilder.Entity<JobSeekerCv>()
+            .HasIndex(cv => cv.UserId)
+            .IsUnique();
+        // Each user can have only one employer profile.
+        modelBuilder.Entity<EmployerProfile>()
+            .HasIndex(profile => profile.UserId)
+            .IsUnique();
+        // One employer profile can create many vacancies.
+        modelBuilder.Entity<Vacancy>()
+            .HasOne(vacancy => vacancy.EmployerProfile)
+            .WithMany()
+            .HasForeignKey(vacancy => vacancy.EmployerProfileId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Improve employer vacancy search performance.
+        modelBuilder.Entity<Vacancy>()
+            .HasIndex(vacancy => vacancy.EmployerProfileId);
+
+        // Improve vacancy status filtering performance.
+        modelBuilder.Entity<Vacancy>()
+            .HasIndex(vacancy => vacancy.Status);
+    }
+}
