@@ -110,6 +110,9 @@ builder.Services.AddScoped<
 // Authentication service registration.
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+// Admin management service registration.
+builder.Services.AddScoped<IAdminService, AdminService>();
+
 // Job Seeker Profile Repository registration.
 builder.Services.AddScoped<
     IJobSeekerProfileRepository,
