@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-
+import { RouterLink } from '@angular/router';
 import {
   CreateJobSeekerProfile,
   JobSeekerProfile,
@@ -17,10 +17,11 @@ import { JobSeekerCvComponent } from '../job-seeker-cv/job-seeker-cv.component';
 @Component({
   selector: 'app-job-seeker-profile',
   standalone: true,
-  imports: [
-  ReactiveFormsModule,
-  JobSeekerCvComponent,
-],
+   imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    JobSeekerCvComponent,
+  ],
   templateUrl: './job-seeker-profile.component.html',
   styleUrl: './job-seeker-profile.component.css',
 })
