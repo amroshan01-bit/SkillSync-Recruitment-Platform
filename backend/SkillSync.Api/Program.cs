@@ -36,6 +36,7 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IJobSeekerCvService,
     JobSeekerCvService>();
+
 // Employer Profile Repository registration.
 builder.Services.AddScoped<
     IEmployerProfileRepository,
@@ -45,6 +46,7 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IEmployerProfileService,
     EmployerProfileService>();
+
 // Vacancy Repository registration.
 builder.Services.AddScoped<
     IVacancyRepository,
@@ -54,6 +56,26 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IVacancyService,
     VacancyService>();
+
+// Matching Repository registration.
+builder.Services.AddScoped<
+    IMatchingRepository,
+    MatchingRepository>();
+
+// Matching Service registration.
+builder.Services.AddScoped<
+    IMatchingService,
+    MatchingService>();
+
+// Job Application Repository registration.
+builder.Services.AddScoped<
+    IJobApplicationRepository,
+    JobApplicationRepository>();
+
+// Job Application Service registration.
+builder.Services.AddScoped<
+    IJobApplicationService,
+    JobApplicationService>();
 
 // Angular frontend permission.
 builder.Services.AddCors(options =>

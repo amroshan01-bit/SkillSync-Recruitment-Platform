@@ -1,0 +1,259 @@
+<div class="matches-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">PERSONALISED OPPORTUNITIES</p>
+      <h1>Your Job Matches</h1>
+      <p class="subtitle">
+        Discover vacancies matched with your skills.
+        Match scores are calculated securely by the backend.
+      </p>
+    </div>
+
+    <nav class="page-navigation">
+      <a href="/seeker/skills">Manage Skills</a>
+      <a href="/seeker/applications">My Applications</a>
+    </nav>
+  </header>
+
+  @if (successMessage) {
+    <div class="alert success-alert">
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage && !selectedMatch) {
+    <div class="alert error-alert">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="state-card">
+      <div class="loader"></div>
+      <p>Finding the best jobs for you...</p>
+    </div>
+  } @else if (matches.length === 0) {
+    <div class="state-card">
+      <div class="empty-icon">⌕</div>
+      <h2>No matching jobs found</h2>
+      <p>
+        Add more skills or check again when new vacancies
+        become available.
+      </p>
+      <a class="primary-link" href="/seeker/skills">
+        Update My Skills
+      </a>
+    </div>
+  } @else {
+    <section class="summary-bar">
+      <div>
+        <strong>{{ matches.length }}</strong>
+        <span>matching job found</span>
+      </div>
+
+      <p>
+        Jobs are ordered using your backend-generated
+        skill match score.
+      </p>
+    </section>
+
+    <section class="matches-grid">
+      @for (match of matches; track match.vacancyId) {
+        <article class="match-card">
+          <div class="card-top">
+            <div class="company-logo">
+              {{ match.companyName.charAt(0) }}
+            </div>
+
+            <div class="job-heading">
+              <p>{{ match.companyName }}</p>
+              <h2>{{ match.jobTitle }}</h2>
+
+              <div class="job-meta">
+                <span>⌖ {{ match.location }}</span>
+                <span>{{ match.workplaceType }}</span>
+                <span>{{ match.employmentType }}</span>
+              </div>
+            </div>
+
+            <div
+              class="score-circle"
+              [class.excellent]="match.matchScore >= 80"
+              [class.good]="
+                match.matchScore >= 60 &&
+                match.matchScore < 80
+              "
+            >
+              <strong>{{ match.matchScore }}%</strong>
+              <span>Match</span>
+            </div>
+          </div>
+
+          <div class="match-level">
+            {{ matchLevel(match.matchScore) }}
+          </div>
+
+          <div class="salary">
+            <span>Salary range</span>
+            <strong>
+              {{ match.currency }}
+              {{ match.minimumSalary | number:'1.0-0' }}
+              –
+              {{ match.maximumSalary | number:'1.0-0' }}
+            </strong>
+          </div>
+
+          <section class="skills-section">
+            <div class="skill-group">
+              <h3>
+                <span class="matched-dot"></span>
+                Matched Skills
+              </h3>
+
+              <div class="skill-list">
+                @for (
+                  skill of match.matchedSkills;
+                  track skill
+                ) {
+                  <span class="skill matched-skill">
+                    ✓ {{ skill }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <h3>
+                <span class="missing-dot"></span>
+                Missing Skills
+              </h3>
+
+              <div class="skill-list">
+                @for (
+                  skill of match.missingSkills;
+                  track skill
+                ) {
+                  <span class="skill missing-skill">
+                    {{ skill }}
+                  </span>
+                } @empty {
+                  <span class="all-matched">
+                    All required skills matched!
+                  </span>
+                }
+              </div>
+            </div>
+          </section>
+
+          <footer class="card-footer">
+            @if (match.hasApplied) {
+              <div class="application-status">
+                <span>Application status</span>
+                <strong>
+                  {{ match.applicationStatus }}
+                </strong>
+              </div>
+
+              <button
+                type="button"
+                class="applied-button"
+                disabled
+              >
+                ✓ Already Applied
+              </button>
+            } @else {
+              <p>
+                Your profile is ready for this opportunity.
+              </p>
+
+              <button
+                type="button"
+                class="apply-button"
+                (click)="openApplication(match)"
+              >
+                Apply Now
+              </button>
+            }
+          </footer>
+        </article>
+      }
+    </section>
+  }
+
+  @if (selectedMatch) {
+    <div
+      class="modal-backdrop"
+      (click)="closeApplication()"
+    >
+      <section
+        class="application-modal"
+        (click)="$event.stopPropagation()"
+      >
+        <header class="modal-header">
+          <div>
+            <p>JOB APPLICATION</p>
+            <h2>{{ selectedMatch.jobTitle }}</h2>
+            <span>{{ selectedMatch.companyName }}</span>
+          </div>
+
+          <button
+            type="button"
+            class="close-button"
+            (click)="closeApplication()"
+            [disabled]="isApplying"
+          >
+            ×
+          </button>
+        </header>
+
+        <div class="modal-content">
+          <label for="coverLetter">
+            Cover Letter
+          </label>
+
+          <textarea
+            id="coverLetter"
+            [(ngModel)]="coverLetter"
+            rows="8"
+            maxlength="2000"
+            placeholder="Explain why you are suitable for this position..."
+          ></textarea>
+
+          <div class="character-count">
+            {{ coverLetter.length }} / 2000
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert error-alert modal-alert">
+              {{ errorMessage }}
+            </div>
+          }
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="cancel-button"
+            (click)="closeApplication()"
+            [disabled]="isApplying"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="submit-button"
+            (click)="submitApplication()"
+            [disabled]="isApplying"
+          >
+            {{
+              isApplying
+                ? 'Submitting...'
+                : 'Submit Application'
+            }}
+          </button>
+        </footer>
+      </section>
+    </div>
+  }
+</div>
