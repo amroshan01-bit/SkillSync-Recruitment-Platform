@@ -5,7 +5,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+} from '@angular/router';
 
 import {
   CreateJobSeekerProfile,
@@ -21,6 +24,7 @@ import { JobSeekerCvComponent } from '../job-seeker-cv/job-seeker-cv.component';
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    RouterLink,
     JobSeekerCvComponent,
   ],
   templateUrl: './job-seeker-profile.component.html',
@@ -39,7 +43,8 @@ export class JobSeekerProfileComponent implements OnInit {
   private readonly router = inject(Router);
 
   readonly userId = this.authService.getUserId() ?? '';
-  readonly userName = this.authService.getUserName() ?? 'User';
+  readonly userName =
+    this.authService.getUserName() ?? 'User';
 
   // Backend-லிருந்து கிடைக்கும் profile-ஐ வைத்திருக்கும்.
   profile: JobSeekerProfile | null = null;

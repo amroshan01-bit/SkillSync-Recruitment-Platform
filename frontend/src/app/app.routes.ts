@@ -9,6 +9,9 @@ import { UnauthorizedComponent } from './features/auth/unauthorized/unauthorized
 import { EmployerProfileComponent } from './features/employer/employer-profile/employer-profile.component';
 import { VacancyManagementComponent } from './features/employer/vacancy-management/vacancy-management.component';
 import { JobSeekerProfileComponent } from './features/seeker/job-seeker-profile/job-seeker-profile.component';
+import { JobMatchesComponent } from './features/seeker/job-matches/job-matches.component';
+import { MyApplicationsComponent } from './features/seeker/my-applications/my-applications.component';
+import { ManageSkillsComponent } from './features/seeker/manage-skills/manage-skills.component';
 
 export const routes: Routes = [
   {
@@ -49,7 +52,39 @@ export const routes: Routes = [
       roles: ['JobSeeker'],
     },
   },
+   {
+    path: 'seeker/matches',
+    component: JobMatchesComponent,
+    canActivate: [
+      authGuard,
+      roleGuard,
+    ],
+    data: {
+      roles: ['JobSeeker'],
+    },
+  },
   {
+    path: 'seeker/applications',
+    component: MyApplicationsComponent,
+    canActivate: [
+      authGuard,
+      roleGuard,
+    ],
+    data: {
+      roles: ['JobSeeker'],
+    },
+  },
+  {
+    path: 'seeker/skills',
+    component: ManageSkillsComponent,
+    canActivate: [
+      authGuard,
+      roleGuard,
+    ],
+    data: {
+      roles: ['JobSeeker'],
+    },
+  },  {
     path: 'employer/profile',
     component: EmployerProfileComponent,
     canActivate: [

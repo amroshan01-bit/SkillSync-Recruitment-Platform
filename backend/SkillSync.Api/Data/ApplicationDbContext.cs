@@ -30,14 +30,30 @@ public class ApplicationDbContext : DbContext
         get;
         set;
     }
+
     // Employer profile table.
     public DbSet<EmployerProfile> EmployerProfiles
     {
         get;
         set;
     }
+
     // Vacancy table.
     public DbSet<Vacancy> Vacancies
+    {
+        get;
+        set;
+    }
+
+    // Job seeker skills table.
+    public DbSet<JobSeekerSkill> JobSeekerSkills
+    {
+        get;
+        set;
+    }
+
+    // Job applications table.
+    public DbSet<JobApplication> JobApplications
     {
         get;
         set;
@@ -62,10 +78,12 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<JobSeekerCv>()
             .HasIndex(cv => cv.UserId)
             .IsUnique();
+
         // Each user can have only one employer profile.
         modelBuilder.Entity<EmployerProfile>()
             .HasIndex(profile => profile.UserId)
             .IsUnique();
+
         // One employer profile can create many vacancies.
         modelBuilder.Entity<Vacancy>()
             .HasOne(vacancy => vacancy.EmployerProfile)
@@ -80,5 +98,34 @@ public class ApplicationDbContext : DbContext
         // Improve vacancy status filtering performance.
         modelBuilder.Entity<Vacancy>()
             .HasIndex(vacancy => vacancy.Status);
+
+        // Prevent duplicate skills for the same job seeker.
+        modelBuilder.Entity<JobSeekerSkill>()
+            .HasIndex(skill => new
+            {
+                skill.UserId,
+                skill.SkillName
+            })
+            .IsUnique();
+
+        // Prevent duplicate applications for the same vacancy.
+        modelBuilder.Entity<JobApplication>()
+            .HasIndex(application => new
+            {
+                application.JobSeekerUserId,
+                application.VacancyId
+            })
+            .IsUnique();
+
+        // Each application belongs to one vacancy.
+        modelBuilder.Entity<JobApplication>()
+            .HasOne(application => application.Vacancy)
+            .WithMany()
+            .HasForeignKey(application => application.VacancyId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Improve application status filtering performance.
+        modelBuilder.Entity<JobApplication>()
+            .HasIndex(application => application.Status);
     }
 }
