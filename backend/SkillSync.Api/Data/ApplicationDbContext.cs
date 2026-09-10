@@ -10,6 +10,12 @@ public class ApplicationDbContext : DbContext
         : base(options)
     {
     }
+    // Registered user accounts table.
+    public DbSet<User> Users
+    {
+      get;
+      set;
+    }
 
     // Job seeker profile table.
     public DbSet<JobSeekerProfile> JobSeekerProfiles
@@ -58,6 +64,10 @@ public class ApplicationDbContext : DbContext
         ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        // Each email address can belong to only one user.
+        modelBuilder.Entity<User>()
+            .HasIndex(user => user.Email)
+            .IsUnique();
 
         // Each user can have only one job seeker profile.
         modelBuilder.Entity<JobSeekerProfile>()

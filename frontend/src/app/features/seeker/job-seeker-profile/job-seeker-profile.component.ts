@@ -5,19 +5,24 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+} from '@angular/router';
+
 import {
   CreateJobSeekerProfile,
   JobSeekerProfile,
   UpdateJobSeekerProfile,
 } from '../../../core/models/job-seeker-profile.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { JobSeekerProfileService } from '../../../core/services/job-seeker-profile.service';
 import { JobSeekerCvComponent } from '../job-seeker-cv/job-seeker-cv.component';
 
 @Component({
   selector: 'app-job-seeker-profile',
   standalone: true,
-   imports: [
+  imports: [
     ReactiveFormsModule,
     RouterLink,
     JobSeekerCvComponent,
@@ -34,9 +39,12 @@ export class JobSeekerProfileComponent implements OnInit {
     JobSeekerProfileService,
   );
 
-  // Authentication முடியும்வரை பயன்படுத்தும் temporary User ID.
-  readonly userId =
-    '11111111-1111-1111-1111-111111111111';
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
+  readonly userId = this.authService.getUserId() ?? '';
+  readonly userName =
+    this.authService.getUserName() ?? 'User';
 
   // Backend-லிருந்து கிடைக்கும் profile-ஐ வைத்திருக்கும்.
   profile: JobSeekerProfile | null = null;
@@ -103,6 +111,11 @@ export class JobSeekerProfileComponent implements OnInit {
 
   // Page திறந்தவுடன் profile data load செய்யும்.
   ngOnInit(): void {
+    if (!this.userId) {
+      this.logout();
+      return;
+    }
+
     this.loadProfile();
   }
 
@@ -227,6 +240,11 @@ export class JobSeekerProfileComponent implements OnInit {
             'Unable to update the profile.';
         },
       });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 
   // Light Mode மற்றும் Dark Mode இடையே மாற்றும்.

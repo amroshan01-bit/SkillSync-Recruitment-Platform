@@ -59,18 +59,18 @@
 
         <div class="account">
           <span class="account-avatar">
-            {{
-              profileForm.controls.contactPerson.value.charAt(0)
-                || 'E'
-            }}
+            {{ userName.charAt(0).toUpperCase() || 'U' }}
           </span>
-          <span>
-            {{
-              profileForm.controls.contactPerson.value
-                || 'Employer'
-            }}
-          </span>
+          <span>{{ userName }}</span>
         </div>
+
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()"
+        >
+          Logout
+        </button>
       </div>
     </header>
 
@@ -155,16 +155,16 @@
                 >
                   <option value="">Select company size</option>
                   <option value="1-10 employees">
-                    1–10 employees
+                    1ΓÇô10 employees
                   </option>
                   <option value="11-50 employees">
-                    11–50 employees
+                    11ΓÇô50 employees
                   </option>
                   <option value="51-200 employees">
-                    51–200 employees
+                    51ΓÇô200 employees
                   </option>
                   <option value="201-500 employees">
-                    201–500 employees
+                    201ΓÇô500 employees
                   </option>
                   <option value="501+ employees">
                     501+ employees

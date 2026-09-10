@@ -6,12 +6,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import {
   CreateVacancy,
   UpdateVacancy,
   Vacancy,
 } from '../../../core/models/vacancy.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { EmployerProfileService } from '../../../core/services/employer-profile.service';
 import { VacancyService } from '../../../core/services/vacancy.service';
 
@@ -28,9 +30,11 @@ export class VacancyManagementComponent implements OnInit {
     EmployerProfileService,
   );
   private readonly vacancyService = inject(VacancyService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  readonly userId =
-    '11111111-1111-1111-1111-111111111111';
+  readonly userId = this.authService.getUserId() ?? '';
+  readonly userName = this.authService.getUserName() ?? 'User';
 
   employerProfileId = '';
   companyName = '';
@@ -140,6 +144,11 @@ export class VacancyManagementComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    if (!this.userId) {
+      this.logout();
+      return;
+    }
+
     this.loadEmployerProfile();
   }
 
@@ -406,6 +415,11 @@ export class VacancyManagementComponent implements OnInit {
 
   toggleDarkMode(): void {
     this.darkMode = !this.darkMode;
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 
   private getErrorMessage(

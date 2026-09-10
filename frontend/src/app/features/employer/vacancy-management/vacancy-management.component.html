@@ -54,10 +54,18 @@
 
         <div class="account">
           <span class="account-avatar">
-            {{ companyName.charAt(0) || 'E' }}
+            {{ userName.charAt(0).toUpperCase() || 'U' }}
           </span>
-          <span>{{ companyName || 'Employer' }}</span>
+          <span>{{ userName }}</span>
         </div>
+
+        <button
+          type="button"
+          class="theme-button"
+          (click)="logout()"
+        >
+          Logout
+        </button>
       </div>
     </header>
 

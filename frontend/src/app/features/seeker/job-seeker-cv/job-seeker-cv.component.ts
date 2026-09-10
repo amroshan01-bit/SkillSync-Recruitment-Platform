@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 
 import { JobSeekerCv } from '../../../core/models/job-seeker-cv.model';
-import { JobSeekerCvService } from '../../../core/services/job-seeker-cv.service'
+import { AuthService } from '../../../core/services/auth.service';
+import { JobSeekerCvService } from '../../../core/services/job-seeker-cv.service';
 
 @Component({
   selector: 'app-job-seeker-cv',
@@ -15,9 +16,10 @@ import { JobSeekerCvService } from '../../../core/services/job-seeker-cv.service
 export class JobSeekerCvComponent implements OnInit {
   // Gets the CV service.
   private readonly cvService = inject(JobSeekerCvService);
+  private readonly authService = inject(AuthService);
 
-  // Temporary user ID until authentication is added.
-  readonly userId = '11111111-1111-1111-1111-111111111111';
+  // Uses the authenticated user's ID.
+  readonly userId = this.authService.getUserId() ?? '';
 
   // Stores the uploaded CV information.
   cv: JobSeekerCv | null = null;
@@ -48,6 +50,10 @@ export class JobSeekerCvComponent implements OnInit {
 
   // Loads the CV when the component opens.
   ngOnInit(): void {
+    if (!this.userId) {
+      return;
+    }
+
     this.loadCv();
   }
 

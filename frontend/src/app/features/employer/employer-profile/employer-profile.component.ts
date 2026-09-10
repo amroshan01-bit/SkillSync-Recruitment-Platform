@@ -5,12 +5,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import {
   CreateEmployerProfile,
   EmployerProfile,
   UpdateEmployerProfile,
 } from '../../../core/models/employer-profile.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { EmployerProfileService } from '../../../core/services/employer-profile.service';
 
 @Component({
@@ -25,9 +27,11 @@ export class EmployerProfileComponent implements OnInit {
   private readonly profileService = inject(
     EmployerProfileService,
   );
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  readonly userId =
-    '11111111-1111-1111-1111-111111111111';
+  readonly userId = this.authService.getUserId() ?? '';
+  readonly userName = this.authService.getUserName() ?? 'User';
 
   profile: EmployerProfile | null = null;
   loading = false;
@@ -105,6 +109,11 @@ export class EmployerProfileComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    if (!this.userId) {
+      this.logout();
+      return;
+    }
+
     this.loadProfile();
   }
 
@@ -221,6 +230,11 @@ export class EmployerProfileComponent implements OnInit {
             'Unable to update the employer profile.';
         },
       });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 
   toggleDarkMode(): void {
