@@ -13,7 +13,6 @@ export interface JobSeekerProfile {
 }
 
 export interface CreateJobSeekerProfile {
-  userId: string;
   fullName: string;
   professionalTitle: string | null;
   bio: string | null;

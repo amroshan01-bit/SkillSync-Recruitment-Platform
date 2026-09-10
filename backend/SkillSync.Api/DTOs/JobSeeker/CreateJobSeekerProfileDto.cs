@@ -5,9 +5,6 @@ namespace SkillSync.Api.DTOs.JobSeeker;
 public class CreateJobSeekerProfileDto
 {
     [Required]
-    public Guid UserId { get; set; }
-
-    [Required]
     [MaxLength(150)]
     public string FullName { get; set; } = string.Empty;
 

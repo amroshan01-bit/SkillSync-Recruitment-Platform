@@ -15,21 +15,8 @@ public class JobSeekerProfileService : IJobSeekerProfileService
         _repository = repository;
     }
 
-    public async Task<List<JobSeekerProfileDto>> GetAllAsync()
-    {
-        var profiles = await _repository.GetAllAsync();
-
-        return profiles.Select(MapToDto).ToList();
-    }
-
-    public async Task<JobSeekerProfileDto?> GetByIdAsync(Guid id)
-    {
-        var profile = await _repository.GetByIdAsync(id);
-
-        return profile is null ? null : MapToDto(profile);
-    }
-
-    public async Task<JobSeekerProfileDto?> GetByUserIdAsync(Guid userId)
+    public async Task<JobSeekerProfileDto?> GetByUserIdAsync(
+        Guid userId)
     {
         var profile = await _repository.GetByUserIdAsync(userId);
 
@@ -37,10 +24,11 @@ public class JobSeekerProfileService : IJobSeekerProfileService
     }
 
     public async Task<JobSeekerProfileDto?> CreateAsync(
+        Guid userId,
         CreateJobSeekerProfileDto dto)
     {
         var profileExists =
-            await _repository.ExistsForUserAsync(dto.UserId);
+            await _repository.ExistsForUserAsync(userId);
 
         if (profileExists)
         {
@@ -49,7 +37,7 @@ public class JobSeekerProfileService : IJobSeekerProfileService
 
         var profile = new JobSeekerProfile
         {
-            UserId = dto.UserId,
+            UserId = userId,
             FullName = dto.FullName,
             ProfessionalTitle = dto.ProfessionalTitle,
             Bio = dto.Bio,
@@ -66,10 +54,11 @@ public class JobSeekerProfileService : IJobSeekerProfileService
     }
 
     public async Task<bool> UpdateAsync(
-        Guid id,
+        Guid userId,
         UpdateJobSeekerProfileDto dto)
     {
-        var profile = await _repository.GetByIdAsync(id);
+        var profile =
+            await _repository.GetByUserIdAsync(userId);
 
         if (profile is null)
         {
@@ -90,9 +79,10 @@ public class JobSeekerProfileService : IJobSeekerProfileService
         return true;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid userId)
     {
-        var profile = await _repository.GetByIdAsync(id);
+        var profile =
+            await _repository.GetByUserIdAsync(userId);
 
         if (profile is null)
         {

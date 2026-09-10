@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 
 import { JobSeekerCv } from '../../../core/models/job-seeker-cv.model';
-import { AuthService } from '../../../core/services/auth.service';
+
 import { JobSeekerCvService } from '../../../core/services/job-seeker-cv.service';
 
 @Component({
@@ -16,11 +16,6 @@ import { JobSeekerCvService } from '../../../core/services/job-seeker-cv.service
 export class JobSeekerCvComponent implements OnInit {
   // Gets the CV service.
   private readonly cvService = inject(JobSeekerCvService);
-  private readonly authService = inject(AuthService);
-
-  // Uses the authenticated user's ID.
-  readonly userId = this.authService.getUserId() ?? '';
-
   // Stores the uploaded CV information.
   cv: JobSeekerCv | null = null;
 
@@ -50,19 +45,15 @@ export class JobSeekerCvComponent implements OnInit {
 
   // Loads the CV when the component opens.
   ngOnInit(): void {
-    if (!this.userId) {
-      return;
-    }
-
-    this.loadCv();
-  }
+  this.loadCv();
+}
 
   // Gets the current user's CV from the backend.
   loadCv(): void {
     this.loading = true;
     this.errorMessage = '';
 
-    this.cvService.getByUserId(this.userId).subscribe({
+    this.cvService.getCurrent().subscribe({
       next: (cv) => {
         this.cv = cv;
         this.loading = false;
@@ -136,7 +127,7 @@ export class JobSeekerCvComponent implements OnInit {
     this.successMessage = '';
 
     this.cvService
-      .upload(this.userId, this.selectedFile)
+      .upload(this.selectedFile)
       .subscribe({
         next: (cv) => {
           this.cv = cv;
@@ -166,7 +157,7 @@ export class JobSeekerCvComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.cvService.download(this.userId).subscribe({
+    this.cvService.download().subscribe({
       next: (fileBlob) => {
         // Creates a temporary browser download URL.
         const downloadUrl =
@@ -210,7 +201,7 @@ export class JobSeekerCvComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.cvService.delete(this.userId).subscribe({
+    this.cvService.deleteCurrent().subscribe({
       next: () => {
         this.cv = null;
         this.selectedFile = null;

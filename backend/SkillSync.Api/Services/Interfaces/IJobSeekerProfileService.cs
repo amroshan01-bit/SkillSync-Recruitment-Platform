@@ -4,18 +4,15 @@ namespace SkillSync.Api.Services.Interfaces;
 
 public interface IJobSeekerProfileService
 {
-    Task<List<JobSeekerProfileDto>> GetAllAsync();
-
-    Task<JobSeekerProfileDto?> GetByIdAsync(Guid id);
-
     Task<JobSeekerProfileDto?> GetByUserIdAsync(Guid userId);
 
     Task<JobSeekerProfileDto?> CreateAsync(
+        Guid userId,
         CreateJobSeekerProfileDto dto);
 
     Task<bool> UpdateAsync(
-        Guid id,
+        Guid userId,
         UpdateJobSeekerProfileDto dto);
 
-    Task<bool> DeleteAsync(Guid id);
+    Task<bool> DeleteAsync(Guid userId);
 }
