@@ -63,6 +63,14 @@ export class AuthService {
     return this.authSubject.value?.token ?? null;
   }
 
+  getUserId(): string | null {
+    return this.authSubject.value?.userId ?? null;
+  }
+
+  getUserName(): string | null {
+    return this.authSubject.value?.fullName ?? null;
+  }
+
   getRole(): UserRole | null {
     return this.authSubject.value?.role ?? null;
   }

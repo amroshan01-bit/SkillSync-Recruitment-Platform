@@ -19,6 +19,8 @@
 .account-avatar { display:grid; width:38px; height:38px; place-items:center; border-radius:50%; color:#0e69dc; background:#d9ebff; }
 .theme-button { min-height:40px; padding:8px 14px; border:1px solid #ccd9e8; border-radius:10px; color:#48566d; background:#fff; font:inherit; font-size:14px; font-weight:600; cursor:pointer; }
 .theme-button:hover { color:#0e69dc; border-color:#1677ff; background:#f0f7ff; }
+.logout-button { min-height:40px; padding:8px 14px; border:1px solid #fecaca; border-radius:10px; color:#b42318; background:#fff; font:inherit; font-size:14px; font-weight:600; cursor:pointer; }
+.logout-button:hover { color:#fff; border-color:#dc2626; background:#dc2626; }
 .content { padding:30px; }
 .page-heading { margin-bottom:24px; }
 .page-heading h1 { margin:0 0 7px; font-size:28px; }
@@ -68,6 +70,8 @@
 .dark-theme .form-field input:focus,.dark-theme .form-field textarea:focus { border-color:#5aa2ff; box-shadow:0 0 0 3px rgb(90 162 255 / 16%); }
 .dark-theme .theme-button,.dark-theme .secondary-button { color:#cad3e3; border-color:#3b4a62; background:#182235; }
 .dark-theme .theme-button:hover,.dark-theme .secondary-button:hover { color:#a9d1ff; border-color:#5aa2ff; background:#21344d; }
+.dark-theme .logout-button { color:#ffaaa3; border-color:#7f3b3b; background:#182235; }
+.dark-theme .logout-button:hover { color:#fff; border-color:#dc2626; background:#dc2626; }
 .dark-theme .primary-button { color:#fff; background:#347fdd; }
 .dark-theme .primary-button:hover { background:#438fe9; }
 .dark-theme .completion-track { background:#2b3950; }
@@ -85,6 +89,6 @@
   .topbar { padding:12px 20px; }
   .search-text { display:none; }
   .topbar-actions { margin-left:auto; gap:10px; }
-  .theme-button { padding:8px 10px; }
+  .theme-button,.logout-button { padding:8px 10px; }
   .account { margin-left:auto; }
 }

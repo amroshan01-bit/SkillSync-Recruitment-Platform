@@ -506,3 +506,41 @@
     display: none;
   }
 }
+
+.logout-button {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  color: #b42318;
+  background: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  color: #ffffff;
+  border-color: #dc2626;
+  background: #dc2626;
+}
+
+.dark-theme .logout-button {
+  color: #ffaaa3;
+  border-color: #7f3b3b;
+  background: #182235;
+}
+
+.dark-theme .logout-button:hover {
+  color: #ffffff;
+  border-color: #dc2626;
+  background: #dc2626;
+}
+
+@media (max-width: 800px) {
+  .theme-button,
+  .logout-button {
+    padding: 8px 10px;
+  }
+}

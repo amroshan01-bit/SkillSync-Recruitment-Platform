@@ -27,6 +27,9 @@ export class AdminDashboardComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
+  readonly userName =
+    this.authService.getUserName() ?? 'Admin';
+
   users: AdminUser[] = [];
   isLoading = true;
   errorMessage = '';

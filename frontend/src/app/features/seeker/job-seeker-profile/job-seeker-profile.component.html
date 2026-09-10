@@ -14,11 +14,29 @@
     <header class="topbar">
       <p class="search-text">Search jobs, skills or companies</p>
       <div class="topbar-actions">
-        <button type="button" class="theme-button" (click)="toggleDarkMode()"
-          [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+        <button
+          type="button"
+          class="theme-button"
+          (click)="toggleDarkMode()"
+          [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+        >
           @if (darkMode) { ☀ Light } @else { ☾ Dark }
         </button>
-        <div class="account"><span class="account-avatar">P</span><span>Piraveena</span></div>
+
+        <div class="account">
+          <span class="account-avatar">
+            {{ userName.charAt(0).toUpperCase() || 'U' }}
+          </span>
+          <span>{{ userName }}</span>
+        </div>
+
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()"
+        >
+          Logout
+        </button>
       </div>
     </header>
 
@@ -81,8 +99,8 @@
           <app-job-seeker-cv />
 
           <aside class="summary-panel">
-            <div class="profile-avatar">{{ profileForm.controls.fullName.value.charAt(0) || 'P' }}</div>
-            <h2>{{ profileForm.controls.fullName.value || 'Job Seeker' }}</h2>
+            <div class="profile-avatar">{{ profileForm.controls.fullName.value.charAt(0) || userName.charAt(0) || 'U' }}</div>
+            <h2>{{ profileForm.controls.fullName.value || userName }}</h2>
             <p class="profile-title">{{ profileForm.controls.professionalTitle.value || 'Add professional title' }}</p>
             <div class="completion-heading"><span>Profile Completion</span><strong>80%</strong></div>
             <div class="completion-track"><div class="completion-value"></div></div>
