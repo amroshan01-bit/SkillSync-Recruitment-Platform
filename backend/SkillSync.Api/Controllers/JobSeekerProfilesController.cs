@@ -1,11 +1,16 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillSync.Api.DTOs.JobSeeker;
+using SkillSync.Api.Models;
 using SkillSync.Api.Services.Interfaces;
 
 namespace SkillSync.Api.Controllers;
 
 [ApiController]
 [Route("api/job-seeker-profiles")]
+[Authorize(Roles = UserRoles.JobSeeker)]
 public class JobSeekerProfilesController : ControllerBase
 {
     private readonly IJobSeekerProfileService _service;
@@ -16,85 +21,82 @@ public class JobSeekerProfilesController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<JobSeekerProfileDto>>> GetAll()
+    [HttpGet("me")]
+    public async Task<ActionResult<JobSeekerProfileDto>>
+        GetCurrent()
     {
-        var profiles = await _service.GetAllAsync();
-
-        return Ok(profiles);
-    }
-
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<JobSeekerProfileDto>> GetById(
-        Guid id)
-    {
-        var profile = await _service.GetByIdAsync(id);
-
-        if (profile is null)
+        if (!TryGetCurrentUserId(out var userId))
         {
-            return NotFound();
+            return Unauthorized();
         }
 
-        return Ok(profile);
+        var profile =
+            await _service.GetByUserIdAsync(userId);
+
+        return profile is null ? NotFound() : Ok(profile);
     }
 
-    [HttpGet("user/{userId:guid}")]
-    public async Task<ActionResult<JobSeekerProfileDto>> GetByUserId(
-        Guid userId)
+    [HttpPost("me")]
+    public async Task<ActionResult<JobSeekerProfileDto>>
+        CreateCurrent(CreateJobSeekerProfileDto dto)
     {
-        var profile = await _service.GetByUserIdAsync(userId);
-
-        if (profile is null)
+        if (!TryGetCurrentUserId(out var userId))
         {
-            return NotFound();
+            return Unauthorized();
         }
 
-        return Ok(profile);
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<JobSeekerProfileDto>> Create(
-        CreateJobSeekerProfileDto dto)
-    {
-        var profile = await _service.CreateAsync(dto);
+        var profile =
+            await _service.CreateAsync(userId, dto);
 
         if (profile is null)
         {
-            return Conflict(
-                new { message = "This user already has a profile." });
+            return Conflict(new
+            {
+                message = "This user already has a profile."
+            });
         }
 
         return CreatedAtAction(
-            nameof(GetById),
-            new { id = profile.Id },
+            nameof(GetCurrent),
             profile);
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(
-        Guid id,
+    [HttpPut("me")]
+    public async Task<IActionResult> UpdateCurrent(
         UpdateJobSeekerProfileDto dto)
     {
-        var updated = await _service.UpdateAsync(id, dto);
-
-        if (!updated)
+        if (!TryGetCurrentUserId(out var userId))
         {
-            return NotFound();
+            return Unauthorized();
         }
 
-        return NoContent();
+        var updated =
+            await _service.UpdateAsync(userId, dto);
+
+        return updated ? NoContent() : NotFound();
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("me")]
+    public async Task<IActionResult> DeleteCurrent()
     {
-        var deleted = await _service.DeleteAsync(id);
-
-        if (!deleted)
+        if (!TryGetCurrentUserId(out var userId))
         {
-            return NotFound();
+            return Unauthorized();
         }
 
-        return NoContent();
+        var deleted = await _service.DeleteAsync(userId);
+
+        return deleted ? NoContent() : NotFound();
+    }
+
+    private bool TryGetCurrentUserId(out Guid userId)
+    {
+        var userIdValue =
+            User.FindFirst(
+                ClaimTypes.NameIdentifier)?.Value
+            ?? User.FindFirst(
+                JwtRegisteredClaimNames.Sub)?.Value;
+
+        return Guid.TryParse(userIdValue, out userId);
     }
 }

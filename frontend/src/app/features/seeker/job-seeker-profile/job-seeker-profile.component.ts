@@ -42,7 +42,6 @@ export class JobSeekerProfileComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly userId = this.authService.getUserId() ?? '';
   readonly userName =
     this.authService.getUserName() ?? 'User';
 
@@ -111,11 +110,6 @@ export class JobSeekerProfileComponent implements OnInit {
 
   // Page திறந்தவுடன் profile data load செய்யும்.
   ngOnInit(): void {
-    if (!this.userId) {
-      this.logout();
-      return;
-    }
-
     this.loadProfile();
   }
 
@@ -125,7 +119,7 @@ export class JobSeekerProfileComponent implements OnInit {
     this.errorMessage = '';
 
     this.profileService
-      .getByUserId(this.userId)
+      .getCurrent()
       .subscribe({
         // API success ஆனால் form-ல் data நிரப்பும்.
         next: (profile) => {
@@ -188,10 +182,8 @@ export class JobSeekerProfileComponent implements OnInit {
     }
 
     // Profile இல்லையென்றால் புதிய profile உருவாக்கும்.
-    const createData: CreateJobSeekerProfile = {
-      userId: this.userId,
-      ...formValue,
-    };
+    const createData: CreateJobSeekerProfile =
+      formValue;
 
     this.createProfile(createData);
   }
@@ -224,7 +216,7 @@ export class JobSeekerProfileComponent implements OnInit {
     }
 
     this.profileService
-      .update(this.profile.id, updateData)
+      .update(updateData)
       .subscribe({
         next: () => {
           this.saving = false;

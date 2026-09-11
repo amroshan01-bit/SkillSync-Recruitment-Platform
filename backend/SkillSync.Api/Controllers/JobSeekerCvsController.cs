@@ -1,45 +1,97 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillSync.Api.DTOs.JobSeeker;
+using SkillSync.Api.Models;
 using SkillSync.Api.Services.Interfaces;
 
 namespace SkillSync.Api.Controllers;
 
 [ApiController]
 [Route("api/job-seeker-cvs")]
+[Authorize(Roles = UserRoles.JobSeeker)]
 public class JobSeekerCvsController : ControllerBase
 {
     private readonly IJobSeekerCvService _service;
 
-    public JobSeekerCvsController(IJobSeekerCvService service)
+    public JobSeekerCvsController(
+        IJobSeekerCvService service)
     {
         _service = service;
     }
 
-    [HttpGet("user/{userId:guid}")]
-    public async Task<ActionResult<JobSeekerCvDto>> Get(Guid userId)
+    [HttpGet("me")]
+    public async Task<ActionResult<JobSeekerCvDto>>
+        GetCurrent()
     {
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
         var cv = await _service.GetByUserIdAsync(userId);
+
         return cv is null ? NotFound() : Ok(cv);
     }
 
-    [HttpPost("upload/{userId:guid}")]
+    [HttpPost("me/upload")]
     [Consumes("multipart/form-data")]
-    public async Task<ActionResult<JobSeekerCvDto>> Upload(Guid userId, IFormFile file)
+    public async Task<ActionResult<JobSeekerCvDto>>
+        UploadCurrent(IFormFile file)
     {
-        var result = await _service.UploadAsync(userId, file);
-        return result.Error is not null ? BadRequest(new { message = result.Error }) : Ok(result.Cv);
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var result =
+            await _service.UploadAsync(userId, file);
+
+        return result.Error is not null
+            ? BadRequest(new { message = result.Error })
+            : Ok(result.Cv);
     }
 
-    [HttpGet("download/{userId:guid}")]
-    public async Task<IActionResult> Download(Guid userId)
+    [HttpGet("me/download")]
+    public async Task<IActionResult> DownloadCurrent()
     {
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
         var file = await _service.DownloadAsync(userId);
-        return file is null ? NotFound() : File(file.Value.Bytes, file.Value.ContentType, file.Value.FileName);
+
+        return file is null
+            ? NotFound()
+            : File(
+                file.Value.Bytes,
+                file.Value.ContentType,
+                file.Value.FileName);
     }
 
-    [HttpDelete("user/{userId:guid}")]
-    public async Task<IActionResult> Delete(Guid userId)
+    [HttpDelete("me")]
+    public async Task<IActionResult> DeleteCurrent()
     {
-        return await _service.DeleteAsync(userId) ? NoContent() : NotFound();
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var deleted = await _service.DeleteAsync(userId);
+
+        return deleted ? NoContent() : NotFound();
+    }
+
+    private bool TryGetCurrentUserId(out Guid userId)
+    {
+        var userIdValue =
+            User.FindFirst(
+                ClaimTypes.NameIdentifier)?.Value
+            ?? User.FindFirst(
+                JwtRegisteredClaimNames.Sub)?.Value;
+
+        return Guid.TryParse(userIdValue, out userId);
     }
 }
