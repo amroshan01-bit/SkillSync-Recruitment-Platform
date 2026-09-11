@@ -8,11 +8,16 @@ namespace SkillSync.Api.Services.Implementations;
 public class VacancyService : IVacancyService
 {
     private readonly IVacancyRepository _repository;
+    private readonly IEmployerProfileRepository
+    _employerProfileRepository;
 
-    public VacancyService(IVacancyRepository repository)
-    {
-        _repository = repository;
-    }
+    public VacancyService(
+    IVacancyRepository repository,
+    IEmployerProfileRepository employerProfileRepository)
+{
+    _repository = repository;
+    _employerProfileRepository = employerProfileRepository;
+}
 
     public async Task<List<VacancyDto>> GetAllAsync(
         string? status,
@@ -24,18 +29,27 @@ public class VacancyService : IVacancyService
         return vacancies.Select(MapToDto).ToList();
     }
 
-    public async Task<List<VacancyDto>>
-        GetByEmployerProfileIdAsync(
-            Guid employerProfileId,
-            string? status)
-    {
-        var vacancies =
-            await _repository.GetByEmployerProfileIdAsync(
-                employerProfileId,
-                status);
+    public async Task<List<VacancyDto>?>
+    GetCurrentEmployerAsync(
+        Guid userId,
+        string? status)
+{
+    var employerProfile =
+        await _employerProfileRepository
+            .GetByUserIdAsync(userId);
 
-        return vacancies.Select(MapToDto).ToList();
+    if (employerProfile is null)
+    {
+        return null;
     }
+
+    var vacancies =
+        await _repository.GetByEmployerProfileIdAsync(
+            employerProfile.Id,
+            status);
+
+    return vacancies.Select(MapToDto).ToList();
+}
 
     public async Task<VacancyDto?> GetByIdAsync(Guid id)
     {
@@ -45,22 +59,23 @@ public class VacancyService : IVacancyService
     }
 
     public async Task<VacancyDto?> CreateAsync(
-        CreateVacancyDto dto)
+    Guid userId,
+    CreateVacancyDto dto)
     {
-        var employerExists =
-            await _repository.EmployerProfileExistsAsync(
-                dto.EmployerProfileId);
+        var employerProfile =
+    await _employerProfileRepository
+        .GetByUserIdAsync(userId);
 
-        if (!employerExists ||
-            dto.MaximumSalary < dto.MinimumSalary ||
-            dto.ApplicationClosingDate <= DateTime.UtcNow)
-        {
-            return null;
-        }
+if (employerProfile is null ||
+    dto.MaximumSalary < dto.MinimumSalary ||
+    dto.ApplicationClosingDate <= DateTime.UtcNow)
+{
+    return null;
+}
 
         var vacancy = new Vacancy
         {
-            EmployerProfileId = dto.EmployerProfileId,
+            EmployerProfileId = employerProfile.Id,
             JobTitle = dto.JobTitle,
             Department = dto.Department,
             Location = dto.Location,
@@ -94,13 +109,20 @@ public class VacancyService : IVacancyService
     }
 
     public async Task<bool> UpdateAsync(
-        Guid id,
-        UpdateVacancyDto dto)
+    Guid userId,
+    Guid id,
+    UpdateVacancyDto dto)
     {
-        var vacancy = await _repository.GetByIdAsync(id);
+        var employerProfile =
+    await _employerProfileRepository
+        .GetByUserIdAsync(userId);
 
-        if (vacancy is null ||
-            vacancy.Status == "Closed" ||
+var vacancy = await _repository.GetByIdAsync(id);
+
+if (employerProfile is null ||
+    vacancy is null ||
+    vacancy.EmployerProfileId != employerProfile.Id ||
+    vacancy.Status == "Closed" ||
             dto.MaximumSalary < dto.MinimumSalary ||
             dto.ApplicationClosingDate <= DateTime.UtcNow)
         {
@@ -136,11 +158,20 @@ public class VacancyService : IVacancyService
         return true;
     }
 
-    public async Task<bool> CloseAsync(Guid id)
+    public async Task<bool> CloseAsync(
+    Guid userId,
+    Guid id)
     {
-        var vacancy = await _repository.GetByIdAsync(id);
+        var employerProfile =
+    await _employerProfileRepository
+        .GetByUserIdAsync(userId);
 
-        if (vacancy is null || vacancy.Status == "Closed")
+var vacancy = await _repository.GetByIdAsync(id);
+
+if (employerProfile is null ||
+    vacancy is null ||
+    vacancy.EmployerProfileId != employerProfile.Id ||
+    vacancy.Status == "Closed")
         {
             return false;
         }
@@ -153,11 +184,19 @@ public class VacancyService : IVacancyService
         return true;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(
+    Guid userId,
+    Guid id)
     {
-        var vacancy = await _repository.GetByIdAsync(id);
+        var employerProfile =
+    await _employerProfileRepository
+        .GetByUserIdAsync(userId);
 
-        if (vacancy is null)
+var vacancy = await _repository.GetByIdAsync(id);
+
+if (employerProfile is null ||
+    vacancy is null ||
+    vacancy.EmployerProfileId != employerProfile.Id)
         {
             return false;
         }
