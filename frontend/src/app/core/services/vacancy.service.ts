@@ -38,21 +38,18 @@ export class VacancyService {
     );
   }
 
-  getByEmployerProfileId(
-    employerProfileId: string,
-    status?: string,
-  ): Observable<Vacancy[]> {
-    let params = new HttpParams();
+  getMine(status?: string): Observable<Vacancy[]> {
+  let params = new HttpParams();
 
-    if (status) {
-      params = params.set('status', status);
-    }
-
-    return this.http.get<Vacancy[]>(
-      `${this.apiUrl}/employer/${employerProfileId}`,
-      { params },
-    );
+  if (status) {
+    params = params.set('status', status);
   }
+
+  return this.http.get<Vacancy[]>(
+    `${this.apiUrl}/mine`,
+    { params },
+  );
+}
 
   create(vacancy: CreateVacancy): Observable<Vacancy> {
     return this.http.post<Vacancy>(

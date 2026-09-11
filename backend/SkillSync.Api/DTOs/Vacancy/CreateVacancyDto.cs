@@ -3,11 +3,7 @@
 namespace SkillSync.Api.DTOs.Vacancy;
 
 public class CreateVacancyDto
-{
-    [Required]
-    public Guid EmployerProfileId { get; set; }
-
-    [Required]
+{   [Required]
     [MaxLength(150)]
     public string JobTitle { get; set; } = string.Empty;
 

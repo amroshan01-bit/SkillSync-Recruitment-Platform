@@ -29,14 +29,12 @@ export class EmployerProfileComponent implements OnInit {
   );
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-
-  readonly userId = this.authService.getUserId() ?? '';
   readonly userName = this.authService.getUserName() ?? 'User';
 
   profile: EmployerProfile | null = null;
   loading = false;
   saving = false;
-  darkMode = false;
+  darkMode = localStorage.getItem('employerDarkMode') === 'true';
   errorMessage = '';
   successMessage = '';
 
@@ -108,21 +106,16 @@ export class EmployerProfileComponent implements OnInit {
     ],
   });
 
-  ngOnInit(): void {
-    if (!this.userId) {
-      this.logout();
-      return;
-    }
-
-    this.loadProfile();
-  }
+ ngOnInit(): void {
+  this.loadProfile();
+}
 
   loadProfile(): void {
     this.loading = true;
     this.errorMessage = '';
 
     this.profileService
-      .getByUserId(this.userId)
+      .getCurrent()
       .subscribe({
         next: (profile) => {
           this.profile = profile;
@@ -182,12 +175,8 @@ export class EmployerProfileComponent implements OnInit {
       return;
     }
 
-    const createData: CreateEmployerProfile = {
-      userId: this.userId,
-      ...formValue,
-    };
-
-    this.createProfile(createData);
+    const createData: CreateEmployerProfile = formValue;
+        this.createProfile(createData);
   }
 
   private createProfile(
@@ -216,7 +205,7 @@ export class EmployerProfileComponent implements OnInit {
     }
 
     this.profileService
-      .update(this.profile.id, updateData)
+      .update(updateData)
       .subscribe({
         next: () => {
           this.saving = false;
@@ -238,6 +227,7 @@ export class EmployerProfileComponent implements OnInit {
   }
 
   toggleDarkMode(): void {
-    this.darkMode = !this.darkMode;
-  }
+  this.darkMode = !this.darkMode;
+  localStorage.setItem('employerDarkMode', String(this.darkMode));
+}
 }

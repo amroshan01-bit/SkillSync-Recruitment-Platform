@@ -8,19 +8,26 @@ public interface IVacancyService
         string? status,
         string? search);
 
-    Task<List<VacancyDto>> GetByEmployerProfileIdAsync(
-        Guid employerProfileId,
+    Task<List<VacancyDto>?> GetCurrentEmployerAsync(
+        Guid userId,
         string? status);
 
     Task<VacancyDto?> GetByIdAsync(Guid id);
 
-    Task<VacancyDto?> CreateAsync(CreateVacancyDto dto);
+    Task<VacancyDto?> CreateAsync(
+        Guid userId,
+        CreateVacancyDto dto);
 
     Task<bool> UpdateAsync(
+        Guid userId,
         Guid id,
         UpdateVacancyDto dto);
 
-    Task<bool> CloseAsync(Guid id);
+    Task<bool> CloseAsync(
+        Guid userId,
+        Guid id);
 
-    Task<bool> DeleteAsync(Guid id);
+    Task<bool> DeleteAsync(
+        Guid userId,
+        Guid id);
 }

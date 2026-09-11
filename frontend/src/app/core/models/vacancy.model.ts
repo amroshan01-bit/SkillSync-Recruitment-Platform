@@ -23,7 +23,6 @@ export interface Vacancy {
 }
 
 export interface CreateVacancy {
-  employerProfileId: string;
   jobTitle: string;
   department: string;
   location: string;

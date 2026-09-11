@@ -35,15 +35,14 @@ export class VacancyManagementComponent implements OnInit {
 
   readonly userId = this.authService.getUserId() ?? '';
   readonly userName = this.authService.getUserName() ?? 'User';
-
-  employerProfileId = '';
   companyName = '';
+  hasEmployerProfile = false;
   vacancies: Vacancy[] = [];
   editingVacancyId: string | null = null;
 
   loading = false;
   saving = false;
-  darkMode = false;
+  darkMode = localStorage.getItem('employerDarkMode') === 'true';
   showForm = false;
   selectedStatus = '';
   errorMessage = '';
@@ -154,13 +153,14 @@ export class VacancyManagementComponent implements OnInit {
 
   loadEmployerProfile(): void {
     this.loading = true;
+    this.hasEmployerProfile = false;
     this.errorMessage = '';
 
     this.employerProfileService
-      .getByUserId(this.userId)
+      .getCurrent()
       .subscribe({
         next: (profile) => {
-          this.employerProfileId = profile.id;
+          this.hasEmployerProfile = true;
           this.companyName = profile.companyName;
           this.loadVacancies();
         },
@@ -173,18 +173,10 @@ export class VacancyManagementComponent implements OnInit {
   }
 
   loadVacancies(): void {
-    if (!this.employerProfileId) {
-      return;
-    }
-
     this.loading = true;
     this.errorMessage = '';
-
     this.vacancyService
-      .getByEmployerProfileId(
-        this.employerProfileId,
-        this.selectedStatus || undefined,
-      )
+  .getMine(this.selectedStatus || undefined)
       .subscribe({
         next: (vacancies) => {
           this.vacancies = vacancies;
@@ -279,17 +271,9 @@ export class VacancyManagementComponent implements OnInit {
         'Maximum salary must be greater than minimum salary.';
       return;
     }
-
-    if (!this.employerProfileId) {
-      this.errorMessage =
-        'Employer profile was not found.';
-      return;
-    }
-
     this.saving = true;
     this.errorMessage = '';
     this.successMessage = '';
-
     const vacancyData: UpdateVacancy = {
       ...value,
       applicationClosingDate:
@@ -304,16 +288,11 @@ export class VacancyManagementComponent implements OnInit {
       return;
     }
 
-    const createData: CreateVacancy = {
-      employerProfileId: this.employerProfileId,
-      ...vacancyData,
-    };
-
+    const createData: CreateVacancy = vacancyData;
     this.createVacancy(createData);
   }
-
   private createVacancy(
-    createData: CreateVacancy,
+        createData: CreateVacancy,
   ): void {
     this.vacancyService.create(createData).subscribe({
       next: () => {
@@ -414,8 +393,9 @@ export class VacancyManagementComponent implements OnInit {
   }
 
   toggleDarkMode(): void {
-    this.darkMode = !this.darkMode;
-  }
+  this.darkMode = !this.darkMode;
+  localStorage.setItem('employerDarkMode', String(this.darkMode));
+}
 
   logout(): void {
     this.authService.logout();

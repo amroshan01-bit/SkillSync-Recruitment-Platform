@@ -5,9 +5,6 @@ namespace SkillSync.Api.DTOs.Employer;
 public class CreateEmployerProfileDto
 {
     [Required]
-    public Guid UserId { get; set; }
-
-    [Required]
     [MaxLength(150)]
     public string CompanyName { get; set; } = string.Empty;
 
