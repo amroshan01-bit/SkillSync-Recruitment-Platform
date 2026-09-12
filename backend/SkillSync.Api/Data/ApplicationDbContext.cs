@@ -58,7 +58,12 @@ public class ApplicationDbContext : DbContext
         get;
         set;
     }
-
+    // In-app notifications table.
+    public DbSet<Notification> Notifications
+    {
+        get;
+        set;
+    }
     // Database rules.
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
@@ -127,5 +132,9 @@ public class ApplicationDbContext : DbContext
         // Improve application status filtering performance.
         modelBuilder.Entity<JobApplication>()
             .HasIndex(application => application.Status);
+
+// Improve notification lookup performance for each user.
+modelBuilder.Entity<Notification>()
+    .HasIndex(notification => notification.UserId);
     }
 }
