@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -16,22 +16,10 @@ export class EmployerProfileService {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl =
-    `${environment.apiUrl}/employer-profiles`;
+    `${environment.apiUrl}/employer-profiles/me`;
 
-  getAll(): Observable<EmployerProfile[]> {
-    return this.http.get<EmployerProfile[]>(this.apiUrl);
-  }
-
-  getById(id: string): Observable<EmployerProfile> {
-    return this.http.get<EmployerProfile>(
-      `${this.apiUrl}/${id}`,
-    );
-  }
-
-  getByUserId(userId: string): Observable<EmployerProfile> {
-    return this.http.get<EmployerProfile>(
-      `${this.apiUrl}/user/${userId}`,
-    );
+  getCurrent(): Observable<EmployerProfile> {
+    return this.http.get<EmployerProfile>(this.apiUrl);
   }
 
   create(
@@ -44,18 +32,15 @@ export class EmployerProfileService {
   }
 
   update(
-    id: string,
     profile: UpdateEmployerProfile,
   ): Observable<void> {
     return this.http.put<void>(
-      `${this.apiUrl}/${id}`,
+      this.apiUrl,
       profile,
     );
   }
 
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(
-      `${this.apiUrl}/${id}`,
-    );
+  delete(): Observable<void> {
+    return this.http.delete<void>(this.apiUrl);
   }
 }

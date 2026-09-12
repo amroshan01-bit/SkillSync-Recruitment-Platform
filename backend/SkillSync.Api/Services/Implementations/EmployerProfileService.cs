@@ -38,10 +38,11 @@ public class EmployerProfileService : IEmployerProfileService
     }
 
     public async Task<EmployerProfileDto?> CreateAsync(
-        CreateEmployerProfileDto dto)
+    Guid userId,
+    CreateEmployerProfileDto dto)
     {
         var profileExists =
-            await _repository.ExistsForUserAsync(dto.UserId);
+            await _repository.ExistsForUserAsync(userId);
 
         if (profileExists)
         {
@@ -50,7 +51,7 @@ public class EmployerProfileService : IEmployerProfileService
 
         var profile = new EmployerProfile
         {
-            UserId = dto.UserId,
+            UserId = userId,
             CompanyName = dto.CompanyName,
             Industry = dto.Industry,
             CompanySize = dto.CompanySize,
@@ -70,11 +71,11 @@ public class EmployerProfileService : IEmployerProfileService
     }
 
     public async Task<bool> UpdateAsync(
-        Guid id,
-        UpdateEmployerProfileDto dto)
-    {
-        var profile = await _repository.GetByIdAsync(id);
-
+    Guid userId,
+    UpdateEmployerProfileDto dto)
+{
+    var profile =
+        await _repository.GetByUserIdAsync(userId);
         if (profile is null)
         {
             return false;
@@ -97,9 +98,10 @@ public class EmployerProfileService : IEmployerProfileService
         return true;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
-    {
-        var profile = await _repository.GetByIdAsync(id);
+    public async Task<bool> DeleteAsync(Guid userId)
+{
+    var profile =
+        await _repository.GetByUserIdAsync(userId);
 
         if (profile is null)
         {

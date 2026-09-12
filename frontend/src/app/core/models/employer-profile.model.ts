@@ -16,7 +16,6 @@ export interface EmployerProfile {
 }
 
 export interface CreateEmployerProfile {
-  userId: string;
   companyName: string;
   industry: string;
   companySize: string;

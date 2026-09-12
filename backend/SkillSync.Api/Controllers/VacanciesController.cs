@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SkillSync.Api.DTOs.Vacancy;
+using SkillSync.Api.Models;
 using SkillSync.Api.Services.Interfaces;
 
 namespace SkillSync.Api.Controllers;
@@ -31,39 +35,55 @@ public class VacanciesController : ControllerBase
     {
         var vacancy = await _service.GetByIdAsync(id);
 
-        if (vacancy is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(vacancy);
+        return vacancy is null ? NotFound() : Ok(vacancy);
     }
 
-    [HttpGet("employer/{employerProfileId:guid}")]
-    public async Task<ActionResult<List<VacancyDto>>> GetByEmployer(
-        Guid employerProfileId,
+    [HttpGet("mine")]
+    [Authorize(Roles = UserRoles.Employer)]
+    public async Task<ActionResult<List<VacancyDto>>> GetMine(
         [FromQuery] string? status)
     {
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
         var vacancies =
-            await _service.GetByEmployerProfileIdAsync(
-                employerProfileId,
+            await _service.GetCurrentEmployerAsync(
+                userId,
                 status);
+
+        if (vacancies is null)
+        {
+            return NotFound(new
+            {
+                message =
+                    "Create an employer profile before managing vacancies."
+            });
+        }
 
         return Ok(vacancies);
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<ActionResult<VacancyDto>> Create(
         CreateVacancyDto dto)
     {
-        var vacancy = await _service.CreateAsync(dto);
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var vacancy =
+            await _service.CreateAsync(userId, dto);
 
         if (vacancy is null)
         {
             return BadRequest(new
             {
                 message =
-                    "Check the employer, salary range and closing date."
+                    "Check the employer profile, salary range and closing date."
             });
         }
 
@@ -74,18 +94,25 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Update(
         Guid id,
         UpdateVacancyDto dto)
     {
-        var updated = await _service.UpdateAsync(id, dto);
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var updated =
+            await _service.UpdateAsync(userId, id, dto);
 
         if (!updated)
         {
             return BadRequest(new
             {
                 message =
-                    "The vacancy cannot be updated. Check its status and values."
+                    "The vacancy cannot be updated. Check its ownership, status and values."
             });
         }
 
@@ -93,16 +120,23 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpPatch("{id:guid}/close")]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Close(Guid id)
     {
-        var closed = await _service.CloseAsync(id);
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var closed =
+            await _service.CloseAsync(userId, id);
 
         if (!closed)
         {
             return BadRequest(new
             {
                 message =
-                    "The vacancy was not found or is already closed."
+                    "The vacancy was not found, is not yours or is already closed."
             });
         }
 
@@ -110,15 +144,28 @@ public class VacanciesController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var deleted = await _service.DeleteAsync(id);
-
-        if (!deleted)
+        if (!TryGetCurrentUserId(out var userId))
         {
-            return NotFound();
+            return Unauthorized();
         }
 
-        return NoContent();
+        var deleted =
+            await _service.DeleteAsync(userId, id);
+
+        return deleted ? NoContent() : NotFound();
+    }
+
+    private bool TryGetCurrentUserId(out Guid userId)
+    {
+        var userIdValue =
+            User.FindFirst(
+                ClaimTypes.NameIdentifier)?.Value
+            ?? User.FindFirst(
+                JwtRegisteredClaimNames.Sub)?.Value;
+
+        return Guid.TryParse(userIdValue, out userId);
     }
 }

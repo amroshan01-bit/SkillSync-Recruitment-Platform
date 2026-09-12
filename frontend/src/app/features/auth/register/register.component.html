@@ -1,0 +1,437 @@
+<main class="min-h-screen bg-sky-50 lg:grid lg:grid-cols-2">
+  <section
+    class="relative hidden overflow-hidden bg-gradient-to-br
+           from-sky-100 via-sky-200 to-blue-300
+           px-12 py-10 lg:flex lg:flex-col lg:justify-between"
+  >
+    <div class="relative z-10">
+      <a routerLink="/" class="inline-flex items-center gap-2">
+        <span
+          class="grid h-11 w-11 place-items-center rounded-xl
+                 bg-sky-600 text-xl font-bold text-white shadow-lg"
+        >
+          S
+        </span>
+
+        <span class="text-3xl font-bold tracking-tight text-slate-900">
+          Skill<span class="text-sky-600">Sync</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="relative z-10 max-w-lg">
+      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.3em]
+                text-sky-700">
+        Talent today
+      </p>
+
+      <h1 class="text-5xl font-bold leading-tight text-slate-900">
+        Create opportunities.
+        <span class="block text-sky-700">
+          Build a stronger future.
+        </span>
+      </h1>
+
+      <div class="mt-8 space-y-4 text-slate-700">
+        <p>✓ Discover jobs that match your skills</p>
+        <p>✓ Connect with growing companies</p>
+        <p>✓ Manage your recruitment journey</p>
+      </div>
+    </div>
+
+    <div
+      class="absolute -bottom-28 -right-24 h-96 w-96
+             rounded-full bg-white/40"
+    ></div>
+
+    <div
+      class="absolute left-20 top-32 h-32 w-32
+             rounded-full bg-sky-400/20"
+    ></div>
+
+    <p class="relative z-10 text-sm text-slate-600">
+      SkillSync Recruitment Platform
+    </p>
+  </section>
+
+  <section class="flex min-h-screen items-center justify-center px-5 py-8">
+    <div
+      class="w-full max-w-lg rounded-3xl border border-slate-200
+             bg-white p-7 shadow-xl shadow-sky-100 sm:p-9"
+    >
+      <div class="mb-6 lg:hidden">
+        <a
+          routerLink="/"
+          class="inline-flex items-center gap-2"
+        >
+          <span
+            class="grid h-10 w-10 place-items-center rounded-xl
+                   bg-sky-600 font-bold text-white"
+          >
+            S
+          </span>
+
+          <span class="text-2xl font-bold text-slate-900">
+            Skill<span class="text-sky-600">Sync</span>
+          </span>
+        </a>
+      </div>
+
+      <header class="mb-6">
+        <p class="mb-2 text-sm font-semibold text-sky-600">
+          Join SkillSync
+        </p>
+
+        <h2 class="text-3xl font-bold text-slate-900">
+          Create your account
+        </h2>
+
+        <p class="mt-2 text-sm text-slate-500">
+          Enter your information to get started.
+        </p>
+      </header>
+
+      @if (errorMessage) {
+        <div
+          class="mb-5 rounded-xl border border-red-200
+                 bg-red-50 px-4 py-3 text-sm text-red-700"
+          role="alert"
+        >
+          {{ errorMessage }}
+        </div>
+      }
+
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="onSubmit()"
+        class="space-y-4"
+        novalidate
+      >
+        <div>
+          <label
+            for="fullName"
+            class="mb-1.5 block text-sm font-semibold text-slate-700"
+          >
+            Full name
+          </label>
+
+          <input
+            id="fullName"
+            type="text"
+            formControlName="fullName"
+            autocomplete="name"
+            placeholder="Enter your full name"
+            class="w-full rounded-xl border border-slate-300
+                   px-4 py-3 text-slate-900 outline-none
+                   transition placeholder:text-slate-400
+                   focus:border-sky-500 focus:ring-4
+                   focus:ring-sky-100"
+          />
+
+          @if (
+            registerForm.controls.fullName.touched &&
+            registerForm.controls.fullName.hasError('required')
+          ) {
+            <p class="mt-1.5 text-sm text-red-600">
+              Full name is required.
+            </p>
+          }
+        </div>
+
+        <div>
+          <label
+            for="email"
+            class="mb-1.5 block text-sm font-semibold text-slate-700"
+          >
+            Email address
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            class="w-full rounded-xl border border-slate-300
+                   px-4 py-3 text-slate-900 outline-none
+                   transition placeholder:text-slate-400
+                   focus:border-sky-500 focus:ring-4
+                   focus:ring-sky-100"
+          />
+
+          @if (
+            registerForm.controls.email.touched &&
+            registerForm.controls.email.hasError('required')
+          ) {
+            <p class="mt-1.5 text-sm text-red-600">
+              Email address is required.
+            </p>
+          }
+
+          @if (
+            registerForm.controls.email.touched &&
+            registerForm.controls.email.hasError('email')
+          ) {
+            <p class="mt-1.5 text-sm text-red-600">
+              Enter a valid email address.
+            </p>
+          }
+        </div>
+
+        <fieldset>
+          <legend
+            class="mb-2 block text-sm font-semibold text-slate-700"
+          >
+            I am a
+          </legend>
+
+          <div class="grid grid-cols-2 gap-3">
+            <label
+              class="flex cursor-pointer items-center gap-3
+                     rounded-xl border border-slate-300 px-4 py-3
+                     transition has-[:checked]:border-sky-500
+                     has-[:checked]:bg-sky-50
+                     has-[:checked]:ring-2
+                     has-[:checked]:ring-sky-100"
+            >
+              <input
+                type="radio"
+                formControlName="role"
+                value="JobSeeker"
+                class="h-4 w-4 accent-sky-600"
+              />
+              <span class="text-sm font-medium text-slate-700">
+                Job Seeker
+              </span>
+            </label>
+
+            <label
+              class="flex cursor-pointer items-center gap-3
+                     rounded-xl border border-slate-300 px-4 py-3
+                     transition has-[:checked]:border-sky-500
+                     has-[:checked]:bg-sky-50
+                     has-[:checked]:ring-2
+                     has-[:checked]:ring-sky-100"
+            >
+              <input
+                type="radio"
+                formControlName="role"
+                value="Employer"
+                class="h-4 w-4 accent-sky-600"
+              />
+              <span class="text-sm font-medium text-slate-700">
+                Employer
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label
+              for="password"
+              class="mb-1.5 block text-sm font-semibold text-slate-700"
+            >
+              Password
+            </label>
+
+                        <div class="relative">
+              <input
+                id="password"
+                [type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                autocomplete="new-password"
+                placeholder="Minimum 8 characters"
+                class="w-full rounded-xl border border-slate-300
+                       py-3 pl-4 pr-16 text-slate-900 outline-none
+                       transition placeholder:text-slate-400
+                       focus:border-sky-500 focus:ring-4
+                       focus:ring-sky-100"
+              />
+
+              <button
+                type="button"
+                (click)="togglePasswordVisibility()"
+                class="absolute inset-y-0 right-0 grid w-12
+                       place-items-center text-slate-500
+                       transition hover:text-sky-600"
+                [attr.aria-label]="
+                  showPassword ? 'Hide password' : 'Show password'
+                "
+                [title]="
+                  showPassword ? 'Hide password' : 'Show password'
+                "
+              >
+                @if (showPassword) {
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12" />
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M3 3l18 18" />
+                  </svg>
+                } @else {
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (
+              registerForm.controls.password.touched &&
+              registerForm.controls.password.hasError('required')
+            ) {
+              <p class="mt-1.5 text-sm text-red-600">
+                Password is required.
+              </p>
+            }
+
+            @if (
+              registerForm.controls.password.touched &&
+              registerForm.controls.password.hasError('minlength')
+            ) {
+              <p class="mt-1.5 text-sm text-red-600">
+                Use at least 8 characters.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label
+              for="confirmPassword"
+              class="mb-1.5 block text-sm font-semibold text-slate-700"
+            >
+              Confirm password
+            </label>
+
+                       <div class="relative">
+              <input
+                id="confirmPassword"
+                [type]="
+                  showConfirmPassword ? 'text' : 'password'
+                "
+                formControlName="confirmPassword"
+                autocomplete="new-password"
+                placeholder="Repeat password"
+                class="w-full rounded-xl border border-slate-300
+                       py-3 pl-4 pr-16 text-slate-900 outline-none
+                       transition placeholder:text-slate-400
+                       focus:border-sky-500 focus:ring-4
+                       focus:ring-sky-100"
+              />
+
+              <button
+                type="button"
+                (click)="toggleConfirmPasswordVisibility()"
+                class="absolute inset-y-0 right-0 grid w-12
+                       place-items-center text-slate-500
+                       transition hover:text-sky-600"
+                [attr.aria-label]="
+                  showConfirmPassword
+                    ? 'Hide confirm password'
+                    : 'Show confirm password'
+                "
+                [title]="
+                  showConfirmPassword
+                    ? 'Hide confirm password'
+                    : 'Show confirm password'
+                "
+              >
+                @if (showConfirmPassword) {
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12" />
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M3 3l18 18" />
+                  </svg>
+                } @else {
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (
+              registerForm.controls.confirmPassword.touched &&
+              registerForm.controls.confirmPassword.hasError('required')
+            ) {
+              <p class="mt-1.5 text-sm text-red-600">
+                Confirm your password.
+              </p>
+            }
+
+            @if (
+              registerForm.controls.confirmPassword.touched &&
+              registerForm.hasError('passwordMismatch')
+            ) {
+              <p class="mt-1.5 text-sm text-red-600">
+                Passwords do not match.
+              </p>
+            }
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="isSubmitting"
+          class="w-full rounded-xl bg-sky-600 px-5 py-3.5
+                 font-semibold text-white shadow-lg shadow-sky-200
+                 transition hover:bg-sky-700
+                 focus:outline-none focus:ring-4 focus:ring-sky-200
+                 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          @if (isSubmitting) {
+            Creating account...
+          } @else {
+            Create account
+          }
+        </button>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-slate-600">
+        Already have an account?
+        <a
+          routerLink="/login"
+          class="font-semibold text-sky-600 hover:text-sky-700"
+        >
+          Sign in
+        </a>
+      </p>
+    </div>
+  </section>
+</main>

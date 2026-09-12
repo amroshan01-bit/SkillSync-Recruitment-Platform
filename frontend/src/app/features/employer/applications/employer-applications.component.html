@@ -1,0 +1,314 @@
+<div class="employer-page" [class.dark-mode]="darkMode">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div>
+        <strong>SkillSync</strong>
+        <span>Employer Portal</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/employer/profile">
+        Company Profile
+      </a>
+
+      <a routerLink="/employer/vacancies">
+        Vacancies
+      </a>
+
+      <a
+        routerLink="/employer/applications"
+        class="active"
+      >
+        Applications
+      </a>
+    </nav>
+
+    <button
+      type="button"
+      class="logout-button"
+      (click)="logout()"
+    >
+      Logout
+    </button>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Recruitment Management</p>
+        <h1>Applications</h1>
+      </div>
+
+      <div class="topbar-actions">
+        <button
+          type="button"
+          class="theme-button"
+          (click)="toggleDarkMode()"
+        >
+          {{ darkMode ? 'Light Mode' : 'Dark Mode' }}
+        </button>
+
+        <div class="user-card">
+          <span>Logged in as</span>
+          <strong>{{ userName }}</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="content-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Your Vacancies</p>
+          <h2>Select a vacancy</h2>
+        </div>
+
+        <span
+          class="count-badge"
+          *ngIf="!loadingVacancies"
+        >
+          {{ vacancies.length }} Vacancies
+        </span>
+      </div>
+
+      <p
+        class="loading-message"
+        *ngIf="loadingVacancies"
+      >
+        Loading vacancies...
+      </p>
+
+      <div
+        class="vacancy-list"
+        *ngIf="!loadingVacancies && vacancies.length > 0"
+      >
+        <button
+          type="button"
+          class="vacancy-option"
+          *ngFor="let vacancy of vacancies"
+          [class.selected]="selectedVacancyId === vacancy.id"
+          (click)="selectVacancy(vacancy.id)"
+        >
+          <strong>{{ vacancy.jobTitle }}</strong>
+
+          <span>
+            {{ vacancy.location }} · {{ vacancy.status }}
+          </span>
+        </button>
+      </div>
+
+      <div
+        class="empty-state"
+        *ngIf="!loadingVacancies && vacancies.length === 0"
+      >
+        <h3>No vacancies available</h3>
+        <p>
+          Create a vacancy before reviewing applications.
+        </p>
+      </div>
+    </section>
+
+    <p
+      class="message success-message"
+      *ngIf="successMessage"
+    >
+      {{ successMessage }}
+    </p>
+
+    <p
+      class="message error-message"
+      *ngIf="errorMessage"
+    >
+      {{ errorMessage }}
+    </p>
+
+    <section
+      class="content-card"
+      *ngIf="selectedVacancyId"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Candidate Ranking</p>
+          <h2>Ranked Applicants</h2>
+        </div>
+
+        <span
+          class="count-badge"
+          *ngIf="!loadingApplicants"
+        >
+          {{ applicants.length }} Applicants
+        </span>
+      </div>
+
+      <p
+        class="loading-message"
+        *ngIf="loadingApplicants"
+      >
+        Loading applicants...
+      </p>
+
+      <div
+        class="empty-state"
+        *ngIf="
+          !loadingApplicants &&
+          applicants.length === 0
+        "
+      >
+        <h3>No applications yet</h3>
+        <p>
+          Applications for this vacancy will appear here.
+        </p>
+      </div>
+
+      <div
+        class="applicant-list"
+        *ngIf="
+          !loadingApplicants &&
+          applicants.length > 0
+        "
+      >
+        <article
+          class="applicant-card"
+          *ngFor="let applicant of applicants; let i = index"
+        >
+          <div class="applicant-header">
+            <div class="rank">
+              #{{ i + 1 }}
+            </div>
+
+            <div class="candidate">
+              <h3>{{ applicant.fullName }}</h3>
+
+              <p>
+                {{
+                  applicant.professionalTitle ||
+                  'Job Seeker'
+                }}
+              </p>
+            </div>
+
+            <div class="score">
+              <strong>
+                {{ applicant.matchScore | number:'1.0-2' }}%
+              </strong>
+              <span>Match Score</span>
+            </div>
+          </div>
+
+          <div class="candidate-details">
+            <span>
+              Location:
+              <strong>
+                {{ applicant.location || 'Not provided' }}
+              </strong>
+            </span>
+
+            <span>
+              Experience:
+              <strong>
+                {{ applicant.yearsOfExperience }} years
+              </strong>
+            </span>
+
+            <span>
+              Qualification:
+              <strong>
+                {{
+                  applicant.highestQualification ||
+                  'Not provided'
+                }}
+              </strong>
+            </span>
+          </div>
+
+          <div class="skills-grid">
+            <div class="skill-section">
+              <h4>Matched Skills</h4>
+
+              <div class="skill-tags">
+                <span
+                  class="skill-tag matched"
+                  *ngFor="let skill of applicant.matchedSkills"
+                >
+                  {{ skill }}
+                </span>
+
+                <span
+                  class="no-skills"
+                  *ngIf="applicant.matchedSkills.length === 0"
+                >
+                  No matched skills
+                </span>
+              </div>
+            </div>
+
+            <div class="skill-section">
+              <h4>Missing Skills</h4>
+
+              <div class="skill-tags">
+                <span
+                  class="skill-tag missing"
+                  *ngFor="let skill of applicant.missingSkills"
+                >
+                  {{ skill }}
+                </span>
+
+                <span
+                  class="no-skills"
+                  *ngIf="applicant.missingSkills.length === 0"
+                >
+                  No missing skills
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="cover-letter"
+            *ngIf="applicant.coverLetter"
+          >
+            <h4>Cover Letter</h4>
+            <p>{{ applicant.coverLetter }}</p>
+          </div>
+
+          <div class="application-footer">
+            <span class="applied-date">
+              Applied:
+              {{ applicant.appliedAtUtc | date:'mediumDate' }}
+            </span>
+
+            <label class="status-control">
+              <span>Status</span>
+
+              <select
+                #statusSelect
+                [value]="applicant.status"
+                [disabled]="
+                  updatingApplicationId ===
+                  applicant.applicationId
+                "
+                (change)="
+                  updateStatus(
+                    applicant,
+                    statusSelect.value
+                  )
+                "
+              >
+                <option value="Pending">Pending</option>
+                <option value="Under Review">
+                  Under Review
+                </option>
+                <option value="Shortlisted">
+                  Shortlisted
+                </option>
+                <option value="Accepted">Accepted</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+            </label>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>

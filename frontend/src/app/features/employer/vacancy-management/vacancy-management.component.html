@@ -21,7 +21,7 @@
         Vacancies
       </a>
 
-      <a href="#">
+      <a href="/employer/applications">
         <span class="nav-icon">A</span>
         Applications
       </a>
@@ -54,10 +54,18 @@
 
         <div class="account">
           <span class="account-avatar">
-            {{ companyName.charAt(0) || 'E' }}
+            {{ userName.charAt(0).toUpperCase() || 'U' }}
           </span>
-          <span>{{ companyName || 'Employer' }}</span>
+          <span>{{ userName }}</span>
         </div>
+
+        <button
+          type="button"
+          class="theme-button"
+          (click)="logout()"
+        >
+          Logout
+        </button>
       </div>
     </header>
 
@@ -74,7 +82,7 @@
           type="button"
           class="primary-button create-button"
           (click)="openCreateForm()"
-          [disabled]="!employerProfileId"
+          [disabled]="!hasEmployerProfile"
         >
           + Create Vacancy
         </button>
@@ -111,7 +119,7 @@
               class="close-form-button"
               (click)="cancelForm()"
             >
-              ×
+              Ã—
             </button>
           </div>
 
@@ -450,7 +458,7 @@
                   <strong>
                     {{ vacancy.currency }}
                     {{ vacancy.minimumSalary | number }}
-                    –
+                    â€“
                     {{ vacancy.maximumSalary | number }}
                   </strong>
                 </div>

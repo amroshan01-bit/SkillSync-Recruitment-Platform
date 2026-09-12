@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -18,19 +18,9 @@ export class JobSeekerProfileService {
   private readonly apiUrl =
     `${environment.apiUrl}/job-seeker-profiles`;
 
-  getAll(): Observable<JobSeekerProfile[]> {
-    return this.http.get<JobSeekerProfile[]>(this.apiUrl);
-  }
-
-  getById(id: string): Observable<JobSeekerProfile> {
+  getCurrent(): Observable<JobSeekerProfile> {
     return this.http.get<JobSeekerProfile>(
-      `${this.apiUrl}/${id}`,
-    );
-  }
-
-  getByUserId(userId: string): Observable<JobSeekerProfile> {
-    return this.http.get<JobSeekerProfile>(
-      `${this.apiUrl}/user/${userId}`,
+      `${this.apiUrl}/me`,
     );
   }
 
@@ -38,24 +28,23 @@ export class JobSeekerProfileService {
     profile: CreateJobSeekerProfile,
   ): Observable<JobSeekerProfile> {
     return this.http.post<JobSeekerProfile>(
-      this.apiUrl,
+      `${this.apiUrl}/me`,
       profile,
     );
   }
 
   update(
-    id: string,
     profile: UpdateJobSeekerProfile,
   ): Observable<void> {
     return this.http.put<void>(
-      `${this.apiUrl}/${id}`,
+      `${this.apiUrl}/me`,
       profile,
     );
   }
 
-  delete(id: string): Observable<void> {
+  deleteCurrent(): Observable<void> {
     return this.http.delete<void>(
-      `${this.apiUrl}/${id}`,
+      `${this.apiUrl}/me`,
     );
   }
 }

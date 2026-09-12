@@ -1,0 +1,118 @@
+<div class="applications-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">APPLICATION TRACKER</p>
+      <h1>My Applications</h1>
+      <p class="subtitle">
+        View all your submitted job applications and track
+        their latest status.
+      </p>
+    </div>
+
+    <nav class="page-navigation">
+      <a href="/seeker/matches">Job Matches</a>
+      <a href="/seeker/skills">Manage Skills</a>
+    </nav>
+  </header>
+
+  @if (errorMessage) {
+    <div class="alert error-alert">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="state-card">
+      <div class="loader"></div>
+      <p>Loading your applications...</p>
+    </div>
+  } @else if (applications.length === 0) {
+    <div class="state-card">
+      <div class="empty-icon">▣</div>
+      <h2>No applications yet</h2>
+      <p>
+        Explore your job matches and apply for a suitable
+        opportunity.
+      </p>
+      <a class="primary-link" href="/seeker/matches">
+        Find Matching Jobs
+      </a>
+    </div>
+  } @else {
+    <section class="summary-card">
+      <div>
+        <strong>{{ applications.length }}</strong>
+        <span>
+          {{
+            applications.length === 1
+              ? 'application submitted'
+              : 'applications submitted'
+          }}
+        </span>
+      </div>
+
+      <p>
+        Status information is updated by the employer.
+      </p>
+    </section>
+
+    <section class="application-list">
+      @for (
+        application of applications;
+        track application.id
+      ) {
+        <article class="application-card">
+          <div class="company-logo">
+            {{ application.companyName.charAt(0) }}
+          </div>
+
+          <div class="application-details">
+            <p class="company-name">
+              {{ application.companyName }}
+            </p>
+
+            <h2>{{ application.jobTitle }}</h2>
+
+            <div class="application-meta">
+              <span>
+                Applied:
+                {{
+                  application.appliedAtUtc
+                    | date:'mediumDate'
+                }}
+              </span>
+
+              <span>
+                Updated:
+                {{
+                  application.updatedAtUtc
+                    | date:'mediumDate'
+                }}
+              </span>
+            </div>
+
+            @if (application.coverLetter) {
+              <details class="cover-letter">
+                <summary>View cover letter</summary>
+                <p>{{ application.coverLetter }}</p>
+              </details>
+            }
+          </div>
+
+          <div class="status-area">
+            <span>Current Status</span>
+
+            <strong
+              class="status-badge"
+              [ngClass]="
+                getStatusClass(application.status)
+              "
+            >
+              {{ application.status }}
+            </strong>
+          </div>
+        </article>
+      }
+    </section>
+  }
+</div>
