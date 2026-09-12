@@ -16,9 +16,9 @@ export class MatchingService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getSkills(userId: string): Observable<string[]> {
+  getSkills(): Observable<string[]> {
     return this.http.get<string[]>(
-      `${this.apiUrl}/skills/${userId}`
+      `${this.apiUrl}/skills`
     );
   }
 
@@ -31,9 +31,9 @@ export class MatchingService {
     );
   }
 
-  getMatches(userId: string): Observable<MatchResult[]> {
+  getMatches(): Observable<MatchResult[]> {
     return this.http.get<MatchResult[]>(
-      `${this.apiUrl}/results/${userId}`
+      `${this.apiUrl}/results`
     );
   }
 }

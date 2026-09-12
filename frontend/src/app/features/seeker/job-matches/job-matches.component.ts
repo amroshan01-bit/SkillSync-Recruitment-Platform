@@ -17,9 +17,6 @@ import { MatchingService } from '../../../core/services/matching.service';
   styleUrl: './job-matches.component.css',
 })
 export class JobMatchesComponent implements OnInit {
-  private readonly userId =
-    '11111111-1111-1111-1111-111111111111';
-
   matches: MatchResult[] = [];
   selectedMatch: MatchResult | null = null;
 
@@ -44,7 +41,7 @@ export class JobMatchesComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.matchingService.getMatches(this.userId).subscribe({
+    this.matchingService.getMatches().subscribe({
       next: (matches: MatchResult[]) => {
         this.matches = matches;
         this.isLoading = false;
@@ -97,7 +94,6 @@ export class JobMatchesComponent implements OnInit {
     this.applicationService
       .createApplication({
         vacancyId: this.selectedMatch.vacancyId,
-        jobSeekerUserId: this.userId,
         coverLetter,
       })
       .subscribe({

@@ -2,16 +2,20 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+
 import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { UnauthorizedComponent } from './features/auth/unauthorized/unauthorized.component';
+
+import { EmployerApplicationsComponent } from './features/employer/applications/employer-applications.component';
 import { EmployerProfileComponent } from './features/employer/employer-profile/employer-profile.component';
 import { VacancyManagementComponent } from './features/employer/vacancy-management/vacancy-management.component';
-import { JobSeekerProfileComponent } from './features/seeker/job-seeker-profile/job-seeker-profile.component';
+
 import { JobMatchesComponent } from './features/seeker/job-matches/job-matches.component';
-import { MyApplicationsComponent } from './features/seeker/my-applications/my-applications.component';
+import { JobSeekerProfileComponent } from './features/seeker/job-seeker-profile/job-seeker-profile.component';
 import { ManageSkillsComponent } from './features/seeker/manage-skills/manage-skills.component';
+import { MyApplicationsComponent } from './features/seeker/my-applications/my-applications.component';
 
 export const routes: Routes = [
   {
@@ -52,7 +56,7 @@ export const routes: Routes = [
       roles: ['JobSeeker'],
     },
   },
-   {
+  {
     path: 'seeker/matches',
     component: JobMatchesComponent,
     canActivate: [
@@ -84,7 +88,8 @@ export const routes: Routes = [
     data: {
       roles: ['JobSeeker'],
     },
-  },  {
+  },
+  {
     path: 'employer/profile',
     component: EmployerProfileComponent,
     canActivate: [
@@ -105,6 +110,18 @@ export const routes: Routes = [
     data: {
       roles: ['Employer'],
     },
+  },
+  {
+    path: 'employer/applications',
+    component: EmployerApplicationsComponent,
+    canActivate: [
+      authGuard,
+      roleGuard,
+    ],
+    data: {
+      roles: ['Employer'],
+    },
+    title: 'Applications | SkillSync',
   },
   {
     path: '',

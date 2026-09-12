@@ -11,9 +11,6 @@ import { JobApplicationService } from '../../../core/services/job-application.se
   styleUrl: './my-applications.component.css',
 })
 export class MyApplicationsComponent implements OnInit {
-  private readonly userId =
-    '11111111-1111-1111-1111-111111111111';
-
   applications: JobApplication[] = [];
 
   isLoading = false;
@@ -33,7 +30,7 @@ export class MyApplicationsComponent implements OnInit {
     this.errorMessage = '';
 
     this.applicationService
-      .getByJobSeeker(this.userId)
+      .getMyApplications()
       .subscribe({
         next: (applications: JobApplication[]) => {
           this.applications = applications;

@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SkillSync.Api.DTOs.Application;
+using SkillSync.Api.Models;
 using SkillSync.Api.Services.Interfaces;
 
 namespace SkillSync.Api.Controllers;
@@ -16,18 +20,25 @@ public class JobApplicationsController : ControllerBase
         _applicationService = applicationService;
     }
 
-    // Create a new job application.
     [HttpPost]
+    [Authorize(Roles = UserRoles.JobSeeker)]
     public async Task<ActionResult<JobApplicationDto>> Create(
         CreateJobApplicationRequest request)
     {
+        if (!TryGetCurrentUserId(out var jobSeekerUserId))
+        {
+            return Unauthorized();
+        }
+
         if (!ModelState.IsValid)
         {
             return ValidationProblem(ModelState);
         }
 
         var result =
-            await _applicationService.CreateAsync(request);
+            await _applicationService.CreateAsync(
+                jobSeekerUserId,
+                request);
 
         if (result.Application is null)
         {
@@ -47,25 +58,19 @@ public class JobApplicationsController : ControllerBase
             });
         }
 
-        return CreatedAtAction(
-            nameof(GetByJobSeeker),
-            new
-            {
-                jobSeekerUserId =
-                    result.Application.JobSeekerUserId
-            },
+        return StatusCode(
+            StatusCodes.Status201Created,
             result.Application);
     }
 
-    // Get applications submitted by one job seeker.
-    [HttpGet("job-seeker/{jobSeekerUserId:guid}")]
+    [HttpGet("job-seeker/me")]
+    [Authorize(Roles = UserRoles.JobSeeker)]
     public async Task<ActionResult<List<JobApplicationDto>>>
-        GetByJobSeeker(Guid jobSeekerUserId)
+        GetMyApplications()
     {
-        if (jobSeekerUserId == Guid.Empty)
+        if (!TryGetCurrentUserId(out var jobSeekerUserId))
         {
-            return BadRequest(
-                "A valid job seeker user ID is required.");
+            return Unauthorized();
         }
 
         var applications =
@@ -76,11 +81,16 @@ public class JobApplicationsController : ControllerBase
         return Ok(applications);
     }
 
-    // Get applications received for one vacancy.
     [HttpGet("vacancy/{vacancyId:guid}")]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<ActionResult<List<JobApplicationDto>>>
         GetByVacancy(Guid vacancyId)
     {
+        if (!TryGetCurrentUserId(out var employerUserId))
+        {
+            return Unauthorized();
+        }
+
         if (vacancyId == Guid.Empty)
         {
             return BadRequest(
@@ -88,18 +98,60 @@ public class JobApplicationsController : ControllerBase
         }
 
         var applications =
-            await _applicationService
-                .GetByVacancyIdAsync(vacancyId);
+            await _applicationService.GetByVacancyIdAsync(
+                employerUserId,
+                vacancyId);
+
+        if (applications is null)
+        {
+            return NotFound(
+                "Vacancy was not found or does not belong to the logged-in employer.");
+        }
 
         return Ok(applications);
     }
 
-    // Update an application's current status.
+    [HttpGet("vacancy/{vacancyId:guid}/ranked")]
+    [Authorize(Roles = UserRoles.Employer)]
+    public async Task<ActionResult<List<RankedApplicantDto>>>
+        GetRankedApplicants(Guid vacancyId)
+    {
+        if (!TryGetCurrentUserId(out var employerUserId))
+        {
+            return Unauthorized();
+        }
+
+        if (vacancyId == Guid.Empty)
+        {
+            return BadRequest(
+                "A valid vacancy ID is required.");
+        }
+
+        var applicants =
+            await _applicationService.GetRankedApplicantsAsync(
+                employerUserId,
+                vacancyId);
+
+        if (applicants is null)
+        {
+            return NotFound(
+                "Vacancy was not found or does not belong to the logged-in employer.");
+        }
+
+        return Ok(applicants);
+    }
+
     [HttpPatch("{applicationId:guid}/status")]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> UpdateStatus(
         Guid applicationId,
         UpdateApplicationStatusRequest request)
     {
+        if (!TryGetCurrentUserId(out var employerUserId))
+        {
+            return Unauthorized();
+        }
+
         if (!ModelState.IsValid)
         {
             return ValidationProblem(ModelState);
@@ -107,15 +159,27 @@ public class JobApplicationsController : ControllerBase
 
         var updated =
             await _applicationService.UpdateStatusAsync(
+                employerUserId,
                 applicationId,
                 request);
 
         if (!updated)
         {
             return BadRequest(
-                "Application not found or status is invalid.");
+                "Application not found, does not belong to your vacancy, or status is invalid.");
         }
 
         return NoContent();
+    }
+
+    private bool TryGetCurrentUserId(out Guid userId)
+    {
+        var userIdValue =
+            User.FindFirst(
+                ClaimTypes.NameIdentifier)?.Value
+            ?? User.FindFirst(
+                JwtRegisteredClaimNames.Sub)?.Value;
+
+        return Guid.TryParse(userIdValue, out userId);
     }
 }

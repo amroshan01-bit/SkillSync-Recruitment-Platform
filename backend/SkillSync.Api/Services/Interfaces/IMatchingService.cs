@@ -7,6 +7,7 @@ public interface IMatchingService
     Task<List<string>> GetSkillsAsync(Guid userId);
 
     Task<bool> UpdateSkillsAsync(
+        Guid userId,
         UpdateJobSeekerSkillsRequest request);
 
     Task<List<MatchResultDto>> GetMatchesAsync(

@@ -14,9 +14,6 @@ import { MatchingService } from '../../../core/services/matching.service';
   styleUrl: './manage-skills.component.css',
 })
 export class ManageSkillsComponent implements OnInit {
-  private readonly userId =
-    '11111111-1111-1111-1111-111111111111';
-
   skills: string[] = [];
   newSkill = '';
 
@@ -38,7 +35,7 @@ export class ManageSkillsComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.matchingService.getSkills(this.userId).subscribe({
+    this.matchingService.getSkills().subscribe({
       next: (skills: string[]) => {
         this.skills = skills;
         this.isLoading = false;
@@ -93,7 +90,6 @@ export class ManageSkillsComponent implements OnInit {
 
     this.matchingService
       .updateSkills({
-        userId: this.userId,
         skills: this.skills,
       })
       .subscribe({

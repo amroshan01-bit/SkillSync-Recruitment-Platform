@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import {
   CreateJobApplicationRequest,
   JobApplication,
+  RankedApplicant,
   UpdateApplicationStatusRequest,
 } from '../models/job-application.model';
 
@@ -26,11 +27,9 @@ export class JobApplicationService {
     );
   }
 
-  getByJobSeeker(
-    jobSeekerUserId: string
-  ): Observable<JobApplication[]> {
+  getMyApplications(): Observable<JobApplication[]> {
     return this.http.get<JobApplication[]>(
-      `${this.apiUrl}/job-seeker/${jobSeekerUserId}`
+      `${this.apiUrl}/job-seeker/me`
     );
   }
 
@@ -39,6 +38,14 @@ export class JobApplicationService {
   ): Observable<JobApplication[]> {
     return this.http.get<JobApplication[]>(
       `${this.apiUrl}/vacancy/${vacancyId}`
+    );
+  }
+
+  getRankedApplicants(
+    vacancyId: string
+  ): Observable<RankedApplicant[]> {
+    return this.http.get<RankedApplicant[]>(
+      `${this.apiUrl}/vacancy/${vacancyId}/ranked`
     );
   }
 

@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SkillSync.Api.DTOs.Matching;
+using SkillSync.Api.Models;
 using SkillSync.Api.Services.Interfaces;
 
 namespace SkillSync.Api.Controllers;
 
 [ApiController]
 [Route("api/matching")]
+[Authorize(Roles = UserRoles.JobSeeker)]
 public class MatchingController : ControllerBase
 {
     private readonly IMatchingService _matchingService;
@@ -16,14 +21,12 @@ public class MatchingController : ControllerBase
         _matchingService = matchingService;
     }
 
-    // Get the job seeker's saved skills.
-    [HttpGet("skills/{userId:guid}")]
-    public async Task<ActionResult<List<string>>> GetSkills(
-        Guid userId)
+    [HttpGet("skills")]
+    public async Task<ActionResult<List<string>>> GetSkills()
     {
-        if (userId == Guid.Empty)
+        if (!TryGetCurrentUserId(out var userId))
         {
-            return BadRequest("A valid user ID is required.");
+            return Unauthorized();
         }
 
         var skills =
@@ -32,18 +35,24 @@ public class MatchingController : ControllerBase
         return Ok(skills);
     }
 
-    // Replace the job seeker's current skill list.
     [HttpPut("skills")]
     public async Task<IActionResult> UpdateSkills(
         UpdateJobSeekerSkillsRequest request)
     {
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            return Unauthorized();
+        }
+
         if (!ModelState.IsValid)
         {
             return ValidationProblem(ModelState);
         }
 
         var updated =
-            await _matchingService.UpdateSkillsAsync(request);
+            await _matchingService.UpdateSkillsAsync(
+                userId,
+                request);
 
         if (!updated)
         {
@@ -54,19 +63,29 @@ public class MatchingController : ControllerBase
         return NoContent();
     }
 
-    // Get matching jobs with backend-calculated scores.
-    [HttpGet("results/{userId:guid}")]
+    [HttpGet("results")]
     public async Task<ActionResult<List<MatchResultDto>>>
-        GetMatches(Guid userId)
+        GetMatches()
     {
-        if (userId == Guid.Empty)
+        if (!TryGetCurrentUserId(out var userId))
         {
-            return BadRequest("A valid user ID is required.");
+            return Unauthorized();
         }
 
         var matches =
             await _matchingService.GetMatchesAsync(userId);
 
         return Ok(matches);
+    }
+
+    private bool TryGetCurrentUserId(out Guid userId)
+    {
+        var userIdValue =
+            User.FindFirst(
+                ClaimTypes.NameIdentifier)?.Value
+            ?? User.FindFirst(
+                JwtRegisteredClaimNames.Sub)?.Value;
+
+        return Guid.TryParse(userIdValue, out userId);
     }
 }

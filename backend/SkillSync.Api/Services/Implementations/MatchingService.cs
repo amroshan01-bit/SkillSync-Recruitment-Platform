@@ -16,7 +16,8 @@ public class MatchingService : IMatchingService
 
     public async Task<List<string>> GetSkillsAsync(Guid userId)
     {
-        var skills = await _repository.GetSkillsByUserIdAsync(userId);
+        var skills =
+            await _repository.GetSkillsByUserIdAsync(userId);
 
         return skills
             .Select(skill => skill.SkillName)
@@ -25,14 +26,14 @@ public class MatchingService : IMatchingService
     }
 
     public async Task<bool> UpdateSkillsAsync(
+        Guid userId,
         UpdateJobSeekerSkillsRequest request)
     {
-        if (request.UserId == Guid.Empty)
+        if (userId == Guid.Empty)
         {
             return false;
         }
 
-        // Remove empty and duplicate skill names.
         var cleanedSkills = request.Skills
             .Where(skill => !string.IsNullOrWhiteSpace(skill))
             .Select(skill => skill.Trim())
@@ -42,13 +43,13 @@ public class MatchingService : IMatchingService
         var jobSeekerSkills = cleanedSkills
             .Select(skillName => new JobSeekerSkill
             {
-                UserId = request.UserId,
+                UserId = userId,
                 SkillName = skillName
             })
             .ToList();
 
         await _repository.ReplaceSkillsAsync(
-            request.UserId,
+            userId,
             jobSeekerSkills);
 
         return true;
@@ -81,7 +82,6 @@ public class MatchingService : IMatchingService
 
         foreach (var vacancy in vacancies)
         {
-            // Split required skills stored as comma-separated text.
             var requiredSkills = ParseSkills(
                 vacancy.RequiredSkills);
 
@@ -93,7 +93,6 @@ public class MatchingService : IMatchingService
                 .Where(skill => !seekerSkillNames.Contains(skill))
                 .ToList();
 
-            // Match score is calculated only in the C# backend.
             var matchScore = requiredSkills.Count == 0
                 ? 0
                 : Math.Round(

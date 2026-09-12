@@ -16,6 +16,5 @@ export interface MatchResult {
 }
 
 export interface UpdateJobSeekerSkillsRequest {
-  userId: string;
   skills: string[];
 }
