@@ -41,7 +41,7 @@ public class UpdateEmployerProfileDto
     public string EmailAddress { get; set; } = string.Empty;
 
     [Required]
-    [MaxLength(30)]
-    [Phone]
+    [StringLength(15, MinimumLength = 7)]
+    [RegularExpression(@"^[0-9+\-\s]+$")]
     public string PhoneNumber { get; set; } = string.Empty;
 }

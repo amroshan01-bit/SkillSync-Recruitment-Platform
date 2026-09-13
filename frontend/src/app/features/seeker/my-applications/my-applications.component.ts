@@ -1,12 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import {
+  Router,
+  RouterLink,
+} from '@angular/router';
 
 import { JobApplication } from '../../../core/models/job-application.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { JobApplicationService } from '../../../core/services/job-application.service';
 
 @Component({
   selector: 'app-my-applications',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+  ],
   templateUrl: './my-applications.component.html',
   styleUrl: './my-applications.component.css',
 })
@@ -16,10 +24,17 @@ export class MyApplicationsComponent implements OnInit {
   isLoading = false;
   errorMessage = '';
 
+  darkMode = false;
+  userName = 'User';
+
   constructor(
-    private readonly applicationService:
-      JobApplicationService
-  ) {}
+    private readonly applicationService: JobApplicationService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {
+    this.userName =
+      this.authService.getUserName() ?? 'User';
+  }
 
   ngOnInit(): void {
     this.loadApplications();
@@ -49,5 +64,18 @@ export class MyApplicationsComponent implements OnInit {
       .trim()
       .toLowerCase()
       .replace(/\s+/g, '-');
+  }
+
+  goBack(): void {
+    window.history.back();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
+  toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
   }
 }

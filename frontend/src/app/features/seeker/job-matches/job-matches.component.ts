@@ -2,8 +2,13 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {
+  Router,
+  RouterLink,
+} from '@angular/router';
 
 import { MatchResult } from '../../../core/models/match-result.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { JobApplicationService } from '../../../core/services/job-application.service';
 import { MatchingService } from '../../../core/services/matching.service';
 
@@ -12,6 +17,7 @@ import { MatchingService } from '../../../core/services/matching.service';
   imports: [
     CommonModule,
     FormsModule,
+    RouterLink,
   ],
   templateUrl: './job-matches.component.html',
   styleUrl: './job-matches.component.css',
@@ -28,10 +34,18 @@ export class JobMatchesComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
 
+  darkMode = false;
+  userName = 'User';
+
   constructor(
     private readonly matchingService: MatchingService,
-    private readonly applicationService: JobApplicationService
-  ) {}
+    private readonly applicationService: JobApplicationService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {
+    this.userName =
+      this.authService.getUserName() ?? 'User';
+  }
 
   ngOnInit(): void {
     this.loadMatches();
@@ -127,5 +141,18 @@ export class JobMatchesComponent implements OnInit {
     }
 
     return 'Potential Match';
+  }
+
+  goBack(): void {
+    window.history.back();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
+  toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
   }
 }

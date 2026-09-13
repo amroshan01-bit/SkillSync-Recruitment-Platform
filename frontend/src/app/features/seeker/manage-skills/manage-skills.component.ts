@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {
+  Router,
+  RouterLink,
+} from '@angular/router';
 
+import { AuthService } from '../../../core/services/auth.service';
 import { MatchingService } from '../../../core/services/matching.service';
 
 @Component({
@@ -9,6 +14,7 @@ import { MatchingService } from '../../../core/services/matching.service';
   imports: [
     CommonModule,
     FormsModule,
+    RouterLink,
   ],
   templateUrl: './manage-skills.component.html',
   styleUrl: './manage-skills.component.css',
@@ -23,9 +29,17 @@ export class ManageSkillsComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
 
+  darkMode = false;
+  userName = 'User';
+
   constructor(
-    private readonly matchingService: MatchingService
-  ) {}
+    private readonly matchingService: MatchingService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {
+    this.userName =
+      this.authService.getUserName() ?? 'User';
+  }
 
   ngOnInit(): void {
     this.loadSkills();
@@ -56,7 +70,7 @@ export class ManageSkillsComponent implements OnInit {
 
     const alreadyExists = this.skills.some(
       (currentSkill) =>
-        currentSkill.toLowerCase() === skill.toLowerCase()
+        currentSkill.toLowerCase() === skill.toLowerCase(),
     );
 
     if (alreadyExists) {
@@ -72,7 +86,7 @@ export class ManageSkillsComponent implements OnInit {
 
   removeSkill(skill: string): void {
     this.skills = this.skills.filter(
-      (currentSkill) => currentSkill !== skill
+      (currentSkill) => currentSkill !== skill,
     );
 
     this.successMessage = '';
@@ -104,5 +118,18 @@ export class ManageSkillsComponent implements OnInit {
           this.isSaving = false;
         },
       });
+  }
+
+  goBack(): void {
+    window.history.back();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
+  toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
   }
 }

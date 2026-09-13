@@ -17,18 +17,13 @@
       </a>
 
       <a href="/employer/vacancies">
-  <span class="nav-icon">V</span>
-  Vacancies
-</a>
-
-      <a href="#">
-        <span class="nav-icon">A</span>
-        Applications
+        <span class="nav-icon">V</span>
+        Vacancies
       </a>
 
-      <a href="#">
-        <span class="nav-icon">N</span>
-        Notifications
+      <a href="/employer/applications">
+        <span class="nav-icon">A</span>
+        Applications
       </a>
     </nav>
   </aside>
@@ -155,16 +150,16 @@
                 >
                   <option value="">Select company size</option>
                   <option value="1-10 employees">
-                    1ΓÇô10 employees
+                    1-10 employees
                   </option>
                   <option value="11-50 employees">
-                    11ΓÇô50 employees
+                    11-50 employees
                   </option>
                   <option value="51-200 employees">
-                    51ΓÇô200 employees
+                    51-200 employees
                   </option>
                   <option value="201-500 employees">
-                    201ΓÇô500 employees
+                    201-500 employees
                   </option>
                   <option value="501+ employees">
                     501+ employees
@@ -300,7 +295,7 @@
                   && profileForm.controls.phoneNumber.invalid
                 ) {
                   <small class="validation-error">
-                    Phone number is required.
+                    Enter a valid phone number (7-15 characters; digits, +, - and spaces only).
                   </small>
                 }
               </div>
@@ -333,10 +328,14 @@
 
           <aside class="summary-panel">
             <div class="company-logo">
-              @if (profileForm.controls.logoPath.value) {
+              @if (
+                profileForm.controls.logoPath.value &&
+                !logoLoadFailed
+              ) {
                 <img
                   [src]="profileForm.controls.logoPath.value"
                   alt="Company logo"
+                  (error)="onLogoError()"
                 />
               } @else {
                 {{
