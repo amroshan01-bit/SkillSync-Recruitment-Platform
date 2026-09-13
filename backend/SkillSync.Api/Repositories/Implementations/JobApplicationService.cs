@@ -245,10 +245,35 @@ public class JobApplicationService : IJobApplicationService
             return false;
         }
 
+        if (string.Equals(
+                application.Status,
+                validStatus,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
         application.Status = validStatus;
         application.UpdatedAtUtc = DateTime.UtcNow;
 
-        await _repository.UpdateAsync(application);
+        var jobTitle =
+            application.Vacancy?.JobTitle
+            ?? "your job application";
+
+        var notification = new Notification
+        {
+            Id = Guid.NewGuid(),
+            UserId = application.JobSeekerUserId,
+            Type = "ApplicationStatusChanged",
+            Message =
+                $"Your application for {jobTitle} has been updated to {validStatus}.",
+            IsRead = false,
+            CreatedAtUtc = DateTime.UtcNow
+        };
+
+        await _repository.UpdateStatusWithNotificationAsync(
+            application,
+            notification);
 
         return true;
     }

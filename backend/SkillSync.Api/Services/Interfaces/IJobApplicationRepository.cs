@@ -22,4 +22,7 @@ public interface IJobApplicationRepository
     Task<JobApplication?> GetByIdAsync(Guid id);
 
     Task UpdateAsync(JobApplication application);
+Task UpdateStatusWithNotificationAsync(
+    JobApplication application,
+    Notification notification);
 }

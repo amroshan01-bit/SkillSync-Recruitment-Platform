@@ -1,0 +1,147 @@
+<div class="notifications-page" [class.dark-theme]="darkMode">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-logo">S</span>
+      <span>SkillSync</span>
+    </div>
+
+    <nav class="navigation">
+      <a routerLink="/seeker/profile">
+        <span class="nav-icon">P</span>
+        My Profile
+      </a>
+
+      <a routerLink="/seeker/skills">
+        <span class="nav-icon">S</span>
+        Manage Skills
+      </a>
+
+      <a routerLink="/seeker/matches">
+        <span class="nav-icon">J</span>
+        Job Matches
+      </a>
+
+      <a routerLink="/seeker/applications">
+        <span class="nav-icon">A</span>
+        My Applications
+      </a>
+
+      <a routerLink="/seeker/notifications" class="active">
+        <span class="nav-icon">N</span>
+        Notifications
+      </a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <p class="search-text">
+        Stay updated with your application activity
+      </p>
+
+      <div class="topbar-actions">
+        <button
+          type="button"
+          class="theme-button"
+          (click)="toggleDarkMode()"
+        >
+          @if (darkMode) {
+            Light
+          } @else {
+            Dark
+          }
+        </button>
+
+        <div class="account">
+          <span class="account-avatar">
+            {{ userName.charAt(0).toUpperCase() || 'U' }}
+          </span>
+
+          <span>{{ userName }}</span>
+        </div>
+
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()"
+        >
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="page-heading">
+        <h1>Notifications</h1>
+        <p>
+          View updates related to your job applications.
+        </p>
+      </section>
+
+      @if (loading) {
+        <div class="message">
+          Loading notifications...
+        </div>
+      }
+
+      @if (errorMessage) {
+        <div class="message error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (!loading && !errorMessage) {
+        @if (notifications.length === 0) {
+          <div class="empty-state">
+            <h2>No notifications yet</h2>
+
+            <p>
+              Application status updates will appear here.
+            </p>
+          </div>
+        } @else {
+          <section class="notification-list">
+            @for (
+              notification of notifications;
+              track notification.id
+            ) {
+              <article
+                class="notification-card"
+                [class.unread]="!notification.isRead"
+              >
+                <div class="notification-icon">
+                  N
+                </div>
+
+                <div class="notification-content">
+                  <div class="notification-header">
+                    <h2>
+                      Application Update
+                    </h2>
+
+                    @if (!notification.isRead) {
+                      <span class="unread-badge">
+                        New
+                      </span>
+                    }
+                  </div>
+
+                  <p>
+                    {{ notification.message }}
+                  </p>
+
+                  <small>
+                    {{
+                      notification.createdAtUtc
+                        | date:'medium'
+                    }}
+                  </small>
+                </div>
+              </article>
+            }
+          </section>
+        }
+      }
+    </main>
+  </div>
+</div>

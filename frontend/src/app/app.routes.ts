@@ -16,6 +16,7 @@ import { JobMatchesComponent } from './features/seeker/job-matches/job-matches.c
 import { JobSeekerProfileComponent } from './features/seeker/job-seeker-profile/job-seeker-profile.component';
 import { ManageSkillsComponent } from './features/seeker/manage-skills/manage-skills.component';
 import { MyApplicationsComponent } from './features/seeker/my-applications/my-applications.component';
+import { NotificationsComponent } from './features/seeker/notifications/notifications.component';
 
 export const routes: Routes = [
   {
@@ -77,6 +78,18 @@ export const routes: Routes = [
     data: {
       roles: ['JobSeeker'],
     },
+  },
+  {
+    path: 'seeker/notifications',
+    component: NotificationsComponent,
+    canActivate: [
+      authGuard,
+      roleGuard,
+    ],
+    data: {
+      roles: ['JobSeeker'],
+    },
+    title: 'Notifications | SkillSync',
   },
   {
     path: 'seeker/skills',
