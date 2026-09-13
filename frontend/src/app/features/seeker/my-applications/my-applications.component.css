@@ -3,22 +3,164 @@
   min-height: 100vh;
   font-family: Inter, "Segoe UI", Arial, sans-serif;
   color: #172033;
-  background: linear-gradient(
-    135deg,
-    #eef7ff 0%,
-    #f8fbff 55%,
-    #edf6ff 100%
-  );
 }
 
 * {
   box-sizing: border-box;
 }
 
-.applications-page {
-  width: min(1100px, calc(100% - 40px));
-  margin: 0 auto;
-  padding: 50px 0 80px;
+.profile-page {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  min-height: 100vh;
+  background: #f5f9ff;
+}
+
+.sidebar {
+  padding: 24px 16px;
+  background: #ffffff;
+  border-right: 1px solid #e2ebf5;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px 24px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.brand-logo {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  color: #ffffff;
+  background: #1677ff;
+  border-radius: 10px;
+}
+
+.navigation {
+  display: grid;
+  gap: 6px;
+}
+
+.navigation a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 11px;
+  padding: 10px 12px;
+  color: #5c6980;
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+.navigation a:hover {
+  background: #f3f7fc;
+}
+
+.navigation a.active {
+  color: #0e69dc;
+  background: #eaf4ff;
+  font-weight: 600;
+}
+
+.nav-icon {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: #eef4fb;
+  border-radius: 7px;
+}
+
+.navigation a.active .nav-icon {
+  background: #d7eaff;
+}
+
+.main-area {
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 72px;
+  padding: 14px 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2ebf5;
+}
+
+.topbar-actions,
+.account {
+  display: flex;
+  align-items: center;
+}
+
+.topbar-actions {
+  gap: 16px;
+}
+
+.account {
+  gap: 10px;
+  font-weight: 600;
+}
+
+.account-avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  color: #0e69dc;
+  background: #d9ebff;
+  border-radius: 50%;
+}
+
+.theme-button,
+.back-button,
+.logout-button {
+  min-height: 40px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.theme-button,
+.back-button {
+  color: #48566d;
+  background: #ffffff;
+  border: 1px solid #ccd9e8;
+}
+
+.theme-button:hover,
+.back-button:hover {
+  color: #0e69dc;
+  background: #f0f7ff;
+  border-color: #1677ff;
+}
+
+.logout-button {
+  color: #b42318;
+  background: #ffffff;
+  border: 1px solid #fecaca;
+}
+
+.logout-button:hover {
+  color: #ffffff;
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.content {
+  padding: 30px;
 }
 
 .page-header {
@@ -326,18 +468,140 @@
   animation: spin 0.8s linear infinite;
 }
 
+/* Dark mode */
+.profile-page.dark-theme {
+  color: #e8edf7;
+  background: #111827;
+}
+
+.dark-theme .sidebar,
+.dark-theme .topbar,
+.dark-theme .application-card,
+.dark-theme .summary-card,
+.dark-theme .state-card {
+  background: #182235;
+  border-color: #2b3950;
+}
+
+.dark-theme .navigation a {
+  color: #b8c3d8;
+}
+
+.dark-theme .navigation a:hover {
+  background: #202f45;
+}
+
+.dark-theme .navigation a.active {
+  color: #8fc0ff;
+  background: #274566;
+}
+
+.dark-theme .nav-icon {
+  color: #b8c3d8;
+  background: #223149;
+}
+
+.dark-theme .navigation a.active .nav-icon {
+  color: #a9d1ff;
+  background: #31577f;
+}
+
+.dark-theme .account-avatar {
+  color: #a9d1ff;
+  background: #31577f;
+}
+
+.dark-theme .theme-button,
+.dark-theme .back-button {
+  color: #cad3e3;
+  background: #182235;
+  border-color: #3b4a62;
+}
+
+.dark-theme .logout-button {
+  color: #ffaaa3;
+  background: #182235;
+  border-color: #7f3b3b;
+}
+
+.dark-theme .logout-button:hover {
+  color: #ffffff;
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.dark-theme .page-header h1,
+.dark-theme .application-details h2,
+.dark-theme .state-card h2 {
+  color: #e8edf7;
+}
+
+.dark-theme .subtitle,
+.dark-theme .summary-card p,
+.dark-theme .state-card p,
+.dark-theme .application-meta span,
+.dark-theme .cover-letter p,
+.dark-theme .status-area > span {
+  color: #aab6ca;
+}
+
+.dark-theme .page-navigation a,
+.dark-theme .primary-link {
+  color: #cad3e3;
+  background: #182235;
+  border-color: #3b4a62;
+}
+
+.dark-theme .application-meta span,
+.dark-theme .cover-letter {
+  background: #111827;
+  border-color: #2b3950;
+}
+
+.dark-theme .cover-letter summary {
+  color: #8fc0ff;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-@media (max-width: 760px) {
-  .applications-page {
-    width: min(100% - 24px, 1100px);
-    padding: 30px 0 50px;
+@media (max-width: 800px) {
+  .profile-page {
+    grid-template-columns: 1fr;
   }
 
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .topbar {
+    padding: 12px 20px;
+  }
+
+  .topbar-actions {
+    margin-left: auto;
+    gap: 10px;
+  }
+
+  .account span:last-child {
+    display: none;
+  }
+
+  .theme-button,
+  .back-button,
+  .logout-button {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 760px) {
   .page-header,
   .summary-card {
     align-items: stretch;

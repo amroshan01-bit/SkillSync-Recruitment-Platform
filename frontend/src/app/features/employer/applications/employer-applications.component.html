@@ -25,14 +25,7 @@
       </a>
     </nav>
 
-    <button
-      type="button"
-      class="logout-button"
-      (click)="logout()"
-    >
-      Logout
-    </button>
-  </aside>
+     </aside>
 
   <main class="main-content">
     <header class="topbar">
@@ -54,6 +47,13 @@
           <span>Logged in as</span>
           <strong>{{ userName }}</strong>
         </div>
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()"
+        >
+          Logout
+        </button>
       </div>
     </header>
 
@@ -93,7 +93,7 @@
           <strong>{{ vacancy.jobTitle }}</strong>
 
           <span>
-            {{ vacancy.location }} · {{ vacancy.status }}
+            {{ vacancy.location }} - {{ vacancy.status }}
           </span>
         </button>
       </div>

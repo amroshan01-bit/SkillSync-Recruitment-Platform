@@ -29,12 +29,14 @@ export class EmployerProfileComponent implements OnInit {
   );
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+
   readonly userName = this.authService.getUserName() ?? 'User';
 
   profile: EmployerProfile | null = null;
   loading = false;
   saving = false;
   darkMode = localStorage.getItem('employerDarkMode') === 'true';
+  logoLoadFailed = false;
   errorMessage = '';
   successMessage = '';
 
@@ -101,52 +103,53 @@ export class EmployerProfileComponent implements OnInit {
       '',
       [
         Validators.required,
-        Validators.maxLength(30),
+        Validators.minLength(7),
+        Validators.maxLength(15),
+        Validators.pattern(/^[0-9+\-\s]+$/),
       ],
     ],
   });
 
- ngOnInit(): void {
-  this.loadProfile();
-}
+  ngOnInit(): void {
+    this.loadProfile();
+  }
 
   loadProfile(): void {
     this.loading = true;
     this.errorMessage = '';
 
-    this.profileService
-      .getCurrent()
-      .subscribe({
-        next: (profile) => {
-          this.profile = profile;
+    this.profileService.getCurrent().subscribe({
+      next: (profile) => {
+        this.profile = profile;
+        this.logoLoadFailed = false;
 
-          this.profileForm.patchValue({
-            companyName: profile.companyName,
-            industry: profile.industry,
-            companySize: profile.companySize,
-            website: profile.website ?? '',
-            location: profile.location,
-            aboutCompany: profile.aboutCompany,
-            logoPath: profile.logoPath ?? '',
-            contactPerson: profile.contactPerson,
-            emailAddress: profile.emailAddress,
-            phoneNumber: profile.phoneNumber,
-          });
+        this.profileForm.patchValue({
+          companyName: profile.companyName,
+          industry: profile.industry,
+          companySize: profile.companySize,
+          website: profile.website ?? '',
+          location: profile.location,
+          aboutCompany: profile.aboutCompany,
+          logoPath: profile.logoPath ?? '',
+          contactPerson: profile.contactPerson,
+          emailAddress: profile.emailAddress,
+          phoneNumber: profile.phoneNumber,
+        });
 
-          this.loading = false;
-        },
-        error: (error: HttpErrorResponse) => {
-          this.loading = false;
+        this.loading = false;
+      },
+      error: (error: HttpErrorResponse) => {
+        this.loading = false;
 
-          if (error.status === 404) {
-            this.profile = null;
-            return;
-          }
+        if (error.status === 404) {
+          this.profile = null;
+          return;
+        }
 
-          this.errorMessage =
-            'Unable to load the employer profile.';
-        },
-      });
+        this.errorMessage =
+          'Unable to load the employer profile.';
+      },
+    });
   }
 
   saveProfile(): void {
@@ -168,15 +171,13 @@ export class EmployerProfileComponent implements OnInit {
     };
 
     if (this.profile) {
-      const updateData: UpdateEmployerProfile =
-        formValue;
-
+      const updateData: UpdateEmployerProfile = formValue;
       this.updateProfile(updateData);
       return;
     }
 
     const createData: CreateEmployerProfile = formValue;
-        this.createProfile(createData);
+    this.createProfile(createData);
   }
 
   private createProfile(
@@ -185,6 +186,7 @@ export class EmployerProfileComponent implements OnInit {
     this.profileService.create(createData).subscribe({
       next: (profile) => {
         this.profile = profile;
+        this.logoLoadFailed = false;
         this.saving = false;
         this.successMessage =
           'Employer profile created successfully.';
@@ -204,21 +206,23 @@ export class EmployerProfileComponent implements OnInit {
       return;
     }
 
-    this.profileService
-      .update(updateData)
-      .subscribe({
-        next: () => {
-          this.saving = false;
-          this.successMessage =
-            'Employer profile updated successfully.';
-          this.loadProfile();
-        },
-        error: () => {
-          this.saving = false;
-          this.errorMessage =
-            'Unable to update the employer profile.';
-        },
-      });
+    this.profileService.update(updateData).subscribe({
+      next: () => {
+        this.saving = false;
+        this.successMessage =
+          'Employer profile updated successfully.';
+        this.loadProfile();
+      },
+      error: () => {
+        this.saving = false;
+        this.errorMessage =
+          'Unable to update the employer profile.';
+      },
+    });
+  }
+
+  onLogoError(): void {
+    this.logoLoadFailed = true;
   }
 
   logout(): void {
@@ -227,7 +231,10 @@ export class EmployerProfileComponent implements OnInit {
   }
 
   toggleDarkMode(): void {
-  this.darkMode = !this.darkMode;
-  localStorage.setItem('employerDarkMode', String(this.darkMode));
-}
+    this.darkMode = !this.darkMode;
+    localStorage.setItem(
+      'employerDarkMode',
+      String(this.darkMode),
+    );
+  }
 }

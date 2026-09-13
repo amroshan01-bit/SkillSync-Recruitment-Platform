@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import {
@@ -18,7 +23,10 @@ import {
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+  ],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css',
 })
@@ -31,9 +39,20 @@ export class AdminDashboardComponent implements OnInit {
     this.authService.getUserName() ?? 'Admin';
 
   users: AdminUser[] = [];
+
   isLoading = true;
   errorMessage = '';
+
   updatingUserIds = new Set<string>();
+
+  darkMode = false;
+
+  searchTerm = '';
+  roleFilter = 'All';
+  statusFilter = 'All';
+
+  currentPage = 1;
+  readonly pageSize = 5;
 
   readonly roles: UserRole[] = [
     'JobSeeker',
@@ -61,10 +80,100 @@ export class AdminDashboardComponent implements OnInit {
     ).length;
   }
 
+  get adminCount(): number {
+    return this.users.filter(
+      (user) => user.role === 'Admin',
+    ).length;
+  }
+
   get activeUserCount(): number {
     return this.users.filter(
       (user) => user.isActive,
     ).length;
+  }
+
+  get blockedUserCount(): number {
+    return this.users.filter(
+      (user) => !user.isActive,
+    ).length;
+  }
+
+  get jobSeekerPercentage(): number {
+    return this.getPercentage(
+      this.jobSeekerCount,
+    );
+  }
+
+  get employerPercentage(): number {
+    return this.getPercentage(
+      this.employerCount,
+    );
+  }
+
+  get adminPercentage(): number {
+    return this.getPercentage(
+      this.adminCount,
+    );
+  }
+
+  get activeUserPercentage(): number {
+    return this.getPercentage(
+      this.activeUserCount,
+    );
+  }
+
+  get filteredUsers(): AdminUser[] {
+    const search =
+      this.searchTerm.trim().toLowerCase();
+
+    return this.users.filter((user) => {
+      const matchesSearch =
+        !search ||
+        user.fullName.toLowerCase().includes(search) ||
+        user.email.toLowerCase().includes(search);
+
+      const matchesRole =
+        this.roleFilter === 'All' ||
+        user.role === this.roleFilter;
+
+      const matchesStatus =
+        this.statusFilter === 'All' ||
+        (
+          this.statusFilter === 'Active' &&
+          user.isActive
+        ) ||
+        (
+          this.statusFilter === 'Blocked' &&
+          !user.isActive
+        );
+
+      return (
+        matchesSearch &&
+        matchesRole &&
+        matchesStatus
+      );
+    });
+  }
+
+  get totalPages(): number {
+    return Math.max(
+      1,
+      Math.ceil(
+        this.filteredUsers.length /
+        this.pageSize,
+      ),
+    );
+  }
+
+  get paginatedUsers(): AdminUser[] {
+    const start =
+      (this.currentPage - 1) *
+      this.pageSize;
+
+    return this.filteredUsers.slice(
+      start,
+      start + this.pageSize,
+    );
   }
 
   loadUsers(): void {
@@ -74,6 +183,7 @@ export class AdminDashboardComponent implements OnInit {
     this.adminService.getUsers().subscribe({
       next: (users) => {
         this.users = users;
+        this.currentPage = 1;
         this.isLoading = false;
       },
       error: (error: HttpErrorResponse) => {
@@ -85,6 +195,38 @@ export class AdminDashboardComponent implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  applyFilters(): void {
+    this.currentPage = 1;
+  }
+
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.roleFilter = 'All';
+    this.statusFilter = 'All';
+    this.currentPage = 1;
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  goToPage(page: number): void {
+    if (
+      page >= 1 &&
+      page <= this.totalPages
+    ) {
+      this.currentPage = page;
+    }
   }
 
   changeRole(
@@ -105,7 +247,10 @@ export class AdminDashboardComponent implements OnInit {
     this.errorMessage = '';
 
     this.adminService
-      .updateUserRole(user.id, { role: newRole })
+      .updateUserRole(
+        user.id,
+        { role: newRole },
+      )
       .subscribe({
         next: (updatedUser) => {
           this.replaceUser(updatedUser);
@@ -113,8 +258,10 @@ export class AdminDashboardComponent implements OnInit {
         },
         error: () => {
           selectElement.value = user.role;
+
           this.errorMessage =
             `Unable to update ${user.fullName}'s role.`;
+
           this.updatingUserIds.delete(user.id);
         },
       });
@@ -127,7 +274,9 @@ export class AdminDashboardComponent implements OnInit {
     this.adminService
       .updateUserStatus(
         user.id,
-        { isActive: !user.isActive },
+        {
+          isActive: !user.isActive,
+        },
       )
       .subscribe({
         next: (updatedUser) => {
@@ -137,6 +286,7 @@ export class AdminDashboardComponent implements OnInit {
         error: () => {
           this.errorMessage =
             `Unable to update ${user.fullName}'s status.`;
+
           this.updatingUserIds.delete(user.id);
         },
       });
@@ -146,16 +296,39 @@ export class AdminDashboardComponent implements OnInit {
     return this.updatingUserIds.has(userId);
   }
 
+  goBack(): void {
+    window.history.back();
+  }
+
+  toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigateByUrl('/login');
   }
 
-  private replaceUser(updatedUser: AdminUser): void {
-    this.users = this.users.map((user) =>
-      user.id === updatedUser.id
-        ? updatedUser
-        : user,
+  private replaceUser(
+    updatedUser: AdminUser,
+  ): void {
+    this.users = this.users.map(
+      (user) =>
+        user.id === updatedUser.id
+          ? updatedUser
+          : user,
+    );
+  }
+
+  private getPercentage(
+    count: number,
+  ): number {
+    if (this.totalUsers === 0) {
+      return 0;
+    }
+
+    return Math.round(
+      (count / this.totalUsers) * 100,
     );
   }
 }

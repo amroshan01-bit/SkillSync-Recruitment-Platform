@@ -1,113 +1,195 @@
-<div class="skills-page">
-  <header class="page-header">
-    <div>
-      <p class="eyebrow">JOB SEEKER PROFILE</p>
-      <h1>Manage Your Skills</h1>
-      <p class="subtitle">
-        Add your technical and professional skills to receive
-        more accurate job matches.
-      </p>
+<div class="profile-page" [class.dark-theme]="darkMode">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-logo">S</span>
+      <span>SkillSync</span>
     </div>
 
-    <nav class="page-navigation">
-      <a href="/seeker/matches">Job Matches</a>
-      <a href="/seeker/applications">My Applications</a>
+    <nav class="navigation">
+      <a routerLink="/seeker/profile">
+        <span class="nav-icon">P</span>
+        My Profile
+      </a>
+
+      <a routerLink="/seeker/skills" class="active">
+        <span class="nav-icon">S</span>
+        Manage Skills
+      </a>
+
+      <a routerLink="/seeker/matches">
+        <span class="nav-icon">J</span>
+        Job Matches
+      </a>
+
+      <a routerLink="/seeker/applications">
+        <span class="nav-icon">A</span>
+        My Applications
+      </a>
+
+      <a routerLink="/seeker/notifications">
+        <span class="nav-icon">N</span>
+        Notifications
+      </a>
     </nav>
-  </header>
+  </aside>
 
-  <main class="skills-card">
-    <section class="card-heading">
-      <div class="heading-icon">✓</div>
+  <div class="main-area">
+    <header class="topbar">
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()"
+      >
+        Back
+      </button>
 
-      <div>
-        <h2>Skills Profile</h2>
-        <p>
-          Your match score is calculated using the skills
-          listed below.
-        </p>
-      </div>
-    </section>
+      <div class="topbar-actions">
+        <button
+          type="button"
+          class="theme-button"
+          (click)="toggleDarkMode()"
+          [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+        >
+          {{ darkMode ? 'Light Mode' : 'Dark Mode' }}
+        </button>
 
-    @if (isLoading) {
-    <div class="state-message">
-      Loading your skills...
-    </div>
-    } @else {
-    <section class="skill-input-section">
-      <label for="skillInput">Add a new skill</label>
+        <div class="account">
+          <span class="account-avatar">
+            {{ userName.charAt(0).toUpperCase() || 'U' }}
+          </span>
+          <span>{{ userName }}</span>
+        </div>
 
-      <div class="input-row">
-        <input id="skillInput"
-               type="text"
-               [(ngModel)]="newSkill"
-               (keyup.enter)="addSkill()"
-               placeholder="Example: ASP.NET Core"
-               maxlength="100" />
-
-        <button type="button"
-                class="add-button"
-                (click)="addSkill()">
-          Add Skill
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()"
+        >
+          Logout
         </button>
       </div>
-    </section>
+    </header>
 
-    <section class="current-skills">
-      <div class="skills-title">
-        <h3>Your Skills</h3>
-        <span>{{ skills.length }} skills added</span>
-      </div>
-
-      @if (skills.length > 0) {
-      <div class="skill-list">
-        @for (skill of skills; track skill) {
-        <div class="skill-chip">
-          <span>{{ skill }}</span>
-
-          <button type="button"
-                  (click)="removeSkill(skill)"
-                  [attr.aria-label]="'Remove ' + skill">
-            ×
-          </button>
+    <main class="content">
+      <section class="page-header">
+        <div>
+          <p class="eyebrow">JOB SEEKER PROFILE</p>
+          <h1>Manage Your Skills</h1>
+          <p class="subtitle">
+            Add your technical and professional skills to receive
+            more accurate job matches.
+          </p>
         </div>
-        }
-      </div>
-      } @else {
-      <div class="empty-skills">
-        <div class="empty-icon">＋</div>
-        <h4>No skills added yet</h4>
-        <p>
-          Add your first skill using the field above.
-        </p>
-      </div>
-      }
-    </section>
 
-    @if (successMessage) {
-    <div class="alert success-alert">
-      {{ successMessage }}
-    </div>
-    }
+        <nav class="page-navigation">
+          <a routerLink="/seeker/matches">Job Matches</a>
+          <a routerLink="/seeker/applications">My Applications</a>
+        </nav>
+      </section>
 
-    @if (errorMessage) {
-    <div class="alert error-alert">
-      {{ errorMessage }}
-    </div>
-    }
+      <section class="skills-card">
+        <section class="card-heading">
+          <div class="heading-icon">S</div>
 
-    <footer class="card-footer">
-      <p>
-        These skills will be used by the backend matching
-        system.
-      </p>
+          <div>
+            <h2>Skills Profile</h2>
+            <p>
+              Your match score is calculated using the skills
+              listed below.
+            </p>
+          </div>
+        </section>
 
-      <button type="button"
+        @if (isLoading) {
+          <div class="state-message">
+            Loading your skills...
+          </div>
+        } @else {
+          <section class="skill-input-section">
+            <label for="skillInput">Add a new skill</label>
+
+            <div class="input-row">
+              <input
+                id="skillInput"
+                type="text"
+                [(ngModel)]="newSkill"
+                (keyup.enter)="addSkill()"
+                placeholder="Example: ASP.NET Core"
+                maxlength="100"
+              />
+
+              <button
+                type="button"
+                class="add-button"
+                (click)="addSkill()"
+              >
+                Add Skill
+              </button>
+            </div>
+          </section>
+
+          <section class="current-skills">
+            <div class="skills-title">
+              <h3>Your Skills</h3>
+              <span>{{ skills.length }} skills added</span>
+            </div>
+
+            @if (skills.length > 0) {
+              <div class="skill-list">
+                @for (skill of skills; track skill) {
+                  <div class="skill-chip">
+                    <span>{{ skill }}</span>
+
+                    <button
+                      type="button"
+                      (click)="removeSkill(skill)"
+                      [attr.aria-label]="'Remove ' + skill"
+                    >
+                      X
+                    </button>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="empty-skills">
+                <div class="empty-icon">+</div>
+                <h4>No skills added yet</h4>
+                <p>
+                  Add your first skill using the field above.
+                </p>
+              </div>
+            }
+          </section>
+
+          @if (successMessage) {
+            <div class="alert success-alert">
+              {{ successMessage }}
+            </div>
+          }
+
+          @if (errorMessage) {
+            <div class="alert error-alert">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <footer class="card-footer">
+            <p>
+              These skills will be used by the backend matching
+              system.
+            </p>
+
+            <button
+              type="button"
               class="save-button"
               (click)="saveSkills()"
-              [disabled]="isSaving">
-        {{ isSaving ? 'Saving...' : 'Save Skills' }}
-      </button>
-    </footer>
-    }
-  </main>
+              [disabled]="isSaving"
+            >
+              {{ isSaving ? 'Saving...' : 'Save Skills' }}
+            </button>
+          </footer>
+        }
+      </section>
+    </main>
+  </div>
 </div>

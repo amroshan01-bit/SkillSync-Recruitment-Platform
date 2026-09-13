@@ -25,11 +25,6 @@
         <span class="nav-icon">A</span>
         Applications
       </a>
-
-      <a href="#">
-        <span class="nav-icon">N</span>
-        Notifications
-      </a>
     </nav>
   </aside>
 
@@ -111,6 +106,7 @@
                   Create Vacancy
                 }
               </h2>
+
               <p>Enter the complete vacancy information.</p>
             </div>
 
@@ -119,7 +115,7 @@
               class="close-form-button"
               (click)="cancelForm()"
             >
-              Ã—
+              X
             </button>
           </div>
 
@@ -130,6 +126,7 @@
             <div class="form-grid">
               <div class="form-field">
                 <label for="jobTitle">Job Title</label>
+
                 <input
                   id="jobTitle"
                   type="text"
@@ -149,6 +146,7 @@
 
               <div class="form-field">
                 <label for="department">Department</label>
+
                 <input
                   id="department"
                   type="text"
@@ -168,6 +166,7 @@
 
               <div class="form-field full-width">
                 <label for="location">Location</label>
+
                 <input
                   id="location"
                   type="text"
@@ -180,14 +179,23 @@
                 <label for="workplaceType">
                   Workplace Type
                 </label>
+
                 <select
                   id="workplaceType"
                   formControlName="workplaceType"
                 >
-                  <option value="">Select workplace type</option>
-                  <option value="On-site">On-site</option>
-                  <option value="Remote">Remote</option>
-                  <option value="Hybrid">Hybrid</option>
+                  <option value="">
+                    Select workplace type
+                  </option>
+                  <option value="On-site">
+                    On-site
+                  </option>
+                  <option value="Remote">
+                    Remote
+                  </option>
+                  <option value="Hybrid">
+                    Hybrid
+                  </option>
                 </select>
               </div>
 
@@ -195,15 +203,26 @@
                 <label for="employmentType">
                   Employment Type
                 </label>
+
                 <select
                   id="employmentType"
                   formControlName="employmentType"
                 >
-                  <option value="">Select employment type</option>
-                  <option value="Full-time">Full-time</option>
-                  <option value="Part-time">Part-time</option>
-                  <option value="Contract">Contract</option>
-                  <option value="Internship">Internship</option>
+                  <option value="">
+                    Select employment type
+                  </option>
+                  <option value="Full-time">
+                    Full-time
+                  </option>
+                  <option value="Part-time">
+                    Part-time
+                  </option>
+                  <option value="Contract">
+                    Contract
+                  </option>
+                  <option value="Internship">
+                    Internship
+                  </option>
                 </select>
               </div>
 
@@ -211,15 +230,26 @@
                 <label for="experienceLevel">
                   Experience Level
                 </label>
+
                 <select
                   id="experienceLevel"
                   formControlName="experienceLevel"
                 >
-                  <option value="">Select experience level</option>
-                  <option value="Entry Level">Entry Level</option>
-                  <option value="Mid Level">Mid Level</option>
-                  <option value="Senior Level">Senior Level</option>
-                  <option value="Manager">Manager</option>
+                  <option value="">
+                    Select experience level
+                  </option>
+                  <option value="Entry Level">
+                    Entry Level
+                  </option>
+                  <option value="Mid Level">
+                    Mid Level
+                  </option>
+                  <option value="Senior Level">
+                    Senior Level
+                  </option>
+                  <option value="Manager">
+                    Manager
+                  </option>
                 </select>
               </div>
 
@@ -227,6 +257,7 @@
                 <label for="numberOfOpenings">
                   Number of Openings
                 </label>
+
                 <input
                   id="numberOfOpenings"
                   type="number"
@@ -240,6 +271,7 @@
                 <label for="jobDescription">
                   Job Description
                 </label>
+
                 <textarea
                   id="jobDescription"
                   rows="5"
@@ -249,7 +281,10 @@
               </div>
 
               <div class="form-field full-width">
-                <label for="requirements">Requirements</label>
+                <label for="requirements">
+                  Requirements
+                </label>
+
                 <textarea
                   id="requirements"
                   rows="4"
@@ -262,6 +297,7 @@
                 <label for="requiredSkills">
                   Required Skills
                 </label>
+
                 <textarea
                   id="requiredSkills"
                   rows="3"
@@ -274,6 +310,7 @@
                 <label for="minimumSalary">
                   Minimum Salary
                 </label>
+
                 <input
                   id="minimumSalary"
                   type="number"
@@ -286,6 +323,7 @@
                 <label for="maximumSalary">
                   Maximum Salary
                 </label>
+
                 <input
                   id="maximumSalary"
                   type="number"
@@ -295,7 +333,10 @@
               </div>
 
               <div class="form-field">
-                <label for="currency">Currency</label>
+                <label for="currency">
+                  Currency
+                </label>
+
                 <select
                   id="currency"
                   formControlName="currency"
@@ -311,6 +352,7 @@
                 <label for="applicationClosingDate">
                   Application Closing Date
                 </label>
+
                 <input
                   id="applicationClosingDate"
                   type="datetime-local"
@@ -319,13 +361,20 @@
               </div>
 
               <div class="form-field">
-                <label for="status">Status</label>
+                <label for="status">
+                  Status
+                </label>
+
                 <select
                   id="status"
                   formControlName="status"
                 >
-                  <option value="Draft">Draft</option>
-                  <option value="Open">Open</option>
+                  <option value="Draft">
+                    Draft
+                  </option>
+                  <option value="Open">
+                    Open
+                  </option>
                 </select>
               </div>
             </div>
@@ -406,7 +455,9 @@
         } @else if (vacancies.length === 0) {
           <div class="empty-state">
             <div class="empty-icon">V</div>
+
             <h3>No vacancies found</h3>
+
             <p>
               Create a vacancy or select another status filter.
             </p>
@@ -455,10 +506,11 @@
 
                 <div class="salary-row">
                   <span>Salary</span>
+
                   <strong>
                     {{ vacancy.currency }}
                     {{ vacancy.minimumSalary | number }}
-                    â€“
+                    -
                     {{ vacancy.maximumSalary | number }}
                   </strong>
                 </div>
