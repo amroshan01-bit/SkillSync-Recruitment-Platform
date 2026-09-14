@@ -1,58 +1,60 @@
 <section class="cv-card">
-  <!-- Card heading -->
   <div class="cv-heading">
-    <div class="heading-icon">CV</div>
+    <div class="heading-icon">
+      ▤
+    </div>
 
     <div>
-      <h2>Curriculum Vitae</h2>
+      <h2>My CV</h2>
 
       <p>
-        Upload your latest CV to improve your job matches.
+        Upload your CV to get noticed by employers.
       </p>
     </div>
   </div>
 
-  <!-- Loading state -->
   @if (loading) {
     <div class="state-message">
       Loading your CV...
     </div>
   }
 
-  <!-- Error message -->
   @if (errorMessage) {
-    <div class="message error-message" role="alert">
+    <div class="message error-message">
       {{ errorMessage }}
     </div>
   }
 
-  <!-- Success message -->
   @if (successMessage) {
-    <div
-      class="message success-message"
-      aria-live="polite"
-    >
-      {{ successMessage }}
+    <div class="message success-message">
+      ✓ {{ successMessage }}
     </div>
   }
 
   @if (!loading) {
-    <!-- File selection area -->
     <div class="upload-area">
-      <div class="upload-icon">↑</div>
+      <div class="upload-icon">
+        ↑
+      </div>
 
       <h3>
         @if (cv) {
-          Replace your current CV
+          Choose a file to replace
         } @else {
-          Upload your CV
+          Choose a file or drag & drop
         }
       </h3>
 
-      <p>PDF, DOC or DOCX · Maximum 5 MB</p>
+      <p>
+        PDF, DOC or DOCX (Max 5 MB)
+      </p>
 
-      <label class="choose-button" for="cvFile">
-        Choose CV
+      <label
+        class="choose-button"
+        for="cvFile"
+      >
+        <span>▤</span>
+        Choose File
       </label>
 
       <input
@@ -64,13 +66,14 @@
       />
     </div>
 
-    <!-- Selected file preview -->
     @if (selectedFile) {
       <div class="selected-file">
         <div>
-          <span class="file-label">Selected file</span>
+          <span>Selected file</span>
 
-          <strong>{{ selectedFile.name }}</strong>
+          <strong>
+            {{ selectedFile.name }}
+          </strong>
 
           <small>
             {{ formatFileSize(selectedFile.size) }}
@@ -78,8 +81,8 @@
         </div>
 
         <button
-          class="primary-button"
           type="button"
+          class="upload-button"
           [disabled]="uploading"
           (click)="uploadCv()"
         >
@@ -94,66 +97,87 @@
       </div>
     }
 
-    <!-- Existing CV information -->
     @if (cv) {
       <div class="current-cv">
         <div class="file-information">
-          <div class="file-icon">PDF</div>
+          <div class="pdf-icon">
+            PDF
+          </div>
 
           <div class="file-details">
-            <strong>{{ cv.fileName }}</strong>
+            <strong>
+              {{ cv.fileName }}
+            </strong>
 
             <p>
               {{ formatFileSize(cv.fileSize) }}
-              ·
+              &nbsp;•&nbsp;
               Uploaded
-              {{ cv.uploadedAtUtc | date: 'mediumDate' }}
+              {{ cv.uploadedAtUtc | date:'mediumDate' }}
             </p>
           </div>
-
-          <span class="uploaded-status">
-            Uploaded
-          </span>
         </div>
 
         <div class="cv-actions">
           <button
-            class="secondary-button"
             type="button"
+            class="action-button download-button"
             (click)="downloadCv()"
           >
+            <span>↓</span>
             Download
           </button>
 
-          <label
-            class="secondary-button"
-            for="cvFile"
-          >
-            Replace
-          </label>
-
           <button
-            class="delete-button"
             type="button"
+            class="action-button delete-button"
             [disabled]="deleting"
             (click)="deleteCv()"
           >
+            <span>▥</span>
+
             @if (deleting) {
               Deleting...
             } @else {
               Delete
             }
           </button>
+
+          <label
+            class="action-button replace-button"
+            for="cvFile"
+          >
+            <span>↻</span>
+            Replace
+          </label>
         </div>
       </div>
     } @else if (!selectedFile) {
-      <!-- Empty state -->
       <div class="empty-state">
-        <strong>No CV uploaded yet</strong>
+        No CV uploaded yet.
+      </div>
+    }
 
-        <p>
-          Choose a CV file and upload it to your profile.
-        </p>
+    @if (uploading) {
+      <div class="upload-progress-card">
+        <div class="progress-circle">
+          <span></span>
+        </div>
+
+        <div class="progress-information">
+          <div class="progress-heading">
+            <strong>Uploading CV...</strong>
+            <span>Please wait</span>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-value"></div>
+          </div>
+
+          <p>
+            Please wait while your file is being uploaded.
+          </p>
+        </div>
       </div>
     }
   }

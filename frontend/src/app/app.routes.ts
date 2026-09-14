@@ -12,6 +12,8 @@ import { EmployerApplicationsComponent } from './features/employer/applications/
 import { EmployerProfileComponent } from './features/employer/employer-profile/employer-profile.component';
 import { VacancyManagementComponent } from './features/employer/vacancy-management/vacancy-management.component';
 
+import { LandingComponent } from './features/landing/landing/landing.component';
+
 import { JobMatchesComponent } from './features/seeker/job-matches/job-matches.component';
 import { JobSeekerProfileComponent } from './features/seeker/job-seeker-profile/job-seeker-profile.component';
 import { ManageSkillsComponent } from './features/seeker/manage-skills/manage-skills.component';
@@ -19,6 +21,11 @@ import { MyApplicationsComponent } from './features/seeker/my-applications/my-ap
 import { NotificationsComponent } from './features/seeker/notifications/notifications.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: LandingComponent,
+    title: 'SkillSync | People. Skills. Opportunities.',
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -137,12 +144,7 @@ export const routes: Routes = [
     title: 'Applications | SkillSync',
   },
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
-  {
     path: '**',
-    redirectTo: 'login',
+    redirectTo: '',
   },
 ];
