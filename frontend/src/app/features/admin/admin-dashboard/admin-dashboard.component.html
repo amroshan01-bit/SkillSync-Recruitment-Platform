@@ -1,4 +1,4 @@
-<div class="admin-page" [class.dark-theme]="darkMode">
+﻿<div class="admin-page" [class.dark-theme]="darkMode">
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-logo" aria-label="SkillSync logo">
@@ -36,32 +36,6 @@
     </button>
 
     <nav class="navigation" aria-label="Admin navigation">
-      <a class="active" href="#admin-dashboard">
-        <span class="nav-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 13h6V4H4v9Zm10 7h6V11h-6v9ZM4 20h6v-5H4v5Zm10-11h6V4h-6v5Z" />
-          </svg>
-        </span>
-        <span>Dashboard</span>
-      </a>
-
-      <a href="#user-management">
-        <span class="nav-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 19c0-3 2.7-5 6-5s6 2 6 5v1H2v-1Zm11.5 1c.3-.8.5-1.7.5-2.6 0-1.1-.3-2.2-.9-3.1.9-.2 1.8-.3 2.9-.3 3.3 0 6 2 6 5v1h-8.5Z" />
-          </svg>
-        </span>
-        <span>User Management</span>
-      </a>
-
-      <a href="#user-statistics">
-        <span class="nav-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 20h3V10H4v10Zm6 0h3V4h-3v16Zm6 0h3v-7h-3v7Z" />
-          </svg>
-        </span>
-        <span>User Statistics</span>
-      </a>
     </nav>
 
     <div class="sidebar-spacer"></div>
@@ -74,14 +48,7 @@
       <i></i>
     </div>
 
-    <button
-      type="button"
-      class="logout-button"
-      (click)="logout()"
-    >
-      <span aria-hidden="true">↪</span>
-      Logout
-    </button>
+    <button type="button" class="logout-button" (click)="logout()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M14 5h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Logout</span></button>
 
     <div class="sidebar-footer">
       <strong>SkillSync Recruitment Platform</strong>
@@ -105,16 +72,7 @@
           </div>
         </div>
 
-        <button
-          type="button"
-          class="theme-toggle"
-          (click)="toggleDarkMode()"
-          [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
-          [attr.title]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
-        >
-          <span class="theme-option sun" [class.selected]="!darkMode">☀</span>
-          <span class="theme-option moon" [class.selected]="darkMode">☾</span>
-        </button>
+        <button type="button" class="theme-toggle" (click)="toggleDarkMode()" [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'" [attr.title]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"><span class="theme-option sun" [class.selected]="!darkMode"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg></span><span class="theme-option moon" [class.selected]="darkMode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z" fill="currentColor"></path></svg></span></button>
       </div>
     </header>
 
@@ -288,7 +246,7 @@
             [disabled]="isLoading"
             (click)="loadUsers()"
           >
-            <span aria-hidden="true">↻</span>
+            <span aria-hidden="true">â†»</span>
             Refresh
           </button>
         </div>
@@ -467,3 +425,12 @@
     </main>
   </div>
 </div>
+
+
+
+
+
+
+
+
+

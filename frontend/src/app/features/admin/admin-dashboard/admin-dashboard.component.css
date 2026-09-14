@@ -1216,3 +1216,8 @@ select:disabled {
     transform: rotate(360deg);
   }
 }
+.theme-option.sun::before{content:\2600}.theme-option.moon::before{content:\263E}
+
+/* FINAL ICON FIX */
+.theme-toggle svg{width:18px;height:18px;display:block}.logout-button svg{width:19px;height:19px;flex:0 0 19px}
+
