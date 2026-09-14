@@ -1,61 +1,79 @@
 <div class="employer-page" [class.dark-mode]="darkMode">
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-mark">S</div>
-      <div>
+      <div class="brand-logo" aria-label="SkillSync logo">
+        <svg viewBox="0 0 90 70" aria-hidden="true">
+          <defs>
+            <linearGradient id="employerSkillSyncLogoGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#20d4ff" />
+              <stop offset="45%" stop-color="#138df5" />
+              <stop offset="100%" stop-color="#174fd4" />
+            </linearGradient>
+          </defs>
+          <path d="M67 9H34C20 9 13 16 13 26c0 9 7 14 19 14h18c5 0 8 2 8 5s-3 5-8 5H18l-9 12h42c14 0 23-7 23-18 0-10-8-15-21-15H35c-4 0-7-2-7-5s3-5 7-5h23z" fill="url(#employerSkillSyncLogoGradient)" />
+        </svg>
+      </div>
+      <div class="brand-text">
         <strong>SkillSync</strong>
-        <span>Employer Portal</span>
+        <small>People. Skills. Opportunities.</small>
       </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <a routerLink="/employer/profile">
-        Company Profile
-      </a>
+    <button type="button" class="back-button" aria-label="Go back" title="Go Back" onclick="history.back()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
 
-      <a routerLink="/employer/vacancies">
-        Vacancies
+    <nav class="navigation">
+      <a href="/employer/profile">
+        <span class="nav-icon">P</span>
+        <span>Company Profile</span>
       </a>
-
-      <a
-        routerLink="/employer/applications"
-        class="active"
-      >
-        Applications
+      <a href="/employer/vacancies">
+        <span class="nav-icon">V</span>
+        <span>Manage Vacancies</span>
+      </a>
+      <a href="/employer/applications" class="active">
+        <span class="nav-icon">A</span>
+        <span>Applications</span>
       </a>
     </nav>
 
-     </aside>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-quote">Build<br />A Brighter<br />Tomorrow</div>
+
+    <button type="button" class="sidebar-logout" (click)="logout()">
+      <span class="logout-icon">↪</span>
+      <span>Logout</span>
+    </button>
+
+    <div class="sidebar-footer">SkillSync Recruitment Platform</div>
+  </aside>
 
   <main class="main-content">
     <header class="topbar">
-      <div>
-        <p class="eyebrow">Recruitment Management</p>
-        <h1>Applications</h1>
-      </div>
-
+      <div class="topbar-spacer"></div>
       <div class="topbar-actions">
-        <button
-          type="button"
-          class="theme-button"
-          (click)="toggleDarkMode()"
-        >
-          {{ darkMode ? 'Light Mode' : 'Dark Mode' }}
-        </button>
-
-        <div class="user-card">
-          <span>Logged in as</span>
-          <strong>{{ userName }}</strong>
+        <div class="account">
+          <span class="account-avatar">{{ userName.charAt(0).toUpperCase() || 'E' }}</span>
+          <span class="account-copy">
+            <strong>{{ userName }}</strong>
+            <small>Employer</small>
+          </span>
         </div>
-        <button
-          type="button"
-          class="logout-button"
-          (click)="logout()"
-        >
-          Logout
+
+        <button type="button" class="theme-button" (click)="toggleDarkMode()" [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'" title="Toggle theme">
+          <span aria-hidden="true">{{ darkMode ? '☀' : '☾' }}</span>
         </button>
       </div>
     </header>
+
+    <section class="applications-heading">
+      <div>
+        <h1>Applications</h1>
+        <p>Review and manage applications for your job vacancies.</p>
+      </div>
+      <div class="hero-note">Great Applications<br />Build Greater Teams</div>
+    </section>
 
     <section class="content-card">
       <div class="section-heading">
