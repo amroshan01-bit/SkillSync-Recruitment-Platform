@@ -1,0 +1,1062 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.register-page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: grid;
+  grid-template-columns: 58.4% 41.6%;
+
+  overflow: hidden;
+
+  background: #eef8ff;
+
+  font-family:
+    Inter,
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+/* =========================================================
+   LEFT HERO
+   ========================================================= */
+
+.hero-panel {
+  position: relative;
+
+  height: 100vh;
+  min-height: 760px;
+
+  overflow: hidden;
+
+  background: #d9efff;
+}
+
+.hero-reference {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  width: auto;
+  max-width: none;
+
+  display: block;
+
+  user-select: none;
+  pointer-events: none;
+
+  transition:
+    filter 0.3s ease;
+}
+
+.back-link {
+  position: absolute;
+
+  z-index: 10;
+
+  top: 3.8%;
+  left: 2.2%;
+
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    box-shadow 0.2s ease;
+}
+
+.back-link:hover {
+  box-shadow:
+    0 6px 18px rgba(0, 105, 220, 0.16);
+}
+
+.back-link:focus-visible {
+  outline: 3px solid #1677ff;
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   RIGHT PANEL
+   ========================================================= */
+
+.register-panel {
+  position: relative;
+
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    86px 6%
+    82px;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f9fdff 0%,
+      #edf7ff 45%,
+      #e3f1ff 100%
+    );
+
+  transition:
+    background 0.3s ease;
+}
+
+.watermark {
+  position: absolute;
+
+  border-radius: 50%;
+
+  border:
+    55px solid rgba(105, 177, 255, 0.09);
+
+  pointer-events: none;
+}
+
+.watermark-one {
+  width: 620px;
+  height: 620px;
+
+  top: -360px;
+  right: -240px;
+}
+
+.watermark-two {
+  width: 540px;
+  height: 540px;
+
+  bottom: -330px;
+  right: -120px;
+
+  border-width: 70px;
+
+  opacity: 0.8;
+}
+
+.watermark-three {
+  width: 420px;
+  height: 420px;
+
+  right: -290px;
+  top: 32%;
+
+  border-color:
+    rgba(59, 151, 255, 0.08);
+}
+
+/* =========================================================
+   THEME TOGGLE
+   ========================================================= */
+
+.theme-toggle {
+  position: absolute;
+
+  z-index: 20;
+
+  top: 26px;
+  right: 34px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 4px;
+
+  border:
+    1px solid rgba(116, 170, 235, 0.28);
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.82);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 8px 24px rgba(33, 93, 165, 0.14);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.3s ease,
+    box-shadow 0.2s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+
+  box-shadow:
+    0 10px 28px rgba(33, 93, 165, 0.2);
+}
+
+.theme-option {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  color: #55759b;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.theme-option svg {
+  width: 19px;
+  height: 19px;
+}
+
+.theme-option.active {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      145deg,
+      #258eff,
+      #3154b7
+    );
+
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.45),
+    0 4px 12px rgba(37, 104, 207, 0.28);
+}
+
+/* =========================================================
+   REGISTER CARD
+   ========================================================= */
+
+.register-card {
+  position: relative;
+  z-index: 5;
+
+  width: min(100%, 650px);
+
+  padding: 34px 36px 30px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.78);
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.76),
+      rgba(219, 239, 255, 0.56)
+    );
+
+  backdrop-filter:
+    blur(28px)
+    saturate(145%);
+
+  -webkit-backdrop-filter:
+    blur(28px)
+    saturate(145%);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 25px 70px rgba(37, 111, 190, 0.14);
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.register-header {
+  margin-bottom: 24px;
+}
+
+.welcome-text {
+  margin: 0 0 7px;
+
+  color: #0877ed;
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.register-header h1 {
+  margin: 0;
+
+  color: #07183f;
+
+  font-size:
+    clamp(
+      28px,
+      2vw,
+      38px
+    );
+
+  line-height: 1.15;
+  font-weight: 800;
+
+  letter-spacing: -0.6px;
+
+  transition:
+    color 0.3s ease;
+}
+
+.register-description {
+  margin: 10px 0 0;
+
+  color: #375576;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  transition:
+    color 0.3s ease;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 15px 18px;
+}
+
+.form-group {
+  margin-bottom: 17px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #07183f;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  transition:
+    color 0.3s ease;
+}
+
+.liquid-input {
+  position: relative;
+
+  width: 100%;
+  height: 57px;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.88);
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.68),
+      rgba(222, 240, 255, 0.58)
+    );
+
+  backdrop-filter:
+    blur(20px)
+    saturate(150%);
+
+  -webkit-backdrop-filter:
+    blur(20px)
+    saturate(150%);
+
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 4px rgba(83, 158, 236, 0.08),
+    0 8px 22px rgba(53, 125, 204, 0.07);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    background 0.3s ease;
+}
+
+/* Hover zoom */
+
+.liquid-input:hover {
+  transform: scale(1.025);
+
+  border-color:
+    rgba(26, 127, 242, 0.45);
+
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.95),
+    0 8px 22px rgba(30, 118, 220, 0.14),
+    0 0 0 3px rgba(38, 135, 245, 0.06);
+}
+
+.liquid-input:focus-within {
+  transform: scale(1.025);
+
+  border-color:
+    rgba(26, 127, 242, 0.65);
+
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.95),
+    0 0 0 4px rgba(38, 135, 245, 0.1),
+    0 10px 25px rgba(53, 125, 204, 0.1);
+}
+
+.liquid-input input,
+.liquid-input select {
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+  outline: 0;
+
+  padding:
+    0 16px
+    0 50px;
+
+  color: #122b53;
+
+  background: transparent;
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.liquid-input input::placeholder {
+  color: #5b7697;
+}
+
+.password-input {
+  padding-right: 52px !important;
+}
+
+/* =========================================================
+   ROLE
+   ========================================================= */
+
+.role-group {
+  margin-top: 1px;
+}
+
+.role-input select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  cursor: pointer;
+
+  padding-right: 48px;
+}
+
+.select-arrow {
+  position: absolute;
+
+  right: 19px;
+
+  color: #1265bd;
+
+  font-size: 21px;
+
+  pointer-events: none;
+}
+
+.role-icon {
+  display: grid;
+  place-items: center;
+
+  color: #1265bd;
+
+  font-size: 16px;
+}
+
+/* =========================================================
+   ICONS
+   ========================================================= */
+
+.field-icon {
+  position: absolute;
+
+  left: 17px;
+
+  width: 20px;
+  height: 20px;
+
+  color: #114d93;
+
+  pointer-events: none;
+}
+
+/* User */
+
+.user-icon {
+  width: 17px;
+  height: 17px;
+
+  border:
+    2px solid #114d93;
+
+  border-radius: 50%;
+
+  transform: translateY(-5px);
+}
+
+.user-icon::after {
+  content: "";
+
+  position: absolute;
+
+  left: -5px;
+  top: 16px;
+
+  width: 23px;
+  height: 12px;
+
+  border:
+    2px solid #114d93;
+
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+
+  border-bottom: 0;
+}
+
+/* Email */
+
+.email-icon {
+  border:
+    2px solid #114d93;
+
+  border-radius: 3px;
+}
+
+.email-icon::before,
+.email-icon::after {
+  content: "";
+
+  position: absolute;
+
+  top: 3px;
+
+  width: 11px;
+  height: 2px;
+
+  background: #114d93;
+}
+
+.email-icon::before {
+  left: 0;
+
+  transform:
+    rotate(38deg)
+    translate(1px, 2px);
+}
+
+.email-icon::after {
+  right: 0;
+
+  transform:
+    rotate(-38deg)
+    translate(-1px, 2px);
+}
+
+/* Lock */
+
+.lock-icon {
+  top: 21px;
+
+  height: 16px;
+
+  border:
+    2px solid #114d93;
+
+  border-radius: 3px;
+}
+
+.lock-icon::before {
+  content: "";
+
+  position: absolute;
+
+  width: 10px;
+  height: 9px;
+
+  left: 3px;
+  top: -9px;
+
+  border:
+    2px solid #114d93;
+
+  border-bottom: 0;
+
+  border-radius:
+    8px 8px 0 0;
+}
+
+/* =========================================================
+   PASSWORD TOGGLE
+   ========================================================= */
+
+.password-toggle {
+  position: absolute;
+
+  right: 5px;
+  top: 50%;
+
+  width: 44px;
+  height: 44px;
+
+  transform:
+    translateY(-50%);
+
+  display: grid;
+  place-items: center;
+
+  border: 0;
+
+  color: #235c9e;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.password-toggle:hover {
+  color: #0677f8;
+}
+
+.password-toggle svg {
+  width: 21px;
+  height: 21px;
+}
+
+/* =========================================================
+   VALIDATION
+   ========================================================= */
+
+.validation-message {
+  margin: 6px 2px 0;
+
+  color: #dc2626;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.error-message {
+  margin-bottom: 18px;
+
+  padding: 11px 14px;
+
+  border:
+    1px solid rgba(239, 68, 68, 0.24);
+
+  border-radius: 12px;
+
+  color: #b91c1c;
+
+  background:
+    rgba(254, 226, 226, 0.78);
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   CREATE ACCOUNT BUTTON
+   ========================================================= */
+
+.create-account-button {
+  position: relative;
+
+  width: 100%;
+  height: 59px;
+
+  margin-top: 2px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(87, 182, 255, 0.72);
+
+  border-radius: 16px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      180deg,
+      #339dff 0%,
+      #0877f4 50%,
+      #0064e6 100%
+    );
+
+  box-shadow:
+    inset 0 3px 4px rgba(255, 255, 255, 0.52),
+    inset 0 -4px 5px rgba(0, 69, 185, 0.2),
+    0 12px 26px rgba(0, 103, 230, 0.25);
+
+  font-size: 17px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.create-account-button::before {
+  content: "";
+
+  position: absolute;
+
+  top: 3px;
+  left: 6%;
+  right: 6%;
+
+  height: 44%;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.48),
+      rgba(255, 255, 255, 0)
+    );
+
+  pointer-events: none;
+}
+
+.create-account-button > span {
+  position: relative;
+  z-index: 2;
+}
+
+.button-arrow {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.create-account-button:hover:not(:disabled) {
+  transform: scale(1.025);
+
+  filter: brightness(1.04);
+
+  box-shadow:
+    inset 0 3px 4px rgba(255, 255, 255, 0.6),
+    0 15px 32px rgba(0, 103, 230, 0.3);
+}
+
+.create-account-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* =========================================================
+   LOGIN LINK
+   ========================================================= */
+
+.login-text {
+  margin: 21px 0 0;
+
+  text-align: center;
+
+  color: #365472;
+
+  font-size: 14px;
+
+  transition:
+    color 0.3s ease;
+}
+
+.login-text a {
+  margin-left: 4px;
+
+  color: #0877ed;
+
+  font-weight: 800;
+
+  text-decoration: none;
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.platform-footer {
+  position: absolute;
+
+  z-index: 4;
+
+  right: 6%;
+  bottom: 22px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  color: #315a87;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.platform-footer strong {
+  color: #214b78;
+
+  font-weight: 600;
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+.dark-theme {
+  background: #081321;
+}
+
+.dark-theme .hero-panel {
+  background: #0b1727;
+}
+
+.dark-theme .hero-reference {
+  filter:
+    brightness(0.7)
+    saturate(0.82);
+}
+
+.dark-theme .register-panel {
+  background:
+    linear-gradient(
+      145deg,
+      #07111f 0%,
+      #0c1a2c 50%,
+      #10243c 100%
+    );
+}
+
+.dark-theme .watermark {
+  border-color:
+    rgba(79, 153, 240, 0.08);
+}
+
+.dark-theme .theme-toggle {
+  border-color:
+    rgba(129, 175, 230, 0.18);
+
+  background:
+    rgba(16, 34, 56, 0.88);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.dark-theme .register-card {
+  border-color:
+    rgba(126, 178, 235, 0.16);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(16, 35, 58, 0.9),
+      rgba(10, 25, 43, 0.84)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 25px 70px rgba(0, 0, 0, 0.34);
+}
+
+.dark-theme .register-header h1,
+.dark-theme .form-group label {
+  color: #f1f7ff;
+}
+
+.dark-theme .register-description,
+.dark-theme .login-text {
+  color: #a9bdd4;
+}
+
+.dark-theme .liquid-input {
+  border-color:
+    rgba(128, 177, 231, 0.17);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(27, 50, 78, 0.8),
+      rgba(17, 38, 63, 0.76)
+    );
+
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.03),
+    0 8px 22px rgba(0, 0, 0, 0.14);
+}
+
+.dark-theme .liquid-input:hover,
+.dark-theme .liquid-input:focus-within {
+  border-color:
+    rgba(77, 161, 255, 0.65);
+
+  box-shadow:
+    0 0 0 3px rgba(52, 145, 255, 0.1),
+    0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+.dark-theme .liquid-input input,
+.dark-theme .liquid-input select {
+  color: #eef6ff;
+}
+
+.dark-theme .liquid-input input::placeholder {
+  color: #7890aa;
+}
+
+.dark-theme .liquid-input select option {
+  color: #eef6ff;
+  background: #10243c;
+}
+
+.dark-theme .email-icon,
+.dark-theme .lock-icon,
+.dark-theme .lock-icon::before,
+.dark-theme .user-icon,
+.dark-theme .user-icon::after {
+  border-color: #81baff;
+}
+
+.dark-theme .email-icon::before,
+.dark-theme .email-icon::after {
+  background: #81baff;
+}
+
+.dark-theme .password-toggle,
+.dark-theme .role-icon,
+.dark-theme .select-arrow {
+  color: #8fc2ff;
+}
+
+.dark-theme .platform-footer {
+  color: #7896b8;
+}
+
+.dark-theme .platform-footer strong {
+  color: #a9c9ed;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .register-page {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-panel {
+    display: none;
+  }
+
+  .register-panel {
+    padding:
+      90px 22px
+      90px;
+  }
+
+  .register-card {
+    width: min(100%, 650px);
+  }
+}
+
+@media (max-width: 650px) {
+  .theme-toggle {
+    top: 18px;
+    right: 18px;
+  }
+
+  .theme-option {
+    width: 34px;
+    height: 34px;
+  }
+
+  .register-panel {
+    align-items: flex-start;
+
+    padding:
+      85px 14px
+      95px;
+  }
+
+  .register-card {
+    padding: 28px 20px;
+
+    border-radius: 24px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  .register-header h1 {
+    font-size: 29px;
+  }
+
+  .liquid-input,
+  .create-account-button {
+    height: 56px;
+  }
+
+  .platform-footer {
+    right: 18px;
+    bottom: 18px;
+  }
+}

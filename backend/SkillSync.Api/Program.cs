@@ -172,6 +172,14 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IJobApplicationService,
     JobApplicationService>();
+// Notification Repository registration.
+builder.Services.AddScoped<
+    INotificationRepository,
+    NotificationRepository>();
+// Notification Service registration.
+builder.Services.AddScoped<
+    INotificationService,
+    NotificationService>();
 
 // Angular frontend permission.
 builder.Services.AddCors(options =>

@@ -36,6 +36,9 @@ export class LoginComponent {
   errorMessage = '';
   showPassword = false;
 
+  darkMode =
+    localStorage.getItem('authDarkMode') === 'true';
+
   readonly loginForm = this.formBuilder.nonNullable.group({
     email: [
       '',
@@ -53,9 +56,19 @@ export class LoginComponent {
     ],
   });
 
-    togglePasswordVisibility(): void {
+  togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
+
+  toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
+
+    localStorage.setItem(
+      'authDarkMode',
+      String(this.darkMode),
+    );
+  }
+
   onSubmit(): void {
     this.errorMessage = '';
 

@@ -1,126 +1,389 @@
 <div class="profile-page" [class.dark-theme]="darkMode">
   <aside class="sidebar">
-    <div class="brand"><span class="brand-logo">S</span><span>SkillSync</span></div>
-        <nav class="navigation">
+    <div class="brand">
+      <div class="brand-logo" aria-label="SkillSync logo">
+        <svg viewBox="0 0 90 70" aria-hidden="true">
+          <defs>
+            <linearGradient id="skillSyncLogoGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#20d4ff" />
+              <stop offset="45%" stop-color="#138df5" />
+              <stop offset="100%" stop-color="#174fd4" />
+            </linearGradient>
+          </defs>
+
+          <path
+            d="M67 9H34C20 9 13 16 13 26c0 9 7 14 19 14h18c5 0 8 2 8 5s-3 5-8 5H18l-9 12h42c14 0 23-7 23-18 0-10-8-15-21-15H35c-4 0-7-2-7-5s3-5 7-5h23z"
+            fill="url(#skillSyncLogoGradient)"
+          />
+        </svg>
+      </div>
+
+      <div class="brand-text">
+        <strong>SkillSync</strong>
+        <small>People. Skills. Opportunities.</small>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="back-button"
+      aria-label="Go back"
+      title="Go Back"
+      onclick="history.back()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M15 5L8 12L15 19"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M9 12H19"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+
+    <nav class="navigation">
       <a routerLink="/seeker/profile" class="active">
-        <span class="nav-icon">P</span>
-        My Profile
+        <span class="nav-icon">♟</span>
+        <span>My Profile</span>
       </a>
 
       <a routerLink="/seeker/skills">
-        <span class="nav-icon">S</span>
-        Manage Skills
+        <span class="nav-icon">⚙</span>
+        <span>Manage Skills</span>
       </a>
 
       <a routerLink="/seeker/matches">
-        <span class="nav-icon">J</span>
-        Job Matches
+        <span class="nav-icon">▣</span>
+        <span>Job Matches</span>
       </a>
 
       <a routerLink="/seeker/applications">
-        <span class="nav-icon">A</span>
-        My Applications
+        <span class="nav-icon">▤</span>
+        <span>My Applications</span>
       </a>
-    </nav>  </aside>
 
-  <div class="main-area">
+      <a routerLink="/seeker/notifications">
+        <span class="nav-icon">●</span>
+        <span>Notifications</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-fill"></div>
+
+    <div class="sidebar-quote">
+      Build<br />
+      A Brighter<br />
+      Tomorrow
+      <span></span>
+    </div>
+
+    <button
+      type="button"
+      class="logout-button"
+      (click)="logout()"
+    >
+      <span>↪</span>
+      Logout
+    </button>
+
+    <div class="sidebar-footer">
+      <strong>SkillSync Recruitment Platform</strong>
+      <span>People. Skills. Opportunities.</span>
+    </div>
+  </aside>
+
+  <section class="main-area">
     <header class="topbar">
-      <p class="search-text">Search jobs, skills or companies</p>
-      <div class="topbar-actions">
-        <button
-          type="button"
-          class="theme-button"
-          (click)="toggleDarkMode()"
-          [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
-        >
-          @if (darkMode) { ☀ Light } @else { ☾ Dark }
-        </button>
+      <div></div>
 
+      <div class="topbar-actions">
         <div class="account">
-          <span class="account-avatar">
+          <div class="account-avatar">
             {{ userName.charAt(0).toUpperCase() || 'U' }}
-          </span>
-          <span>{{ userName }}</span>
+          </div>
+
+          <div class="account-info">
+            <strong>{{ userName }}</strong>
+            <span>Job Seeker</span>
+          </div>
         </div>
 
         <button
           type="button"
-          class="logout-button"
-          (click)="logout()"
+          class="theme-toggle"
+          (click)="toggleDarkMode()"
         >
-          Logout
+          <span
+            class="theme-option"
+            [class.active]="!darkMode"
+          >
+            ☀
+          </span>
+
+          <span
+            class="theme-option"
+            [class.active]="darkMode"
+          >
+            ☾
+          </span>
         </button>
       </div>
     </header>
 
     <main class="content">
       <section class="page-heading">
-        <h1>My Profile</h1>
-        <p>Keep your details current so employers can understand your experience.</p>
+        <div>
+          <h1>My Profile</h1>
+
+          <p>
+            Keep your details current so employers can understand
+            your experience.
+          </p>
+        </div>
+
+        <div class="opportunity-text">
+          Your Next Opportunity<br />
+          Starts Here
+          <span></span>
+        </div>
       </section>
 
       @if (loading) {
-        <div class="message loading-message">Loading profile...</div>
+        <div class="loading-card">
+          <span class="spinner"></span>
+          Loading profile...
+        </div>
       } @else {
-        @if (errorMessage) { <div class="message error-message">{{ errorMessage }}</div> }
-        @if (successMessage) { <div class="message success-message">{{ successMessage }}</div> }
+        <div class="dashboard-grid">
+          <form
+            class="profile-card"
+            [formGroup]="profileForm"
+            (ngSubmit)="saveProfile()"
+          >
+            <div class="card-heading">
+              <div class="heading-icon profile-heading-icon">
+                ●
+              </div>
 
-        <div class="profile-layout">
-          <form class="form-panel" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-            <h2>Professional Information</h2>
-            <div class="form-grid">
-              <div class="form-field">
-                <label for="fullName">Full Name</label>
-                <input id="fullName" type="text" formControlName="fullName" />
-                @if (profileForm.controls.fullName.touched && profileForm.controls.fullName.invalid) {
-                  <small class="validation-error">Full name is required.</small>
-                }
-              </div>
-              <div class="form-field">
-                <label for="professionalTitle">Professional Title</label>
-                <input id="professionalTitle" type="text" formControlName="professionalTitle" placeholder="Example: Frontend Developer" />
-              </div>
-              <div class="form-field">
-                <label for="location">Location</label>
-                <input id="location" type="text" formControlName="location" />
-              </div>
-              <div class="form-field">
-                <label for="phoneNumber">Phone Number</label>
-                <input id="phoneNumber" type="tel" formControlName="phoneNumber" />
-              </div>
-              <div class="form-field">
-                <label for="yearsOfExperience">Years of Experience</label>
-                <input id="yearsOfExperience" type="number" min="0" max="60" formControlName="yearsOfExperience" />
-              </div>
-              <div class="form-field">
-                <label for="highestQualification">Highest Qualification</label>
-                <input id="highestQualification" type="text" formControlName="highestQualification" />
-              </div>
-              <div class="form-field full-width">
-                <label for="bio">Professional Summary</label>
-                <textarea id="bio" rows="5" formControlName="bio"></textarea>
+              <div>
+                <h2>Professional Information</h2>
+                <p>Tell us about yourself.</p>
               </div>
             </div>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="fullName">
+                  Full Name <span>*</span>
+                </label>
+
+                <div class="input-shell">
+                  <span class="input-icon">♙</span>
+
+                  <input
+                    id="fullName"
+                    type="text"
+                    formControlName="fullName"
+                  />
+                </div>
+
+                @if (
+                  profileForm.controls.fullName.touched &&
+                  profileForm.controls.fullName.invalid
+                ) {
+                  <small class="validation-error">
+                    Full name is required.
+                  </small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="professionalTitle">
+                  Professional Title
+                </label>
+
+                <div class="input-shell">
+                  <span class="input-icon">▣</span>
+
+                  <input
+                    id="professionalTitle"
+                    type="text"
+                    formControlName="professionalTitle"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="location">Location</label>
+
+                <div class="input-shell">
+                  <span class="input-icon">●</span>
+
+                  <input
+                    id="location"
+                    type="text"
+                    formControlName="location"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="phoneNumber">Phone Number</label>
+
+                <div class="input-shell">
+                  <span class="input-icon">☎</span>
+
+                  <input
+                    id="phoneNumber"
+                    type="tel"
+                    formControlName="phoneNumber"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="yearsOfExperience">
+                  Years of Experience <span>*</span>
+                </label>
+
+                <div class="input-shell">
+                  <span class="input-icon">▥</span>
+
+                  <input
+                    id="yearsOfExperience"
+                    type="number"
+                    min="0"
+                    max="60"
+                    formControlName="yearsOfExperience"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="highestQualification">
+                  Highest Qualification
+                </label>
+
+                <div class="input-shell">
+                  <span class="input-icon">◆</span>
+
+                  <input
+                    id="highestQualification"
+                    type="text"
+                    formControlName="highestQualification"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field full-width">
+                <label for="bio">
+                  Professional Summary
+                </label>
+
+                <div class="textarea-shell">
+                  <span class="textarea-icon">▤</span>
+
+                  <textarea
+                    id="bio"
+                    rows="5"
+                    maxlength="1000"
+                    formControlName="bio"
+                  ></textarea>
+
+                  <span class="character-count">
+                    {{ profileForm.controls.bio.value.length }} / 1000
+                  </span>
+                </div>
+              </div>
+            </div>
+
             <div class="form-actions">
-              <button type="button" class="secondary-button" (click)="loadProfile()">Cancel</button>
-              <button type="submit" class="primary-button" [disabled]="saving">
-                @if (saving) { Saving... } @else if (profile) { Update Profile } @else { Create Profile }
+              <button
+                type="submit"
+                class="save-button"
+                [disabled]="saving"
+              >
+                @if (saving) {
+                  <span class="button-spinner"></span>
+                  Saving...
+                } @else {
+                  <span>▣</span>
+                  Save Profile
+                  <span>→</span>
+                }
+              </button>
+
+              <button
+                type="button"
+                class="reset-button"
+                (click)="loadProfile()"
+              >
+                <span>↻</span>
+                Reset
               </button>
             </div>
           </form>
 
-          <app-job-seeker-cv />
+          <div class="right-column">
+            <app-job-seeker-cv />
 
-          <aside class="summary-panel">
-            <div class="profile-avatar">{{ profileForm.controls.fullName.value.charAt(0) || userName.charAt(0) || 'U' }}</div>
-            <h2>{{ profileForm.controls.fullName.value || userName }}</h2>
-            <p class="profile-title">{{ profileForm.controls.professionalTitle.value || 'Add professional title' }}</p>
-            <div class="completion-heading"><span>Profile Completion</span><strong>80%</strong></div>
-            <div class="completion-track"><div class="completion-value"></div></div>
-            <div class="profile-tip">Add your CV and skills next to improve job matching.</div>
-          </aside>
+            <section class="tips-card">
+              <div class="tips-heading">
+                <div class="tips-icon">💡</div>
+                <h2>Tips for a Great Profile</h2>
+              </div>
+
+              <div class="tip-row">
+                <span>✓</span>
+                Keep your information up to date
+              </div>
+
+              <div class="tip-row">
+                <span>✓</span>
+                Write a clear and professional summary
+              </div>
+
+              <div class="tip-row">
+                <span>✓</span>
+                Add your skills and experience
+              </div>
+
+              <div class="tip-row">
+                <span>✓</span>
+                Upload a recent and relevant CV
+              </div>
+            </section>
+          </div>
         </div>
+
+        @if (successMessage) {
+          <div class="success-toast">
+            <div class="toast-icon">✓</div>
+
+            <div>
+              <strong>Profile saved successfully!</strong>
+              <span>{{ successMessage }}</span>
+            </div>
+
+            <div class="toast-line"></div>
+          </div>
+        }
+
+        @if (errorMessage) {
+          <div class="error-toast">
+            {{ errorMessage }}
+          </div>
+        }
       }
     </main>
-  </div>
+  </section>
 </div>

@@ -1,70 +1,68 @@
 <div class="vacancy-page" [class.dark-theme]="darkMode">
   <aside class="sidebar">
     <div class="brand">
-      <span class="brand-logo">S</span>
-      <span>SkillSync</span>
+      <div class="brand-logo" aria-label="SkillSync logo">
+        <svg viewBox="0 0 90 70" aria-hidden="true">
+          <defs>
+            <linearGradient id="employerSkillSyncLogoGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#20d4ff" />
+              <stop offset="45%" stop-color="#138df5" />
+              <stop offset="100%" stop-color="#174fd4" />
+            </linearGradient>
+          </defs>
+          <path d="M67 9H34C20 9 13 16 13 26c0 9 7 14 19 14h18c5 0 8 2 8 5s-3 5-8 5H18l-9 12h42c14 0 23-7 23-18 0-10-8-15-21-15H35c-4 0-7-2-7-5s3-5 7-5h23z" fill="url(#employerSkillSyncLogoGradient)" />
+        </svg>
+      </div>
+      <div class="brand-text">
+        <strong>SkillSync</strong>
+        <small>People. Skills. Opportunities.</small>
+      </div>
     </div>
 
-    <nav class="navigation">
-      <a href="#">
-        <span class="nav-icon">D</span>
-        Dashboard
-      </a>
+    <button type="button" class="back-button" aria-label="Go back" title="Go Back" onclick="history.back()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
 
+    <nav class="navigation">
       <a href="/employer/profile">
         <span class="nav-icon">P</span>
-        Company Profile
+        <span>Company Profile</span>
       </a>
-
       <a href="/employer/vacancies" class="active">
         <span class="nav-icon">V</span>
-        Vacancies
+        <span>Manage Vacancies</span>
       </a>
-
       <a href="/employer/applications">
         <span class="nav-icon">A</span>
-        Applications
-      </a>
-
-      <a href="#">
-        <span class="nav-icon">N</span>
-        Notifications
+        <span>Applications</span>
       </a>
     </nav>
+
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-quote">Build<br />A Brighter<br />Tomorrow</div>
+
+    <button type="button" class="sidebar-logout" (click)="logout()">
+      <span class="logout-icon">↪</span>
+      <span>Logout</span>
+    </button>
+
+    <div class="sidebar-footer">SkillSync Recruitment Platform</div>
   </aside>
 
   <div class="main-area">
     <header class="topbar">
-      <p class="search-text">
-        Manage vacancies for {{ companyName || 'your company' }}
-      </p>
-
+      <div class="topbar-spacer"></div>
       <div class="topbar-actions">
-        <button
-          type="button"
-          class="theme-button"
-          (click)="toggleDarkMode()"
-        >
-          @if (darkMode) {
-            Light Mode
-          } @else {
-            Dark Mode
-          }
-        </button>
-
         <div class="account">
-          <span class="account-avatar">
-            {{ userName.charAt(0).toUpperCase() || 'U' }}
+          <span class="account-avatar">{{ userName.charAt(0).toUpperCase() || 'E' }}</span>
+          <span class="account-copy">
+            <strong>{{ userName }}</strong>
+            <small>Employer</small>
           </span>
-          <span>{{ userName }}</span>
         </div>
 
-        <button
-          type="button"
-          class="theme-button"
-          (click)="logout()"
-        >
-          Logout
+        <button type="button" class="theme-button" (click)="toggleDarkMode()" [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'" title="Toggle theme">
+          <span aria-hidden="true">{{ darkMode ? '☀' : '☾' }}</span>
         </button>
       </div>
     </header>
@@ -111,6 +109,7 @@
                   Create Vacancy
                 }
               </h2>
+
               <p>Enter the complete vacancy information.</p>
             </div>
 
@@ -119,7 +118,7 @@
               class="close-form-button"
               (click)="cancelForm()"
             >
-              Ã—
+              X
             </button>
           </div>
 
@@ -130,6 +129,7 @@
             <div class="form-grid">
               <div class="form-field">
                 <label for="jobTitle">Job Title</label>
+
                 <input
                   id="jobTitle"
                   type="text"
@@ -149,6 +149,7 @@
 
               <div class="form-field">
                 <label for="department">Department</label>
+
                 <input
                   id="department"
                   type="text"
@@ -168,6 +169,7 @@
 
               <div class="form-field full-width">
                 <label for="location">Location</label>
+
                 <input
                   id="location"
                   type="text"
@@ -180,14 +182,23 @@
                 <label for="workplaceType">
                   Workplace Type
                 </label>
+
                 <select
                   id="workplaceType"
                   formControlName="workplaceType"
                 >
-                  <option value="">Select workplace type</option>
-                  <option value="On-site">On-site</option>
-                  <option value="Remote">Remote</option>
-                  <option value="Hybrid">Hybrid</option>
+                  <option value="">
+                    Select workplace type
+                  </option>
+                  <option value="On-site">
+                    On-site
+                  </option>
+                  <option value="Remote">
+                    Remote
+                  </option>
+                  <option value="Hybrid">
+                    Hybrid
+                  </option>
                 </select>
               </div>
 
@@ -195,15 +206,26 @@
                 <label for="employmentType">
                   Employment Type
                 </label>
+
                 <select
                   id="employmentType"
                   formControlName="employmentType"
                 >
-                  <option value="">Select employment type</option>
-                  <option value="Full-time">Full-time</option>
-                  <option value="Part-time">Part-time</option>
-                  <option value="Contract">Contract</option>
-                  <option value="Internship">Internship</option>
+                  <option value="">
+                    Select employment type
+                  </option>
+                  <option value="Full-time">
+                    Full-time
+                  </option>
+                  <option value="Part-time">
+                    Part-time
+                  </option>
+                  <option value="Contract">
+                    Contract
+                  </option>
+                  <option value="Internship">
+                    Internship
+                  </option>
                 </select>
               </div>
 
@@ -211,15 +233,26 @@
                 <label for="experienceLevel">
                   Experience Level
                 </label>
+
                 <select
                   id="experienceLevel"
                   formControlName="experienceLevel"
                 >
-                  <option value="">Select experience level</option>
-                  <option value="Entry Level">Entry Level</option>
-                  <option value="Mid Level">Mid Level</option>
-                  <option value="Senior Level">Senior Level</option>
-                  <option value="Manager">Manager</option>
+                  <option value="">
+                    Select experience level
+                  </option>
+                  <option value="Entry Level">
+                    Entry Level
+                  </option>
+                  <option value="Mid Level">
+                    Mid Level
+                  </option>
+                  <option value="Senior Level">
+                    Senior Level
+                  </option>
+                  <option value="Manager">
+                    Manager
+                  </option>
                 </select>
               </div>
 
@@ -227,6 +260,7 @@
                 <label for="numberOfOpenings">
                   Number of Openings
                 </label>
+
                 <input
                   id="numberOfOpenings"
                   type="number"
@@ -240,6 +274,7 @@
                 <label for="jobDescription">
                   Job Description
                 </label>
+
                 <textarea
                   id="jobDescription"
                   rows="5"
@@ -249,7 +284,10 @@
               </div>
 
               <div class="form-field full-width">
-                <label for="requirements">Requirements</label>
+                <label for="requirements">
+                  Requirements
+                </label>
+
                 <textarea
                   id="requirements"
                   rows="4"
@@ -262,6 +300,7 @@
                 <label for="requiredSkills">
                   Required Skills
                 </label>
+
                 <textarea
                   id="requiredSkills"
                   rows="3"
@@ -274,6 +313,7 @@
                 <label for="minimumSalary">
                   Minimum Salary
                 </label>
+
                 <input
                   id="minimumSalary"
                   type="number"
@@ -286,6 +326,7 @@
                 <label for="maximumSalary">
                   Maximum Salary
                 </label>
+
                 <input
                   id="maximumSalary"
                   type="number"
@@ -295,7 +336,10 @@
               </div>
 
               <div class="form-field">
-                <label for="currency">Currency</label>
+                <label for="currency">
+                  Currency
+                </label>
+
                 <select
                   id="currency"
                   formControlName="currency"
@@ -311,6 +355,7 @@
                 <label for="applicationClosingDate">
                   Application Closing Date
                 </label>
+
                 <input
                   id="applicationClosingDate"
                   type="datetime-local"
@@ -319,13 +364,20 @@
               </div>
 
               <div class="form-field">
-                <label for="status">Status</label>
+                <label for="status">
+                  Status
+                </label>
+
                 <select
                   id="status"
                   formControlName="status"
                 >
-                  <option value="Draft">Draft</option>
-                  <option value="Open">Open</option>
+                  <option value="Draft">
+                    Draft
+                  </option>
+                  <option value="Open">
+                    Open
+                  </option>
                 </select>
               </div>
             </div>
@@ -406,7 +458,9 @@
         } @else if (vacancies.length === 0) {
           <div class="empty-state">
             <div class="empty-icon">V</div>
+
             <h3>No vacancies found</h3>
+
             <p>
               Create a vacancy or select another status filter.
             </p>
@@ -455,10 +509,11 @@
 
                 <div class="salary-row">
                   <span>Salary</span>
+
                   <strong>
                     {{ vacancy.currency }}
                     {{ vacancy.minimumSalary | number }}
-                    â€“
+                    -
                     {{ vacancy.maximumSalary | number }}
                   </strong>
                 </div>

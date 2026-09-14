@@ -50,6 +50,9 @@ export class RegisterComponent {
   showPassword = false;
   showConfirmPassword = false;
 
+  darkMode =
+    localStorage.getItem('authDarkMode') === 'true';
+
   readonly registerForm = this.formBuilder.nonNullable.group(
     {
       fullName: [
@@ -99,6 +102,15 @@ export class RegisterComponent {
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword =
       !this.showConfirmPassword;
+  }
+
+  toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
+
+    localStorage.setItem(
+      'authDarkMode',
+      String(this.darkMode),
+    );
   }
 
   onSubmit(): void {

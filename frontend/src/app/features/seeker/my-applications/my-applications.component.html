@@ -1,118 +1,179 @@
-<div class="applications-page">
-  <header class="page-header">
-    <div>
-      <p class="eyebrow">APPLICATION TRACKER</p>
-      <h1>My Applications</h1>
-      <p class="subtitle">
-        View all your submitted job applications and track
-        their latest status.
-      </p>
-    </div>
-
-    <nav class="page-navigation">
-      <a href="/seeker/matches">Job Matches</a>
-      <a href="/seeker/skills">Manage Skills</a>
-    </nav>
-  </header>
-
-  @if (errorMessage) {
-    <div class="alert error-alert">
-      {{ errorMessage }}
-    </div>
-  }
-
-  @if (isLoading) {
-    <div class="state-card">
-      <div class="loader"></div>
-      <p>Loading your applications...</p>
-    </div>
-  } @else if (applications.length === 0) {
-    <div class="state-card">
-      <div class="empty-icon">▣</div>
-      <h2>No applications yet</h2>
-      <p>
-        Explore your job matches and apply for a suitable
-        opportunity.
-      </p>
-      <a class="primary-link" href="/seeker/matches">
-        Find Matching Jobs
-      </a>
-    </div>
-  } @else {
-    <section class="summary-card">
-      <div>
-        <strong>{{ applications.length }}</strong>
-        <span>
-          {{
-            applications.length === 1
-              ? 'application submitted'
-              : 'applications submitted'
-          }}
-        </span>
+<div class="profile-page" [class.dark-theme]="darkMode">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo" aria-label="SkillSync logo">
+        <svg viewBox="0 0 90 70" aria-hidden="true"><defs><linearGradient id="skillSyncLogoGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#20d4ff"/><stop offset="45%" stop-color="#138df5"/><stop offset="100%" stop-color="#174fd4"/></linearGradient></defs><path d="M67 9H34C20 9 13 16 13 26c0 9 7 14 19 14h18c5 0 8 2 8 5s-3 5-8 5H18l-9 12h42c14 0 23-7 23-18 0-10-8-15-21-15H35c-4 0-7-2-7-5s3-5 7-5h23z" fill="url(#skillSyncLogoGradient)"/></svg>
       </div>
+      <div class="brand-text"><strong>SkillSync</strong><small>People. Skills. Opportunities.</small></div>
+    </div>
 
-      <p>
-        Status information is updated by the employer.
-      </p>
-    </section>
+    <button type="button" class="back-button" aria-label="Go back" title="Go Back" onclick="history.back()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5L8 12L15 19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12H19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
 
-    <section class="application-list">
-      @for (
-        application of applications;
-        track application.id
-      ) {
-        <article class="application-card">
-          <div class="company-logo">
-            {{ application.companyName.charAt(0) }}
-          </div>
+    <nav class="navigation">
+      <a routerLink="/seeker/profile"><span class="nav-icon">♟</span><span>My Profile</span></a>
+      <a routerLink="/seeker/skills"><span class="nav-icon">⚙</span><span>Manage Skills</span></a>
+      <a routerLink="/seeker/matches"><span class="nav-icon">▣</span><span>Job Matches</span></a>
+      <a routerLink="/seeker/applications" class="active"><span class="nav-icon">▤</span><span>My Applications</span></a>
+      <a routerLink="/seeker/notifications"><span class="nav-icon">●</span><span>Notifications</span></a>
+    </nav>
 
-          <div class="application-details">
-            <p class="company-name">
-              {{ application.companyName }}
-            </p>
+    <div class="sidebar-fill"></div>
+    <div class="sidebar-quote">Build<br/>A Brighter<br/>Tomorrow<span></span></div>
+    <button type="button" class="logout-button" (click)="logout()"><span>↪</span> Logout</button>
+    <div class="sidebar-footer"><strong>SkillSync Recruitment Platform</strong><span>People. Skills. Opportunities.</span></div>
+  </aside>
 
-            <h2>{{ application.jobTitle }}</h2>
+  <div class="main-area">
+    <header class="topbar">
+      <div></div>
+      <div class="topbar-actions">
+        <div class="account">
+          <div class="account-avatar">{{ userName.charAt(0).toUpperCase() || 'U' }}</div>
+          <div class="account-info"><strong>{{ userName }}</strong><span>Job Seeker</span></div>
+        </div>
+        <button type="button" class="theme-toggle" (click)="toggleDarkMode()" [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+          <span class="theme-option" [class.active]="!darkMode">☀</span><span class="theme-option" [class.active]="darkMode">☾</span>
+        </button>
+      </div>
+    </header>
 
-            <div class="application-meta">
-              <span>
-                Applied:
-                {{
-                  application.appliedAtUtc
-                    | date:'mediumDate'
-                }}
-              </span>
+    <main class="content">
+      <section class="page-header">
+        <div>
+          <p class="eyebrow">APPLICATION TRACKER</p>
+          <h1>My Applications</h1>
 
-              <span>
-                Updated:
-                {{
-                  application.updatedAtUtc
-                    | date:'mediumDate'
-                }}
-              </span>
-            </div>
+          <p class="subtitle">
+            View all your submitted job applications and track
+            their latest status.
+          </p>
+        </div>
 
-            @if (application.coverLetter) {
-              <details class="cover-letter">
-                <summary>View cover letter</summary>
-                <p>{{ application.coverLetter }}</p>
-              </details>
-            }
-          </div>
+        <nav class="page-navigation">
+          <a routerLink="/seeker/matches">
+            Job Matches
+          </a>
 
-          <div class="status-area">
-            <span>Current Status</span>
+          <a routerLink="/seeker/skills">
+            Manage Skills
+          </a>
+        </nav>
+      </section>
 
-            <strong
-              class="status-badge"
-              [ngClass]="
-                getStatusClass(application.status)
-              "
-            >
-              {{ application.status }}
-            </strong>
-          </div>
-        </article>
+      @if (errorMessage) {
+        <div class="alert error-alert">
+          {{ errorMessage }}
+        </div>
       }
-    </section>
-  }
+
+      @if (isLoading) {
+        <div class="state-card">
+          <div class="loader"></div>
+          <p>Loading your applications...</p>
+        </div>
+      } @else if (applications.length === 0) {
+        <div class="state-card">
+          <div class="empty-icon">A</div>
+
+          <h2>No applications yet</h2>
+
+          <p>
+            Explore your job matches and apply for a suitable
+            opportunity.
+          </p>
+
+          <a
+            class="primary-link"
+            routerLink="/seeker/matches"
+          >
+            Find Matching Jobs
+          </a>
+        </div>
+      } @else {
+        <section class="summary-card">
+          <div>
+            <strong>{{ applications.length }}</strong>
+
+            <span>
+              {{
+                applications.length === 1
+                  ? 'application submitted'
+                  : 'applications submitted'
+              }}
+            </span>
+          </div>
+
+          <p>
+            Status information is updated by the employer.
+          </p>
+        </section>
+
+        <section class="application-list">
+          @for (
+            application of applications;
+            track application.id
+          ) {
+            <article class="application-card">
+              <div class="company-logo">
+                {{ application.companyName.charAt(0) }}
+              </div>
+
+              <div class="application-details">
+                <p class="company-name">
+                  {{ application.companyName }}
+                </p>
+
+                <h2>
+                  {{ application.jobTitle }}
+                </h2>
+
+                <div class="application-meta">
+                  <span>
+                    Applied:
+                    {{
+                      application.appliedAtUtc
+                        | date:'mediumDate'
+                    }}
+                  </span>
+
+                  <span>
+                    Updated:
+                    {{
+                      application.updatedAtUtc
+                        | date:'mediumDate'
+                    }}
+                  </span>
+                </div>
+
+                @if (application.coverLetter) {
+                  <details class="cover-letter">
+                    <summary>
+                      View cover letter
+                    </summary>
+
+                    <p>
+                      {{ application.coverLetter }}
+                    </p>
+                  </details>
+                }
+              </div>
+
+              <div class="status-area">
+                <span>Current Status</span>
+
+                <strong
+                  class="status-badge"
+                  [ngClass]="getStatusClass(application.status)"
+                >
+                  {{ application.status }}
+                </strong>
+              </div>
+            </article>
+          }
+        </section>
+      }
+    </main>
+  </div>
 </div>

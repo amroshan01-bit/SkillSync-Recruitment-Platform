@@ -1,100 +1,101 @@
-<main class="min-h-screen bg-sky-50 lg:grid lg:grid-cols-2">
-  <section
-    class="relative hidden overflow-hidden bg-gradient-to-br
-           from-sky-100 via-sky-200 to-blue-300
-           px-12 py-10 lg:flex lg:flex-col lg:justify-between"
-  >
-    <div class="relative z-10">
-      <a routerLink="/" class="inline-flex items-center gap-2">
-        <span
-          class="grid h-11 w-11 place-items-center rounded-xl
-                 bg-sky-600 text-xl font-bold text-white shadow-lg"
-        >
-          S
-        </span>
+<main
+  class="register-page"
+  [class.dark-theme]="darkMode"
+>
+  <section class="hero-panel">
+    <img
+      class="hero-reference"
+      src="/skillsync-register-reference.png"
+      alt=""
+      aria-hidden="true"
+    />
 
-        <span class="text-3xl font-bold tracking-tight text-slate-900">
-          Skill<span class="text-sky-600">Sync</span>
-        </span>
-      </a>
-    </div>
-
-    <div class="relative z-10 max-w-lg">
-      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.3em]
-                text-sky-700">
-        Talent today
-      </p>
-
-      <h1 class="text-5xl font-bold leading-tight text-slate-900">
-        Create opportunities.
-        <span class="block text-sky-700">
-          Build a stronger future.
-        </span>
-      </h1>
-
-      <div class="mt-8 space-y-4 text-slate-700">
-        <p>✓ Discover jobs that match your skills</p>
-        <p>✓ Connect with growing companies</p>
-        <p>✓ Manage your recruitment journey</p>
-      </div>
-    </div>
-
-    <div
-      class="absolute -bottom-28 -right-24 h-96 w-96
-             rounded-full bg-white/40"
-    ></div>
-
-    <div
-      class="absolute left-20 top-32 h-32 w-32
-             rounded-full bg-sky-400/20"
-    ></div>
-
-    <p class="relative z-10 text-sm text-slate-600">
-      SkillSync Recruitment Platform
-    </p>
+    <a
+      routerLink="/"
+      class="back-link"
+      aria-label="Back to SkillSync landing page"
+    ></a>
   </section>
 
-  <section class="flex min-h-screen items-center justify-center px-5 py-8">
-    <div
-      class="w-full max-w-lg rounded-3xl border border-slate-200
-             bg-white p-7 shadow-xl shadow-sky-100 sm:p-9"
+  <section class="register-panel">
+    <div class="watermark watermark-one"></div>
+    <div class="watermark watermark-two"></div>
+    <div class="watermark watermark-three"></div>
+
+    <button
+      type="button"
+      class="theme-toggle"
+      (click)="toggleDarkMode()"
+      [attr.aria-label]="
+        darkMode
+          ? 'Switch to light mode'
+          : 'Switch to dark mode'
+      "
     >
-      <div class="mb-6 lg:hidden">
-        <a
-          routerLink="/"
-          class="inline-flex items-center gap-2"
+      <span
+        class="theme-option"
+        [class.active]="!darkMode"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
         >
-          <span
-            class="grid h-10 w-10 place-items-center rounded-xl
-                   bg-sky-600 font-bold text-white"
-          >
-            S
-          </span>
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="M4.93 4.93l1.41 1.41"></path>
+          <path d="M17.66 17.66l1.41 1.41"></path>
+          <path d="M2 12h2"></path>
+          <path d="M20 12h2"></path>
+          <path d="M4.93 19.07l1.41-1.41"></path>
+          <path d="M17.66 6.34l1.41-1.41"></path>
+        </svg>
+      </span>
 
-          <span class="text-2xl font-bold text-slate-900">
-            Skill<span class="text-sky-600">Sync</span>
-          </span>
-        </a>
-      </div>
+      <span
+        class="theme-option"
+        [class.active]="darkMode"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M21 12.79A9 9 0 1 1 11.21 3
+               7 7 0 0 0 21 12.79z"
+          ></path>
+        </svg>
+      </span>
+    </button>
 
-      <header class="mb-6">
-        <p class="mb-2 text-sm font-semibold text-sky-600">
-          Join SkillSync
+    <div class="register-card">
+      <header class="register-header">
+        <p class="welcome-text">
+          Get started
         </p>
 
-        <h2 class="text-3xl font-bold text-slate-900">
+        <h1>
           Create your account
-        </h2>
+        </h1>
 
-        <p class="mt-2 text-sm text-slate-500">
-          Enter your information to get started.
+        <p class="register-description">
+          Join SkillSync and take the next step in your career journey.
         </p>
       </header>
 
       @if (errorMessage) {
         <div
-          class="mb-5 rounded-xl border border-red-200
-                 bg-red-50 px-4 py-3 text-sm text-red-700"
+          class="error-message"
           role="alert"
         >
           {{ errorMessage }}
@@ -104,201 +105,135 @@
       <form
         [formGroup]="registerForm"
         (ngSubmit)="onSubmit()"
-        class="space-y-4"
         novalidate
       >
-        <div>
-          <label
-            for="fullName"
-            class="mb-1.5 block text-sm font-semibold text-slate-700"
-          >
-            Full name
-          </label>
-
-          <input
-            id="fullName"
-            type="text"
-            formControlName="fullName"
-            autocomplete="name"
-            placeholder="Enter your full name"
-            class="w-full rounded-xl border border-slate-300
-                   px-4 py-3 text-slate-900 outline-none
-                   transition placeholder:text-slate-400
-                   focus:border-sky-500 focus:ring-4
-                   focus:ring-sky-100"
-          />
-
-          @if (
-            registerForm.controls.fullName.touched &&
-            registerForm.controls.fullName.hasError('required')
-          ) {
-            <p class="mt-1.5 text-sm text-red-600">
-              Full name is required.
-            </p>
-          }
-        </div>
-
-        <div>
-          <label
-            for="email"
-            class="mb-1.5 block text-sm font-semibold text-slate-700"
-          >
-            Email address
-          </label>
-
-          <input
-            id="email"
-            type="email"
-            formControlName="email"
-            autocomplete="email"
-            placeholder="you@example.com"
-            class="w-full rounded-xl border border-slate-300
-                   px-4 py-3 text-slate-900 outline-none
-                   transition placeholder:text-slate-400
-                   focus:border-sky-500 focus:ring-4
-                   focus:ring-sky-100"
-          />
-
-          @if (
-            registerForm.controls.email.touched &&
-            registerForm.controls.email.hasError('required')
-          ) {
-            <p class="mt-1.5 text-sm text-red-600">
-              Email address is required.
-            </p>
-          }
-
-          @if (
-            registerForm.controls.email.touched &&
-            registerForm.controls.email.hasError('email')
-          ) {
-            <p class="mt-1.5 text-sm text-red-600">
-              Enter a valid email address.
-            </p>
-          }
-        </div>
-
-        <fieldset>
-          <legend
-            class="mb-2 block text-sm font-semibold text-slate-700"
-          >
-            I am a
-          </legend>
-
-          <div class="grid grid-cols-2 gap-3">
-            <label
-              class="flex cursor-pointer items-center gap-3
-                     rounded-xl border border-slate-300 px-4 py-3
-                     transition has-[:checked]:border-sky-500
-                     has-[:checked]:bg-sky-50
-                     has-[:checked]:ring-2
-                     has-[:checked]:ring-sky-100"
-            >
-              <input
-                type="radio"
-                formControlName="role"
-                value="JobSeeker"
-                class="h-4 w-4 accent-sky-600"
-              />
-              <span class="text-sm font-medium text-slate-700">
-                Job Seeker
-              </span>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fullName">
+              Full name
             </label>
 
-            <label
-              class="flex cursor-pointer items-center gap-3
-                     rounded-xl border border-slate-300 px-4 py-3
-                     transition has-[:checked]:border-sky-500
-                     has-[:checked]:bg-sky-50
-                     has-[:checked]:ring-2
-                     has-[:checked]:ring-sky-100"
-            >
+            <div class="liquid-input">
+              <span
+                class="field-icon user-icon"
+                aria-hidden="true"
+              ></span>
+
               <input
-                type="radio"
-                formControlName="role"
-                value="Employer"
-                class="h-4 w-4 accent-sky-600"
+                id="fullName"
+                type="text"
+                formControlName="fullName"
+                autocomplete="name"
+                placeholder="Enter your full name"
               />
-              <span class="text-sm font-medium text-slate-700">
-                Employer
-              </span>
-            </label>
+            </div>
+
+            @if (
+              registerForm.controls.fullName.touched &&
+              registerForm.controls.fullName.hasError('required')
+            ) {
+              <p class="validation-message">
+                Full name is required.
+              </p>
+            }
           </div>
-        </fieldset>
 
-        <div class="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label
-              for="password"
-              class="mb-1.5 block text-sm font-semibold text-slate-700"
-            >
+          <div class="form-group">
+            <label for="email">
+              Email address
+            </label>
+
+            <div class="liquid-input">
+              <span
+                class="field-icon email-icon"
+                aria-hidden="true"
+              ></span>
+
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                autocomplete="email"
+                placeholder="you@gmail.com"
+              />
+            </div>
+
+            @if (
+              registerForm.controls.email.touched &&
+              registerForm.controls.email.hasError('required')
+            ) {
+              <p class="validation-message">
+                Email address is required.
+              </p>
+            }
+
+            @if (
+              registerForm.controls.email.touched &&
+              registerForm.controls.email.hasError('email')
+            ) {
+              <p class="validation-message">
+                Enter a valid email address.
+              </p>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="password">
               Password
             </label>
 
-                        <div class="relative">
+            <div class="liquid-input">
+              <span
+                class="field-icon lock-icon"
+                aria-hidden="true"
+              ></span>
+
               <input
                 id="password"
                 [type]="showPassword ? 'text' : 'password'"
                 formControlName="password"
                 autocomplete="new-password"
-                placeholder="Minimum 8 characters"
-                class="w-full rounded-xl border border-slate-300
-                       py-3 pl-4 pr-16 text-slate-900 outline-none
-                       transition placeholder:text-slate-400
-                       focus:border-sky-500 focus:ring-4
-                       focus:ring-sky-100"
+                placeholder="Create a password"
+                class="password-input"
               />
 
               <button
                 type="button"
+                class="password-toggle"
                 (click)="togglePasswordVisibility()"
-                class="absolute inset-y-0 right-0 grid w-12
-                       place-items-center text-slate-500
-                       transition hover:text-sky-600"
                 [attr.aria-label]="
-                  showPassword ? 'Hide password' : 'Show password'
-                "
-                [title]="
-                  showPassword ? 'Hide password' : 'Show password'
+                  showPassword
+                    ? 'Hide password'
+                    : 'Show password'
                 "
               >
-                @if (showPassword) {
-                  <svg
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12" />
-                    <circle cx="12" cy="12" r="3" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 12s3.5-7 10-7
+                       10 7 10 7-3.5 7-10 7S2 12 2 12"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+
+                  @if (showPassword) {
                     <path d="M3 3l18 18" />
-                  </svg>
-                } @else {
-                  <svg
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                }
+                  }
+                </svg>
               </button>
             </div>
+
             @if (
               registerForm.controls.password.touched &&
               registerForm.controls.password.hasError('required')
             ) {
-              <p class="mt-1.5 text-sm text-red-600">
+              <p class="validation-message">
                 Password is required.
               </p>
             }
@@ -307,90 +242,73 @@
               registerForm.controls.password.touched &&
               registerForm.controls.password.hasError('minlength')
             ) {
-              <p class="mt-1.5 text-sm text-red-600">
+              <p class="validation-message">
                 Use at least 8 characters.
               </p>
             }
           </div>
 
-          <div>
-            <label
-              for="confirmPassword"
-              class="mb-1.5 block text-sm font-semibold text-slate-700"
-            >
+          <div class="form-group">
+            <label for="confirmPassword">
               Confirm password
             </label>
 
-                       <div class="relative">
+            <div class="liquid-input">
+              <span
+                class="field-icon lock-icon"
+                aria-hidden="true"
+              ></span>
+
               <input
                 id="confirmPassword"
                 [type]="
-                  showConfirmPassword ? 'text' : 'password'
+                  showConfirmPassword
+                    ? 'text'
+                    : 'password'
                 "
                 formControlName="confirmPassword"
                 autocomplete="new-password"
-                placeholder="Repeat password"
-                class="w-full rounded-xl border border-slate-300
-                       py-3 pl-4 pr-16 text-slate-900 outline-none
-                       transition placeholder:text-slate-400
-                       focus:border-sky-500 focus:ring-4
-                       focus:ring-sky-100"
+                placeholder="Confirm your password"
+                class="password-input"
               />
 
               <button
                 type="button"
+                class="password-toggle"
                 (click)="toggleConfirmPasswordVisibility()"
-                class="absolute inset-y-0 right-0 grid w-12
-                       place-items-center text-slate-500
-                       transition hover:text-sky-600"
                 [attr.aria-label]="
                   showConfirmPassword
                     ? 'Hide confirm password'
                     : 'Show confirm password'
                 "
-                [title]="
-                  showConfirmPassword
-                    ? 'Hide confirm password'
-                    : 'Show confirm password'
-                "
               >
-                @if (showConfirmPassword) {
-                  <svg
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12" />
-                    <circle cx="12" cy="12" r="3" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 12s3.5-7 10-7
+                       10 7 10 7-3.5 7-10 7S2 12 2 12"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+
+                  @if (showConfirmPassword) {
                     <path d="M3 3l18 18" />
-                  </svg>
-                } @else {
-                  <svg
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                }
+                  }
+                </svg>
               </button>
             </div>
+
             @if (
               registerForm.controls.confirmPassword.touched &&
               registerForm.controls.confirmPassword.hasError('required')
             ) {
-              <p class="mt-1.5 text-sm text-red-600">
+              <p class="validation-message">
                 Confirm your password.
               </p>
             }
@@ -399,39 +317,78 @@
               registerForm.controls.confirmPassword.touched &&
               registerForm.hasError('passwordMismatch')
             ) {
-              <p class="mt-1.5 text-sm text-red-600">
+              <p class="validation-message">
                 Passwords do not match.
               </p>
             }
           </div>
         </div>
 
+        <div class="form-group role-group">
+          <label for="role">
+            I am a
+          </label>
+
+          <div class="liquid-input role-input">
+            <span
+              class="field-icon role-icon"
+              aria-hidden="true"
+            >
+              ◉
+            </span>
+
+            <select
+              id="role"
+              formControlName="role"
+            >
+              <option value="JobSeeker">
+                Job Seeker
+              </option>
+
+              <option value="Employer">
+                Employer
+              </option>
+            </select>
+
+            <span class="select-arrow">
+              ⌄
+            </span>
+          </div>
+        </div>
+
         <button
           type="submit"
+          class="create-account-button"
           [disabled]="isSubmitting"
-          class="w-full rounded-xl bg-sky-600 px-5 py-3.5
-                 font-semibold text-white shadow-lg shadow-sky-200
-                 transition hover:bg-sky-700
-                 focus:outline-none focus:ring-4 focus:ring-sky-200
-                 disabled:cursor-not-allowed disabled:opacity-60"
         >
           @if (isSubmitting) {
             Creating account...
           } @else {
-            Create account
+            <span>Create account</span>
+            <span class="button-arrow">
+              &rarr;
+            </span>
           }
         </button>
       </form>
 
-      <p class="mt-6 text-center text-sm text-slate-600">
+      <p class="login-text">
         Already have an account?
-        <a
-          routerLink="/login"
-          class="font-semibold text-sky-600 hover:text-sky-700"
-        >
+
+        <a routerLink="/login">
           Sign in
         </a>
       </p>
+    </div>
+
+    <div class="platform-footer">
+      <strong>
+        SkillSync Recruitment Platform
+      </strong>
+
+      <span>
+        People. Skills. Opportunities.
+      </span>
     </div>
   </section>
 </main>

@@ -90,4 +90,26 @@ public class JobApplicationRepository
         _context.JobApplications.Update(application);
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateStatusWithNotificationAsync(
+        JobApplication application,
+        Notification notification)
+    {
+        await using var transaction =
+            await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            _context.JobApplications.Update(application);
+            _context.Notifications.Add(notification);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 }

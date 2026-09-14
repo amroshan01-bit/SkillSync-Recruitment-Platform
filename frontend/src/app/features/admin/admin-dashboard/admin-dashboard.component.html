@@ -1,273 +1,436 @@
-<div class="min-h-screen bg-sky-50">
-  <header class="border-b border-sky-100 bg-white">
-    <div
-      class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
-    >
-      <div class="flex items-center gap-3">
-        <div
-          class="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-600 text-xl font-bold text-white shadow-md"
-        >
-          S
-        </div>
-
-        <div>
-          <h1 class="text-xl font-bold text-slate-900">
-            Skill<span class="text-sky-600">Sync</span>
-          </h1>
-          <p class="text-xs text-slate-500">
-            Administration
-          </p>
-        </div>
+﻿<div class="admin-page" [class.dark-theme]="darkMode">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo" aria-label="SkillSync logo">
+        <svg viewBox="0 0 90 70" aria-hidden="true">
+          <defs>
+            <linearGradient id="adminSkillSyncLogoGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#20d4ff" />
+              <stop offset="45%" stop-color="#138df5" />
+              <stop offset="100%" stop-color="#174fd4" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M67 9H34C20 9 13 16 13 26c0 9 7 14 19 14h18c5 0 8 2 8 5s-3 5-8 5H18l-9 12h42c14 0 23-7 23-18 0-10-8-15-21-15H35c-4 0-7-2-7-5s3-5 7-5h23z"
+            fill="url(#adminSkillSyncLogoGradient)"
+          />
+        </svg>
       </div>
 
-      <div class="flex items-center gap-3">
-        <div class="flex items-center gap-2">
-          <span
-            class="flex h-9 w-9 items-center justify-center rounded-full bg-sky-100 text-sm font-bold text-sky-700"
-          >
-            {{ userName.charAt(0).toUpperCase() || 'A' }}
-          </span>
-          <span class="text-sm font-semibold text-slate-700">
-            {{ userName }}
-          </span>
-        </div>
-
-        <button
-          type="button"
-          class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
-          (click)="logout()"
-        >
-          Sign out
-        </button>
+      <div class="brand-text">
+        <strong>SkillSync</strong>
+        <small>People. Skills. Opportunities.</small>
       </div>
     </div>
-  </header>
 
-  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-    <section class="mb-8">
-      <p class="mb-2 font-semibold text-sky-600">
-        Admin workspace
-      </p>
-
-      <h2 class="text-3xl font-bold text-slate-900">
-        User Management
-      </h2>
-
-      <p class="mt-2 text-slate-600">
-        Review accounts, assign roles and control user access.
-      </p>
-    </section>
-
-    <section
-      class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+    <button
+      type="button"
+      class="back-button"
+      aria-label="Go back"
+      title="Go Back"
+      (click)="goBack()"
     >
-      <article
-        class="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"
-      >
-        <p class="text-sm font-medium text-slate-500">
-          Total users
-        </p>
-        <p class="mt-2 text-3xl font-bold text-slate-900">
-          {{ totalUsers }}
-        </p>
-      </article>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7" />
+      </svg>
+    </button>
 
-      <article
-        class="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"
-      >
-        <p class="text-sm font-medium text-slate-500">
-          Job seekers
-        </p>
-        <p class="mt-2 text-3xl font-bold text-sky-600">
-          {{ jobSeekerCount }}
-        </p>
-      </article>
+    <nav class="navigation" aria-label="Admin navigation">
+    </nav>
 
-      <article
-        class="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"
-      >
-        <p class="text-sm font-medium text-slate-500">
-          Employers
-        </p>
-        <p class="mt-2 text-3xl font-bold text-indigo-600">
-          {{ employerCount }}
-        </p>
-      </article>
+    <div class="sidebar-spacer"></div>
 
-      <article
-        class="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"
-      >
-        <p class="text-sm font-medium text-slate-500">
-          Active users
-        </p>
-        <p class="mt-2 text-3xl font-bold text-emerald-600">
-          {{ activeUserCount }}
-        </p>
-      </article>
-    </section>
+    <div class="sidebar-quote" aria-hidden="true">
+      <span>Connect</span>
+      <span>Talent.</span>
+      <span>Build</span>
+      <span>Tomorrow.</span>
+      <i></i>
+    </div>
 
-    <section
-      class="overflow-hidden rounded-2xl border border-sky-100 bg-white shadow-sm"
-    >
-      <div
-        class="flex flex-col gap-3 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <div>
-          <h3 class="text-lg font-bold text-slate-900">
-            Registered users
-          </h3>
-          <p class="mt-1 text-sm text-slate-500">
-            Manage every SkillSync account.
-          </p>
+    <button type="button" class="logout-button" (click)="logout()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M14 5h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Logout</span></button>
+
+    <div class="sidebar-footer">
+      <strong>SkillSync Recruitment Platform</strong>
+      <span>People. Skills. Opportunities.</span>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div></div>
+
+      <div class="topbar-actions">
+        <div class="account">
+          <div class="account-avatar">
+            {{ userName.charAt(0).toUpperCase() || 'A' }}
+          </div>
+
+          <div class="account-copy">
+            <strong>{{ userName }}</strong>
+            <span>System Administrator</span>
+          </div>
         </div>
 
-        <button
-          type="button"
-          class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
-          [disabled]="isLoading"
-          (click)="loadUsers()"
-        >
-          Refresh
-        </button>
+        <button type="button" class="theme-toggle" (click)="toggleDarkMode()" [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'" [attr.title]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"><span class="theme-option sun" [class.selected]="!darkMode"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg></span><span class="theme-option moon" [class.selected]="darkMode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z" fill="currentColor"></path></svg></span></button>
       </div>
+    </header>
 
-      <div
-        *ngIf="errorMessage"
-        class="m-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-      >
-        {{ errorMessage }}
-      </div>
+    <main class="admin-content" id="admin-dashboard">
+      <section class="page-heading">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p>Manage SkillSync users, roles and platform access.</p>
+        </div>
 
-      <div
-        *ngIf="isLoading"
-        class="px-5 py-14 text-center"
-      >
-        <div
-          class="mx-auto h-9 w-9 animate-spin rounded-full border-4 border-sky-100 border-t-sky-600"
-        ></div>
-        <p class="mt-4 text-sm text-slate-500">
-          Loading users...
-        </p>
-      </div>
+        <div class="heading-note">
+          <span>Connect Talent.</span>
+          <span>Build Tomorrow.</span>
+          <i></i>
+        </div>
+      </section>
 
-      <div
-        *ngIf="!isLoading && users.length === 0"
-        class="px-5 py-14 text-center text-slate-500"
-      >
-        No registered users found.
-      </div>
+      <section class="stats-grid">
+        <article class="stat-card total-card">
+          <div class="stat-icon blue-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 19c0-3 2.7-5 6-5s6 2 6 5v1H2v-1Zm11.5 1c.3-.8.5-1.7.5-2.6 0-1.1-.3-2.2-.9-3.1.9-.2 1.8-.3 2.9-.3 3.3 0 6 2 6 5v1h-8.5Z" />
+            </svg>
+          </div>
+          <div>
+            <span>Total Users</span>
+            <strong>{{ totalUsers }}</strong>
+          </div>
+        </article>
 
-      <div
-        *ngIf="!isLoading && users.length > 0"
-        class="overflow-x-auto"
-      >
-        <table class="min-w-full divide-y divide-slate-200">
-          <thead class="bg-slate-50">
-            <tr>
-              <th
-                class="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500"
-              >
-                User
-              </th>
-              <th
-                class="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500"
-              >
-                Role
-              </th>
-              <th
-                class="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500"
-              >
-                Status
-              </th>
-              <th
-                class="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500"
-              >
-                Joined
-              </th>
-              <th
-                class="px-5 py-3 text-right text-xs font-bold uppercase tracking-wider text-slate-500"
-              >
-                Action
-              </th>
-            </tr>
-          </thead>
+        <article class="stat-card seeker-card">
+          <div class="stat-icon green-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8c0-4 3.1-6 7-6s7 2 7 6v1H5v-1Z" />
+            </svg>
+          </div>
+          <div>
+            <span>Job Seekers</span>
+            <strong>{{ jobSeekerCount }}</strong>
+          </div>
+        </article>
 
-          <tbody class="divide-y divide-slate-100 bg-white">
-            <tr
-              *ngFor="let user of users"
-              class="transition hover:bg-sky-50/50"
+        <article class="stat-card employer-card">
+          <div class="stat-icon purple-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 21V7l8-4v18H4Zm10 0V10h6v11h-6ZM7 10h2v2H7v-2Zm0 4h2v2H7v-2Zm0 4h2v2H7v-2Zm8-5h2v2h-2v-2Zm0 4h2v2h-2v-2Z" />
+            </svg>
+          </div>
+          <div>
+            <span>Employers</span>
+            <strong>{{ employerCount }}</strong>
+          </div>
+        </article>
+
+        <article class="stat-card active-card">
+          <div class="stat-icon orange-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm-1 14-4-4 1.5-1.5L11 13l4.5-4.5L17 10l-6 6Z" />
+            </svg>
+          </div>
+          <div>
+            <span>Active Users</span>
+            <strong>{{ activeUserCount }}</strong>
+          </div>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="analytics-card" id="user-statistics">
+          <div class="section-heading">
+            <div>
+              <h2>User Statistics</h2>
+              <p>Current SkillSync account distribution.</p>
+            </div>
+          </div>
+
+          <div class="chart-list">
+            <div class="chart-item">
+              <div class="chart-label">
+                <span>Job Seekers</span>
+                <strong>{{ jobSeekerCount }} ({{ jobSeekerPercentage }}%)</strong>
+              </div>
+              <div class="chart-track">
+                <div
+                  class="chart-bar job-seeker-bar"
+                  [style.width.%]="jobSeekerPercentage"
+                ></div>
+              </div>
+            </div>
+
+            <div class="chart-item">
+              <div class="chart-label">
+                <span>Employers</span>
+                <strong>{{ employerCount }} ({{ employerPercentage }}%)</strong>
+              </div>
+              <div class="chart-track">
+                <div
+                  class="chart-bar employer-bar"
+                  [style.width.%]="employerPercentage"
+                ></div>
+              </div>
+            </div>
+
+            <div class="chart-item">
+              <div class="chart-label">
+                <span>Admins</span>
+                <strong>{{ adminCount }} ({{ adminPercentage }}%)</strong>
+              </div>
+              <div class="chart-track">
+                <div
+                  class="chart-bar admin-bar"
+                  [style.width.%]="adminPercentage"
+                ></div>
+              </div>
+            </div>
+
+            <div class="chart-item">
+              <div class="chart-label">
+                <span>Active Users</span>
+                <strong>{{ activeUserCount }} ({{ activeUserPercentage }}%)</strong>
+              </div>
+              <div class="chart-track">
+                <div
+                  class="chart-bar active-bar"
+                  [style.width.%]="activeUserPercentage"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="overview-card">
+          <div class="section-heading">
+            <div>
+              <h2>Platform Overview</h2>
+              <p>Live account totals from the Admin API.</p>
+            </div>
+          </div>
+
+          <div class="overview-list">
+            <div>
+              <span>Admins</span>
+              <strong>{{ adminCount }}</strong>
+            </div>
+            <div>
+              <span>Blocked Users</span>
+              <strong>{{ blockedUserCount }}</strong>
+            </div>
+            <div>
+              <span>Active Users</span>
+              <strong>{{ activeUserCount }}</strong>
+            </div>
+            <div>
+              <span>Total Accounts</span>
+              <strong>{{ totalUsers }}</strong>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="users-card" id="user-management">
+        <div class="users-header">
+          <div>
+            <h2>User Management</h2>
+            <p>Search, filter, assign roles and control user access.</p>
+          </div>
+
+          <button
+            type="button"
+            class="refresh-button"
+            [disabled]="isLoading"
+            (click)="loadUsers()"
+          >
+            <span aria-hidden="true">â†»</span>
+            Refresh
+          </button>
+        </div>
+
+        <div class="filters">
+          <div class="filter-field search-field">
+            <label for="adminSearch">Search</label>
+            <input
+              id="adminSearch"
+              type="text"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="applyFilters()"
+              placeholder="Search by name or email"
+            />
+          </div>
+
+          <div class="filter-field">
+            <label for="roleFilter">Role</label>
+            <select
+              id="roleFilter"
+              [(ngModel)]="roleFilter"
+              (ngModelChange)="applyFilters()"
             >
-              <td class="whitespace-nowrap px-5 py-4">
-                <p class="font-semibold text-slate-900">
-                  {{ user.fullName }}
-                </p>
-                <p class="mt-1 text-sm text-slate-500">
-                  {{ user.email }}
-                </p>
-              </td>
+              <option value="All">All Roles</option>
+              <option value="JobSeeker">Job Seeker</option>
+              <option value="Employer">Employer</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
 
-              <td class="whitespace-nowrap px-5 py-4">
-                <select
-                  class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 disabled:opacity-60"
-                  [disabled]="isUpdating(user.id)"
-                  (change)="changeRole(user, $event)"
-                >
-                  <option
-                    *ngFor="let role of roles"
-                    [value]="role"
-                    [selected]="role === user.role"
-                  >
-                    {{ role }}
-                  </option>
-                </select>
-              </td>
+          <div class="filter-field">
+            <label for="statusFilter">Status</label>
+            <select
+              id="statusFilter"
+              [(ngModel)]="statusFilter"
+              (ngModelChange)="applyFilters()"
+            >
+              <option value="All">All Statuses</option>
+              <option value="Active">Active</option>
+              <option value="Blocked">Blocked</option>
+            </select>
+          </div>
 
-              <td class="whitespace-nowrap px-5 py-4">
-                <span
-                  class="inline-flex rounded-full px-3 py-1 text-xs font-bold"
-                  [ngClass]="
-                    user.isActive
-                      ? 'bg-emerald-100 text-emerald-700'
-                      : 'bg-red-100 text-red-700'
-                  "
-                >
-                  {{ user.isActive ? 'Active' : 'Blocked' }}
-                </span>
-              </td>
+          <button
+            type="button"
+            class="clear-button"
+            (click)="clearFilters()"
+          >
+            Clear Filters
+          </button>
+        </div>
 
-              <td
-                class="whitespace-nowrap px-5 py-4 text-sm text-slate-600"
+        @if (errorMessage) {
+          <div class="alert error-alert">{{ errorMessage }}</div>
+        }
+
+        @if (isLoading) {
+          <div class="loading-state">
+            <div class="loader"></div>
+            <p>Loading users...</p>
+          </div>
+        } @else if (filteredUsers.length === 0) {
+          <div class="empty-state">
+            <h3>No users found</h3>
+            <p>Try changing the search or filters.</p>
+          </div>
+        } @else {
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th class="action-heading">Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (user of paginatedUsers; track user.id) {
+                  <tr>
+                    <td>
+                      <div class="user-cell">
+                        <span class="user-avatar">
+                          {{ user.fullName.charAt(0).toUpperCase() || 'U' }}
+                        </span>
+
+                        <div>
+                          <strong>{{ user.fullName }}</strong>
+                          <span>{{ user.email }}</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <select
+                        class="role-select"
+                        [disabled]="isUpdating(user.id)"
+                        (change)="changeRole(user, $event)"
+                      >
+                        @for (role of roles; track role) {
+                          <option
+                            [value]="role"
+                            [selected]="role === user.role"
+                          >
+                            {{ role }}
+                          </option>
+                        }
+                      </select>
+                    </td>
+
+                    <td>
+                      <span
+                        class="status-badge"
+                        [class.active-status]="user.isActive"
+                        [class.blocked-status]="!user.isActive"
+                      >
+                        {{ user.isActive ? 'Active' : 'Blocked' }}
+                      </span>
+                    </td>
+
+                    <td>{{ user.createdAtUtc | date:'mediumDate' }}</td>
+
+                    <td class="action-cell">
+                      <button
+                        type="button"
+                        class="status-button"
+                        [class.block-button]="user.isActive"
+                        [class.activate-button]="!user.isActive"
+                        [disabled]="isUpdating(user.id)"
+                        (click)="toggleStatus(user)"
+                      >
+                        {{
+                          isUpdating(user.id)
+                            ? 'Updating...'
+                            : user.isActive
+                              ? 'Block'
+                              : 'Activate'
+                        }}
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <div class="pagination-summary">
+              Showing {{ paginatedUsers.length }} of {{ filteredUsers.length }} users
+            </div>
+
+            <div class="pagination-controls">
+              <button
+                type="button"
+                (click)="previousPage()"
+                [disabled]="currentPage === 1"
               >
-                {{ user.createdAtUtc | date: 'mediumDate' }}
-              </td>
+                Previous
+              </button>
 
-              <td
-                class="whitespace-nowrap px-5 py-4 text-right"
+              <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+              <button
+                type="button"
+                (click)="nextPage()"
+                [disabled]="currentPage === totalPages"
               >
-                <button
-                  type="button"
-                  class="rounded-lg px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60"
-                  [ngClass]="
-                    user.isActive
-                      ? 'bg-red-50 text-red-700 hover:bg-red-100'
-                      : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
-                  "
-                  [disabled]="isUpdating(user.id)"
-                  (click)="toggleStatus(user)"
-                >
-                  {{
-                    isUpdating(user.id)
-                      ? 'Updating...'
-                      : user.isActive
-                        ? 'Block'
-                        : 'Activate'
-                  }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+                Next
+              </button>
+            </div>
+          </div>
+        }
+      </section>
+    </main>
+  </div>
 </div>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,116 @@
+<div class="profile-page" [class.dark-theme]="darkMode">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo" aria-label="SkillSync logo">
+        <svg viewBox="0 0 90 70" aria-hidden="true"><defs><linearGradient id="skillSyncLogoGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#20d4ff"/><stop offset="45%" stop-color="#138df5"/><stop offset="100%" stop-color="#174fd4"/></linearGradient></defs><path d="M67 9H34C20 9 13 16 13 26c0 9 7 14 19 14h18c5 0 8 2 8 5s-3 5-8 5H18l-9 12h42c14 0 23-7 23-18 0-10-8-15-21-15H35c-4 0-7-2-7-5s3-5 7-5h23z" fill="url(#skillSyncLogoGradient)"/></svg>
+      </div>
+      <div class="brand-text"><strong>SkillSync</strong><small>People. Skills. Opportunities.</small></div>
+    </div>
+
+    <button type="button" class="back-button" aria-label="Go back" title="Go Back" onclick="history.back()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5L8 12L15 19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12H19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
+
+    <nav class="navigation">
+      <a routerLink="/seeker/profile"><span class="nav-icon">♟</span><span>My Profile</span></a>
+      <a routerLink="/seeker/skills"><span class="nav-icon">⚙</span><span>Manage Skills</span></a>
+      <a routerLink="/seeker/matches"><span class="nav-icon">▣</span><span>Job Matches</span></a>
+      <a routerLink="/seeker/applications"><span class="nav-icon">▤</span><span>My Applications</span></a>
+      <a routerLink="/seeker/notifications" class="active"><span class="nav-icon">●</span><span>Notifications</span></a>
+    </nav>
+
+    <div class="sidebar-fill"></div>
+    <div class="sidebar-quote">Build<br/>A Brighter<br/>Tomorrow<span></span></div>
+    <button type="button" class="logout-button" (click)="logout()"><span>↪</span> Logout</button>
+    <div class="sidebar-footer"><strong>SkillSync Recruitment Platform</strong><span>People. Skills. Opportunities.</span></div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div></div>
+      <div class="topbar-actions">
+        <div class="account">
+          <div class="account-avatar">{{ userName.charAt(0).toUpperCase() || 'U' }}</div>
+          <div class="account-info"><strong>{{ userName }}</strong><span>Job Seeker</span></div>
+        </div>
+        <button type="button" class="theme-toggle" (click)="toggleDarkMode()" [attr.aria-label]="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+          <span class="theme-option" [class.active]="!darkMode">☀</span><span class="theme-option" [class.active]="darkMode">☾</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="page-heading">
+        <h1>Notifications</h1>
+        <p>
+          View updates related to your job applications.
+        </p>
+      </section>
+
+      @if (loading) {
+        <div class="message">
+          Loading notifications...
+        </div>
+      }
+
+      @if (errorMessage) {
+        <div class="message error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (!loading && !errorMessage) {
+        @if (notifications.length === 0) {
+          <div class="empty-state">
+            <h2>No notifications yet</h2>
+
+            <p>
+              Application status updates will appear here.
+            </p>
+          </div>
+        } @else {
+          <section class="notification-list">
+            @for (
+              notification of notifications;
+              track notification.id
+            ) {
+              <article
+                class="notification-card"
+                [class.unread]="!notification.isRead"
+              >
+                <div class="notification-icon">
+                  N
+                </div>
+
+                <div class="notification-content">
+                  <div class="notification-header">
+                    <h2>
+                      Application Update
+                    </h2>
+
+                    @if (!notification.isRead) {
+                      <span class="unread-badge">
+                        New
+                      </span>
+                    }
+                  </div>
+
+                  <p>
+                    {{ notification.message }}
+                  </p>
+
+                  <small>
+                    {{
+                      notification.createdAtUtc
+                        | date:'medium'
+                    }}
+                  </small>
+                </div>
+              </article>
+            }
+          </section>
+        }
+      }
+    </main>
+  </div>
+</div>
